@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_marginLeft="91px"
+        android:background="#123456"
+        android:layout_marginTop="55px"
+        android:layout_width="458px"
+        android:layout_height="458px" />
+    <ImageView
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/booklist_box01_normal3x"
+        android:layout_width="640px"
+        android:layout_height="716px" />
+    <TextView
+        android:textStyle="bold"
+        android:textSize="56px"
+        android:textColor="#1e3f4c"
+        android:text="text"
+        android:gravity="center"
+        android:layout_marginTop="520px"
+        android:layout_marginLeft="40px"
+        android:layout_width="560px"
+        android:layout_height="138px" />
+
+</FrameLayout>

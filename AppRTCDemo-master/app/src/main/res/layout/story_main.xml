@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#123456"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:background="@drawable/btn_home_normal3x"
+            android:layout_width="243px"
+            android:layout_height="243px"/>
+        <TextView
+            android:text="동화 목록"
+            android:gravity="center"
+            android:textSize="52px"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"
+            android:layout_width="363px"
+            android:layout_height="92px" />
+    </RelativeLayout>
+    <GridView
+        android:stretchMode="columnWidth"
+        android:numColumns="2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gv_storylist"
+        android:padding="10dp" />
+</LinearLayout>
