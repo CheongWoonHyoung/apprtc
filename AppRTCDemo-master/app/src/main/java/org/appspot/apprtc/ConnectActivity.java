@@ -140,7 +140,7 @@ public class ConnectActivity extends Activity {
           CallActivity.EXTRA_RUNTIME, 0);
       String room = sharedPref.getString(keyprefRoom, "");
       roomEditText.setText(room);
-      connectToRoom(loopback, runTimeMs);
+      //connectToRoom(loopback, runTimeMs);
       return;
     }
   }
@@ -219,12 +219,13 @@ public class ConnectActivity extends Activity {
         loopback = true;
       }
       commandLineRun = false;
-      connectToRoom(loopback, 0);
+      //connectToRoom(loopback, 0);
     }
   };
 
-  private void connectToRoom(boolean loopback, int runTimeMs) {
+  public void connectToRoom(boolean loopback, int runTimeMs, String roomId) {
     // Get room name (random for loopback).
+    /*
     String roomId;
     if (loopback) {
       roomId = Integer.toString((new Random()).nextInt(100000000));
@@ -234,20 +235,48 @@ public class ConnectActivity extends Activity {
         roomId = roomEditText.getText().toString();
       }
     }
+*/
+
+    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    System.out.println("here_a");
+
+    sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+    keyprefVideoCallEnabled = getString(R.string.pref_videocall_key);
+    System.out.println("here_a");
+
+    keyprefResolution = getString(R.string.pref_resolution_key);
+    keyprefFps = getString(R.string.pref_fps_key);
+    keyprefCaptureQualitySlider = getString(R.string.pref_capturequalityslider_key);
+    keyprefVideoBitrateType = getString(R.string.pref_startvideobitrate_key);
+    keyprefVideoBitrateValue = getString(R.string.pref_startvideobitratevalue_key);
+    keyprefVideoCodec = getString(R.string.pref_videocodec_key);
+    keyprefHwCodecAcceleration = getString(R.string.pref_hwcodec_key);
+    keyprefAudioBitrateType = getString(R.string.pref_startaudiobitrate_key);
+    keyprefAudioBitrateValue = getString(R.string.pref_startaudiobitratevalue_key);
+    keyprefAudioCodec = getString(R.string.pref_audiocodec_key);
+    keyprefNoAudioProcessingPipeline = getString(R.string.pref_noaudioprocessing_key);
+    keyprefOpenSLES = getString(R.string.pref_opensles_key);
+    keyprefDisplayHud = getString(R.string.pref_displayhud_key);
+    keyprefRoomServerUrl = getString(R.string.pref_room_server_url_key);
+    keyprefRoom = getString(R.string.pref_room_key);
+    keyprefRoomList = getString(R.string.pref_room_list_key);
 
     String roomUrl = sharedPref.getString(
         keyprefRoomServerUrl,
         getString(R.string.pref_room_server_url_default));
+    System.out.println("here_a");
 
     // Video call enabled flag.
     boolean videoCallEnabled = sharedPref.getBoolean(keyprefVideoCallEnabled,
         Boolean.valueOf(getString(R.string.pref_videocall_default)));
+    System.out.println("here_b");
 
     // Get default codecs.
     String videoCodec = sharedPref.getString(keyprefVideoCodec,
         getString(R.string.pref_videocodec_default));
     String audioCodec = sharedPref.getString(keyprefAudioCodec,
         getString(R.string.pref_audiocodec_default));
+    System.out.println("here_c");
 
     // Check HW codec flag.
     boolean hwCodec = sharedPref.getBoolean(keyprefHwCodecAcceleration,
@@ -262,6 +291,7 @@ public class ConnectActivity extends Activity {
     boolean useOpenSLES = sharedPref.getBoolean(
         keyprefOpenSLES,
         Boolean.valueOf(getString(R.string.pref_opensles_default)));
+    System.out.println("here_d");
 
     // Get video resolution from settings.
     int videoWidth = 0;
@@ -279,6 +309,7 @@ public class ConnectActivity extends Activity {
         Log.e(TAG, "Wrong video resolution setting: " + resolution);
       }
     }
+    System.out.println("here_e");
 
     // Get camera fps from settings.
     int cameraFps = 0;

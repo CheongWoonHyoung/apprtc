@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -21,16 +22,19 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.appspot.apprtc.CallActivity;
+import org.appspot.apprtc.util.DataChannel;
 /**
  * Created by Donghyun on 2016. 2. 8..
  */
 public class Story extends MainActivity {
 
     private ArrayList<HashMap<String,String>> story_list = new ArrayList<>();
+    ArrayList<HashMap<String,String>> scene_list = new ArrayList<>();
+    ArrayList<HashMap<String,String>> character_list = new ArrayList<>();
+    ArrayList<HashMap<Integer,HashMap>> script_list = new ArrayList<>();
     GridView gridView;
-    //String URL = "http://blay.eerssoft.co.kr/books/list/";
-    //저기서 그 뭐냐 book.jaon 을 불러와야 함
-    String URL = "/data/local/tmp/com.example.donghyunna.myapplication/";
+    String URL = "http://blay.eerssoft.co.kr/books/list/";
 
 
     @Override
@@ -57,6 +61,7 @@ public class Story extends MainActivity {
         }
         return json;
     } */
+
     //리스트받아오기->그리드뷰
     private SHJSONParserCallback callback = new SHJSONParserCallback() {
         @Override
@@ -85,11 +90,11 @@ public class Story extends MainActivity {
                     String version;
                     String displayversion;
                     //String maxPlayer = Story_single.get("maxPlayer").toString();
-                    String maxPlayer = "{\"maxPlayer\":\"6\"}";
+                    String MaxPlayer = "{\"maxPlayer\":\"6\"}";
                     //String character = Story_single.get("character").toString();
-                    String character = "{\"character\":[{\"cid\":\"c1\",\"name\":\"빨간 모자\",\"image\":{\"main\":\"c.jpg\"}},{\"cid\":\"c2\",\"name\":\"늑대\",\"image\":{\"main\":\"c2.jpg\"}},{\"cid\":\"c3\",\"name\":\"할머니\",\"image\":{\"main\":\"c3.jpg\"}},{\"cid\":\"c4\",\"name\":\"사냥꾼\",\"image\":{\"main\":\"c4.jpg\"}},{\"cid\":\"c5\",\"name\":\"엄마\",\"image\":{\"main\":\"c5.jpg\"}},{\"cid\":\"c6\",\"name\":\"내레이션\",\"image\":{\"main\":\"c6.jpg\"}}]}";
+                    String Character = "{\"character\":[{\"cid\":\"c1\",\"name\":\"빨간 모자\",\"image\":{\"main\":\"c.jpg\"}},{\"cid\":\"c2\",\"name\":\"늑대\",\"image\":{\"main\":\"c2.jpg\"}},{\"cid\":\"c3\",\"name\":\"할머니\",\"image\":{\"main\":\"c3.jpg\"}},{\"cid\":\"c4\",\"name\":\"사냥꾼\",\"image\":{\"main\":\"c4.jpg\"}},{\"cid\":\"c5\",\"name\":\"엄마\",\"image\":{\"main\":\"c5.jpg\"}},{\"cid\":\"c6\",\"name\":\"내레이션\",\"image\":{\"main\":\"c6.jpg\"}}]}";
                     //String scene = Story_single.get("scene").toString();
-                    String scene = "{\"scene\":[{\"sid\":\"s001\",\"image\":{\"main\":\"s001.jpg\",\"preview\":\"s001.jpg\"},\"scripts\":[{\"scid\":\"s001c001\",\"cid\":\"c6\",\"audio\":true,\"script\":\"Little Red Riding Hood\"}]},{\"sid\":\"s002\",\"image\":{\"main\":\"s002.jpg\",\"preview\":\"s002.jpg\"},\"scripts\":[{\"scid\":\"s002c001\",\"cid\":\"c6\",\"audio\":true,\"script\":\"Little Red Riding Hood lived in the red roof house.\"},{\"scid\":\"s002c002\",\"cid\":\"c6\",\"audio\":true,\"script\":\"Little Red lived with Mom there.\"},{\"scid\":\"s002c003\",\"cid\":\"c5\",\"audio\":true,\"script\":\"Take Jam and bread to Grandma.\"},{\"scid\":\"s002c004\",\"cid\":\"c1\",\"audio\":true,\"script\":\"Yes, Mom\"},{\"scid\":\"s002c005\",\"cid\":\"c5\",\"audio\":true,\"script\":\"And milk, too?\"},{\"scid\":\"s002c006\",\"cid\":\"c1\",\"audio\":true,\"script\":\"Yes, Mom\"},{\"scid\":\"s002c007\",\"cid\":\"c6\",\"audio\":true,\"script\":\"The wolf lived in the woods.\"},{\"scid\":\"s002c008\",\"cid\":\"c5\",\"audio\":true,\"script\":\"The wolf is big and bad. It can eat you.\"},{\"scid\":\"s002c009\",\"cid\":\"c1\",\"audio\":true,\"script\":\"I'm not scared. I can take food to Grandma.\"}]}]}";
+                    String Scene = "{\"scene\":[{\"sid\":\"s001\",\"image\":{\"main\":\"s001.jpg\",\"preview\":\"s001.jpg\"},\"scripts\":[{\"scid\":\"s001c001\",\"cid\":\"c6\",\"audio\":true,\"script\":\"Little Red Riding Hood\"}]},{\"sid\":\"s002\",\"image\":{\"main\":\"s002.jpg\",\"preview\":\"s002.jpg\"},\"scripts\":[{\"scid\":\"s002c001\",\"cid\":\"c6\",\"audio\":true,\"script\":\"Little Red Riding Hood lived in the red roof house.\"},{\"scid\":\"s002c002\",\"cid\":\"c6\",\"audio\":true,\"script\":\"Little Red lived with Mom there.\"},{\"scid\":\"s002c003\",\"cid\":\"c5\",\"audio\":true,\"script\":\"Take Jam and bread to Grandma.\"},{\"scid\":\"s002c004\",\"cid\":\"c1\",\"audio\":true,\"script\":\"Yes, Mom\"},{\"scid\":\"s002c005\",\"cid\":\"c5\",\"audio\":true,\"script\":\"And milk, too?\"},{\"scid\":\"s002c006\",\"cid\":\"c1\",\"audio\":true,\"script\":\"Yes, Mom\"},{\"scid\":\"s002c007\",\"cid\":\"c6\",\"audio\":true,\"script\":\"The wolf lived in the woods.\"},{\"scid\":\"s002c008\",\"cid\":\"c5\",\"audio\":true,\"script\":\"The wolf is big and bad. It can eat you.\"},{\"scid\":\"s002c009\",\"cid\":\"c1\",\"audio\":true,\"script\":\"I'm not scared. I can take food to Grandma.\"}]}]}";
 
                     Log.e("bookid", bookid);
 
@@ -103,10 +108,71 @@ public class Story extends MainActivity {
                     map.put("description", description);
                     //map.put("verson", version);
                     //map.put("displayversion", displayversion);
-                    map.put("maxPlayer", maxPlayer);
-                    map.put("character", character);
-                    map.put("scene", scene);
+                    //map.put("maxPlayer", maxPlayer);
+                    //map.put("character", character);
+                    //map.put("scene", scene);
+                    try {
+                        JSONObject scene_ = new JSONObject(Scene);
+                        JSONArray scene = scene_.getJSONArray("scene");
+                        JSONObject character_ = new JSONObject(Character);
+                        JSONArray character = character_.getJSONArray("character");
 
+                        for (int k = 0; k < character.length(); k++){
+                            //파싱
+                            JSONObject sceneObj = character.getJSONObject(k);
+                            System.out.println(sceneObj);
+                            String cid = sceneObj.getString("cid");
+                            String name = sceneObj.getString("name");
+                            String image = sceneObj.getJSONObject("image").getString("main");
+                            System.out.println("here1");
+
+                            HashMap<String, String> character_map = new HashMap<>();
+                            character_map.put("cid", cid);
+                            character_map.put("name", name);
+                            character_map.put("image", image);
+
+                            character_list.add(character_map);
+                        }
+
+                        for(int k = 0; k < scene.length(); k++){
+                            //파싱
+                            JSONObject characterObj = scene.getJSONObject(k);
+                            String sid = characterObj.getString("sid");
+                            String image_main = characterObj.getJSONObject("image").getString("main");
+                            String image_preview = characterObj.getJSONObject("image").getString("preview");
+
+                            HashMap<String, String> scene_map = new HashMap<>();
+                            scene_map.put("sid", sid);
+                            scene_map.put("image_main", image_main);
+                            scene_map.put("image_preview", image_preview);
+                            System.out.println("here2");
+                            scene_list.add(scene_map);
+
+                            JSONArray scripts = (JSONArray) characterObj.get("scripts");
+
+                            HashMap<Integer, HashMap> scene_map_main = new HashMap<>();
+                            System.out.println("here2-2");
+                            for (int j = 0; j < scripts.length(); j++){
+                                JSONObject scriptObj = scripts.getJSONObject(j);
+                                String scid = scriptObj.getString("scid");
+                                String cid = scriptObj.getString("cid");
+                                String audio = scriptObj.getString("audio");
+                                String script = scriptObj.getString("script");
+
+                                HashMap<String, String> script_map = new HashMap<>();
+                                script_map.put("scid", scid);
+                                script_map.put("cid", cid);
+                                script_map.put("audio", audio);
+                                script_map.put("script", script);
+                                System.out.println("here3");
+                                scene_map_main.put(i,script_map);
+                            }
+
+                            script_list.add(scene_map_main);
+                        }
+                    }catch (Exception ex) {
+                        System.out.println(ex);
+                    }
                     story_list.add(map);
                 }
             }catch (JSONException e) {
@@ -138,7 +204,7 @@ public class Story extends MainActivity {
                     tv_single_description.setText(story_list.get(position).get("description"));
                     ImageView iv_main = (ImageView) findViewById(R.id.iv_main);
                     String bookid = story_list.get(position).get("bookid");
-                    int title_single= getResources().getIdentifier("com.example.donghyunna.myapplication:drawable/main_"+bookid,null,null);
+                    int title_single = getResources().getIdentifier("org.appspot.apprtc:drawable/main_" + bookid, null, null);
                     iv_main.setImageDrawable(getResources().getDrawable(title_single));
 
                     //CAll_LIST 진행
@@ -149,24 +215,37 @@ public class Story extends MainActivity {
                             setContentView(R.layout.call_list);
                             //친구검색
                             //초대 => 푸시
+                            Button btn_invite = (Button) findViewById(R.id.btn_invite);
+                            btn_invite.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //setContentView
+                                    //appRTC 실행
+                                    ConnectActivity call = new ConnectActivity();
+                                    call.connectToRoom(true, 10000, "354354354");
 
-                            //인텐트로 appRTC 진행
-                            //max player, character, scene => getExtras(jsonObj, jsonArray, jsonArray)
-                        }
-                    });
+                                    //DataChannel로 통신하기
 
-                    //Story_MAIN 뒤로가기 버튼
-                    TextView tv_back = (TextView) findViewById(R.id.tv_back);
-                    tv_back.setOnClickListener(new View.OnClickListener(){
-                        @Override
-                        public void onClick(View v) {
-                            new SHJSONParser().setCallback(callback).execute(URL);
-                            setContentView(R.layout.story_main);
+                                    //받은 값으로 뷰만 바꾸면 댐
+
+                                }
+                            });
+/*
+                            //Story_MAIN 뒤로가기 버튼
+                            TextView tv_back = (TextView) findViewById(R.id.tv_back);
+                            tv_back.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    new SHJSONParser().setCallback(callback).execute(URL);
+                                    setContentView(R.layout.story_main);
+                                }
+                            });*/
                         }
                     });
                 }
             });
-        } else {
+        }
+        else{
             Log.e("error", "gridView is null");
         }
     }

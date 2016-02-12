@@ -441,10 +441,10 @@ public class PeerConnectionClient {
     rtcConfig.rtcpMuxPolicy = PeerConnection.RtcpMuxPolicy.REQUIRE;
     // Use ECDSA encryption.
     rtcConfig.keyType = PeerConnection.KeyType.ECDSA;
-
     peerConnection = factory.createPeerConnection(
         rtcConfig, pcConstraints, pcObserver);
     isInitiator = false;
+
 
     // Set default WebRTC tracing and INFO libjingle logging.
     // NOTE: this _must_ happen while |factory| is alive!
@@ -452,6 +452,8 @@ public class PeerConnectionClient {
         "logcat:",
         EnumSet.of(Logging.TraceLevel.TRACE_DEFAULT),
         Logging.Severity.LS_INFO);
+
+    //Todo
 
     mediaStream = factory.createLocalMediaStream("ARDAMS");
     if (videoCallEnabled) {
