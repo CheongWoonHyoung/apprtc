@@ -21,13 +21,18 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.webrtc.EglBase;
@@ -37,6 +42,8 @@ import org.webrtc.StatsReport;
 import org.webrtc.RendererCommon.ScalingType;
 import org.webrtc.SurfaceViewRenderer;
 
+import java.io.File;
+
 /**
  * Activity for peer connection call setup, call waiting
  * and call view.
@@ -45,6 +52,15 @@ public class CallActivity extends Activity
     implements AppRTCClient.SignalingEvents,
       PeerConnectionClient.PeerConnectionEvents,
       CallFragment.OnCallEvents {
+
+  final private static File RECORDED_FILE = Environment.getDataDirectory();
+  String filename;
+  // MediaPlayer 클래스에 재생에 관련된 메서드와 멤버변수가 저장어되있다.
+  MediaPlayer player;
+  // MediaRecorder 클래스에  녹음에 관련된 메서드와 멤버 변수가 저장되어있다.
+  MediaRecorder recorder;
+
+
 
   public static final String EXTRA_ROOMID =
       "org.appspot.apprtc.ROOMID";
@@ -152,6 +168,11 @@ public class CallActivity extends Activity
         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     setContentView(R.layout.activity_call);
 
+
+    ImageView recordBtn = (ImageView) findViewById(R.id.recordBtn);
+    //ImageView recordStopBtn = (ImageView) findViewById(R.id.recordStopBtn);
+    filename =RECORDED_FILE.getAbsolutePath()+"/test.mp4";;
+
     iceConnected = false;
     signalingParameters = null;
     scalingType = ScalingType.SCALE_ASPECT_FILL;
@@ -255,6 +276,72 @@ public class CallActivity extends Activity
     peerConnectionClient = PeerConnectionClient.getInstance();
     peerConnectionClient.createPeerConnectionFactory(
         CallActivity.this, peerConnectionParameters, CallActivity.this);
+
+
+
+
+
+
+    // 녹음 시작 버튼
+    recordBtn.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        if (recorder != null) {
+          recorder.stop();
+          recorder.release();
+          recorder = null;
+        }
+
+        // 실험 결과 왠만하면 아래 recorder 객체의 속성을 지정하는 순서는 이대로 하는게 좋다 위치를 바꿨을때 에러가 났었음
+        // 녹음 시작을 위해  MediaRecorder 객체  recorder를 생성한다.
+        recorder = new MediaRecorder();
+
+        // 오디오 입력 형식 설정
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+
+        // 음향을 저장할 방식을 설정
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+
+        // 오디오 인코더 설정
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+
+        // 저장될 파일 지정
+        recorder.setOutputFile(filename);
+
+
+        try {
+          Toast.makeText(getApplicationContext(), "녹음이 시작되었습니다.", Toast.LENGTH_LONG).show();
+
+          // 녹음 준비,시작
+          recorder.prepare();
+          recorder.start();
+        } catch (Exception ex) {
+          Log.e("SampleAudioRecorder", "Exception : ", ex);
+        }
+      }
+    });
+
+    // 녹음 중지 버튼
+    /*
+    recordStopBtn.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        if (recorder == null)
+          return;
+
+        // 녹음을 중지
+        recorder.stop();
+
+        // 오디오 녹음에 필요한  메모리를 해제한다
+        recorder.release();
+        recorder = null;
+
+        Toast.makeText(getApplicationContext(), "녹음이 중지되었습니다.", Toast.LENGTH_LONG).show();
+      }
+    });
+    */
+
+
+
+
   }
 
   // Activity interfaces
