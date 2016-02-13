@@ -3,4 +3,269 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:background="#123456"
+                    android:layout_width="268px"
+                    android:layout_height="268px"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/iv_character_1" />
+
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/booklist_box01_normal3x"
+                    android:layout_width="340px"
+                    android:layout_height="416px"
+                    android:layout_gravity="center_horizontal|top" />
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textSize="56px"
+                    android:textColor="#1e3f4c"
+                    android:text="text"
+                    android:gravity="center"
+                    android:layout_marginTop="135dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="138px"
+                    android:layout_gravity="center_horizontal|top" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:background="#123456"
+                    android:layout_width="268px"
+                    android:layout_height="268px"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/iv_character_2" />
+
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/booklist_box01_normal3x"
+                    android:layout_width="340px"
+                    android:layout_height="416px"
+                    android:layout_gravity="center_horizontal|top" />
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textSize="56px"
+                    android:textColor="#1e3f4c"
+                    android:text="text"
+                    android:gravity="center"
+                    android:layout_marginTop="135dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="138px"
+                    android:layout_gravity="center_horizontal|top" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:background="#123456"
+                    android:layout_width="268px"
+                    android:layout_height="268px"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/iv_character_3" />
+
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/booklist_box01_normal3x"
+                    android:layout_width="340px"
+                    android:layout_height="416px"
+                    android:layout_gravity="center_horizontal|top" />
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textSize="56px"
+                    android:textColor="#1e3f4c"
+                    android:text="text"
+                    android:gravity="center"
+                    android:layout_marginTop="135dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="138px"
+                    android:layout_gravity="center_horizontal|top" />
+            </FrameLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_storyplay"
+            android:background="@drawable/btn_start_normal3x" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:background="#123456"
+                    android:layout_width="268px"
+                    android:layout_height="268px"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/iv_character_4" />
+
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/booklist_box01_normal3x"
+                    android:layout_width="340px"
+                    android:layout_height="416px"
+                    android:layout_gravity="center_horizontal|top" />
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textSize="56px"
+                    android:textColor="#1e3f4c"
+                    android:text="text"
+                    android:gravity="center"
+                    android:layout_marginTop="135dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="138px"
+                    android:layout_gravity="center_horizontal|top" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:background="#123456"
+                    android:layout_width="268px"
+                    android:layout_height="268px"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/iv_character_5" />
+
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/booklist_box01_normal3x"
+                    android:layout_width="340px"
+                    android:layout_height="416px"
+                    android:layout_gravity="center_horizontal|top" />
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textSize="56px"
+                    android:textColor="#1e3f4c"
+                    android:text="text"
+                    android:gravity="center"
+                    android:layout_marginTop="135dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="138px"
+                    android:layout_gravity="center_horizontal|top" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:background="#123456"
+                    android:layout_width="268px"
+                    android:layout_height="268px"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/iv_character_6" />
+
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/booklist_box01_normal3x"
+                    android:layout_width="340px"
+                    android:layout_height="416px"
+                    android:layout_gravity="center_horizontal|top" />
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textSize="56px"
+                    android:textColor="#1e3f4c"
+                    android:text="text"
+                    android:gravity="center"
+                    android:layout_marginTop="135dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="138px"
+                    android:layout_gravity="center_horizontal|top" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>

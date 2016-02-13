@@ -22,25 +22,28 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.appspot.apprtc.ConnectActivity;
 import org.appspot.apprtc.CallActivity;
 import org.appspot.apprtc.util.DataChannel;
+import org.appspot.apprtc.Story_Connect;
 /**
  * Created by Donghyun on 2016. 2. 8..
  */
 public class Story extends MainActivity {
 
     private ArrayList<HashMap<String,String>> story_list = new ArrayList<>();
-    ArrayList<HashMap<String,String>> scene_list = new ArrayList<>();
-    ArrayList<HashMap<String,String>> character_list = new ArrayList<>();
-    ArrayList<HashMap<Integer,HashMap>> script_list = new ArrayList<>();
-    GridView gridView;
-    String URL = "http://blay.eerssoft.co.kr/books/list/";
-
+    private ArrayList<HashMap<String,String>> scene_list = new ArrayList<>();
+    private ArrayList<HashMap<String,String>> character_list = new ArrayList<>();
+    private ArrayList<HashMap<Integer,HashMap>> script_list = new ArrayList<>();
+    private GridView gridView;
+    ListAdapter adapter_story;
+    private String URL = "http://blay.eerssoft.co.kr/books/list/";
 
     @Override
     protected void onCreate(Bundle SavedInstanceState) {
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.story_main);
+        adapter_story = new SimpleAdapter(Story.this, story_list, R.layout.item_storylist, new String[]{"bookid","cover_small"}, new int[]{R.id.tv_story_name, R.id.iv_cover});
         new SHJSONParser().setCallback(callback).execute(URL);
 
     }
@@ -74,9 +77,7 @@ public class Story extends MainActivity {
                 }
 
                 story_list.clear();
-                System.out.println("here");
                 JSONArray Story_arr = (JSONArray) json.get("list");
-                System.out.println(Story_arr);
                 for(int i = 0; i< Story_arr.length(); i++) {
                     JSONObject Story_single = Story_arr.getJSONObject(i);
 
@@ -108,15 +109,17 @@ public class Story extends MainActivity {
                     map.put("description", description);
                     //map.put("verson", version);
                     //map.put("displayversion", displayversion);
-                    //map.put("maxPlayer", maxPlayer);
+                    map.put("MaxPlayer", "6");
                     //map.put("character", character);
                     //map.put("scene", scene);
+
                     try {
                         JSONObject scene_ = new JSONObject(Scene);
                         JSONArray scene = scene_.getJSONArray("scene");
                         JSONObject character_ = new JSONObject(Character);
                         JSONArray character = character_.getJSONArray("character");
 
+                        //캐릭터 파싱
                         for (int k = 0; k < character.length(); k++){
                             //파싱
                             JSONObject sceneObj = character.getJSONObject(k);
@@ -134,6 +137,7 @@ public class Story extends MainActivity {
                             character_list.add(character_map);
                         }
 
+                        //스크립트 파싱
                         for(int k = 0; k < scene.length(); k++){
                             //파싱
                             JSONObject characterObj = scene.getJSONObject(k);
@@ -145,13 +149,11 @@ public class Story extends MainActivity {
                             scene_map.put("sid", sid);
                             scene_map.put("image_main", image_main);
                             scene_map.put("image_preview", image_preview);
-                            System.out.println("here2");
                             scene_list.add(scene_map);
 
                             JSONArray scripts = (JSONArray) characterObj.get("scripts");
 
                             HashMap<Integer, HashMap> scene_map_main = new HashMap<>();
-                            System.out.println("here2-2");
                             for (int j = 0; j < scripts.length(); j++){
                                 JSONObject scriptObj = scripts.getJSONObject(j);
                                 String scid = scriptObj.getString("scid");
@@ -190,62 +192,23 @@ public class Story extends MainActivity {
     };
 
     private void setStory_list(){
-        ListAdapter adapter_story = new SimpleAdapter(Story.this, story_list, R.layout.item_storylist, new String[]{"bookid","cover_small"}, new int[]{R.id.tv_story_name, R.id.iv_cover});
         gridView = (GridView)findViewById(R.id.gv_storylist);
         if(gridView != null) {
             gridView.setAdapter(adapter_story);
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    setContentView(R.layout.story_single);
-                    TextView tv_single_name = (TextView) findViewById(R.id.tv_single_name);
-                    tv_single_name.setText(story_list.get(position).get("title"));
-                    TextView tv_single_description = (TextView) findViewById(R.id.tv_single_description);
-                    tv_single_description.setText(story_list.get(position).get("description"));
-                    ImageView iv_main = (ImageView) findViewById(R.id.iv_main);
-                    String bookid = story_list.get(position).get("bookid");
-                    int title_single = getResources().getIdentifier("org.appspot.apprtc:drawable/main_" + bookid, null, null);
-                    iv_main.setImageDrawable(getResources().getDrawable(title_single));
-
-                    //CAll_LIST 진행
-                    TextView tv_start = (TextView) findViewById(R.id.tv_start);
-                    tv_start.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            setContentView(R.layout.call_list);
-                            //친구검색
-                            //초대 => 푸시
-                            Button btn_invite = (Button) findViewById(R.id.btn_invite);
-                            btn_invite.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //setContentView
-                                    //appRTC 실행
-                                    ConnectActivity call = new ConnectActivity();
-                                    call.connectToRoom(true, 10000, "354354354");
-
-                                    //DataChannel로 통신하기
-
-                                    //받은 값으로 뷰만 바꾸면 댐
-
-                                }
-                            });
-/*
-                            //Story_MAIN 뒤로가기 버튼
-                            TextView tv_back = (TextView) findViewById(R.id.tv_back);
-                            tv_back.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    new SHJSONParser().setCallback(callback).execute(URL);
-                                    setContentView(R.layout.story_main);
-                                }
-                            });*/
-                        }
-                    });
+                    Intent intent = new Intent(Story.this, Story_Single .class);
+                    intent.putExtra("title", story_list.get(position).get("title"));
+                    intent.putExtra("description", story_list.get(position).get("description"));
+                    intent.putExtra("bookid", story_list.get(position).get("bookid"));
+                    intent.putExtra("script", script_list.toString());
+                    intent.putExtra("character", character_list.toString());
+                    intent.putExtra("MaxPlayer", story_list.get(position).get("MaxPlayer"));
+                    startActivity(intent);
                 }
             });
-        }
-        else{
+        } else{
             Log.e("error", "gridView is null");
         }
     }

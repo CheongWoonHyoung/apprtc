@@ -25,9 +25,8 @@
 
     <activity
         android:name="MainActivity"
-        android:label="@string/app_name"
+        android:label="BookPlay"
         >
-
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
@@ -56,7 +55,11 @@
         >
     </activity>
     <activity android:name="Story"></activity>
-    <activity android:name="Story_Single"></activity>
+      <activity android:name=".Story_Single"></activity>
+      <activity android:name=".Call_List"></activity>
+      <activity android:name=".ConnectActivity"
+          android:screenOrientation="landscape"></activity>
+
 
     <activity
         android:name="CallActivity"

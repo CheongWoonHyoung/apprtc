@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -30,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +39,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -74,10 +78,23 @@ public class ConnectActivity extends Activity {
   private ArrayList<String> roomList;
   private ArrayAdapter<String> adapter;
 
+  //Custom
+  private String script;
+  private String character;
+  private String roomId_;
+  private Integer MaxPlayer;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    //Custom
+    script = String.valueOf(getIntent().getExtras().getString("script"));
+    character = String.valueOf(getIntent().getExtras().getString("character"));
+    roomId_ = String.valueOf(getIntent().getExtras().getString("roomId"));
+    MaxPlayer = Integer.parseInt(String.valueOf(getIntent().getExtras().getString("MaxPlayer")));
+
+    //Standby
     // Get setting keys.
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -99,50 +116,98 @@ public class ConnectActivity extends Activity {
     keyprefRoom = getString(R.string.pref_room_key);
     keyprefRoomList = getString(R.string.pref_room_list_key);
 
+    //화면 가로 고정
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
     setContentView(R.layout.activity_connect);
 
-    roomEditText = (EditText) findViewById(R.id.room_edittext);
-    roomEditText.setOnEditorActionListener(
-      new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(
-            TextView textView, int i, KeyEvent keyEvent) {
-          if (i == EditorInfo.IME_ACTION_DONE) {
-            addRoomButton.performClick();
-            return true;
-          }
-          return false;
-        }
-    });
-    roomEditText.requestFocus();
+    //String => ArrayList
+    List<String> character_list = new ArrayList<String>(Arrays.asList(character));
+    List<String> script_list = new ArrayList<String>(Arrays.asList(script));
 
-    roomListView = (ListView) findViewById(R.id.room_listview);
-    roomListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+    //캐릭터 이미지 + 텍스트 뿌려주기
+    for (int charcter_loop = 0; charcter_loop < 6; charcter_loop++) {
+      if (charcter_loop < MaxPlayer) {
+        String img_value = Integer.toString(charcter_loop + 1);
+        System.out.println("character_loop");
+        System.out.println(img_value);
+        //c1,c2, 이미지 이름 찾기
+        int im_temp_ = getResources().getIdentifier("c" + img_value, "drawable", "org.appspot.apprtc");
+        //이미지 뷰 찾기
+        //int iv_temp_ = getResources().getIdentifier("R.id.iv_character_"+img_value,null,"org.appspot.apprtc");
 
-    addRoomButton = (ImageButton) findViewById(R.id.add_room_button);
-    addRoomButton.setOnClickListener(addRoomListener);
-    removeRoomButton = (ImageButton) findViewById(R.id.remove_room_button);
-    removeRoomButton.setOnClickListener(removeRoomListener);
+        //ImageView iv_temp = (ImageView) findViewById(iv_temp_);
+        //iv_temp.setBackgroundDrawable(getResources().getDrawable(im_temp_));
+      } else {
+        //더미 이미지 지정
+      }
+    }
+
     connectButton = (ImageButton) findViewById(R.id.connect_button);
     connectButton.setOnClickListener(connectListener);
-    connectLoopbackButton =
-        (ImageButton) findViewById(R.id.connect_loopback_button);
-    connectLoopbackButton.setOnClickListener(connectListener);
 
     // If an implicit VIEW intent is launching the app, go directly to that URL.
     final Intent intent = getIntent();
-    if ("android.intent.action.VIEW".equals(intent.getAction())
-        && !commandLineRun) {
+
+    //if ("android.intent.action.VIEW".equals(intent.getAction())
+    if (!commandLineRun) {
       commandLineRun = true;
       boolean loopback = intent.getBooleanExtra(
-          CallActivity.EXTRA_LOOPBACK, false);
+              CallActivity.EXTRA_LOOPBACK, false);
       int runTimeMs = intent.getIntExtra(
-          CallActivity.EXTRA_RUNTIME, 0);
-      String room = sharedPref.getString(keyprefRoom, "");
-      roomEditText.setText(room);
-      //connectToRoom(loopback, runTimeMs);
+              CallActivity.EXTRA_RUNTIME, 0);
+
+      //서로 연결하기
+      connectToRoom(loopback, runTimeMs);
       return;
     }
+
+    //서로 연결했으니 이제 통신하며, 배역 선정
+    //통신이 힘들면 일단 그냥 혼자서 시작하는걸로 ㄱㄱ
+    // 위에서 이미지뷰를 선언했다고 가정하고
+    /*
+    //이미지뷰 아이디
+    String iv_id = "";
+    iv_temp.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch (View v, MotionEvent event) {
+            //사용자가 선택한 이미지뷰의 iD 값을 가져오고
+                iv_id= v.getResources().getResourceName(v.getId());
+            }
+
+        });
+     });
+     //아이디값에 따라서 캐릭터 아이디 알아내기
+     String User_character_Id = ""; //<=여기다가 넣고
+     */
+
+    //시작! 버튼 누르면
+    //Textview tv_startplay = (Button) findViewbyId(R.id.tv_startPlay);
+    //온클릭 리스너
+    /*
+    tv_startPlay.onClickLister(new View.OnClickListener() {
+      @Override
+      public void onClick(
+      ...
+          //콘텐츠 뷰 바꿔기 => Playing
+          setContentView(R.layout.playing);
+
+          //ArrayList Script_list 분해해서 진행 콘텐츠 뷰 바꾸며 진행 ㄱㄱ
+
+          //사용자 아이디면 => 녹음
+          //if (Script_list.get(index).get("Sid") == User_character_Id){
+          //녹음
+          //else{
+          //녹음 ㄴㄴ
+      }
+     */
+
+
+
+
+
+
+
   }
 
   @Override
@@ -166,19 +231,21 @@ public class ConnectActivity extends Activity {
   @Override
   public void onPause() {
     super.onPause();
+    /*
     String room = roomEditText.getText().toString();
     String roomListJson = new JSONArray(roomList).toString();
     SharedPreferences.Editor editor = sharedPref.edit();
     editor.putString(keyprefRoom, room);
     editor.putString(keyprefRoomList, roomListJson);
-    editor.commit();
+    editor.commit();*/
   }
 
   @Override
   public void onResume() {
-    super.onResume();
-    String room = sharedPref.getString(keyprefRoom, "");
-    roomEditText.setText(room);
+    super.onResume();    /*
+
+   // String room = sharedPref.getString(keyprefRoom, "");
+    //roomEditText.setText(room);
     roomList = new ArrayList<String>();
     String roomListJson = sharedPref.getString(keyprefRoomList, null);
     if (roomListJson != null) {
@@ -191,13 +258,15 @@ public class ConnectActivity extends Activity {
         Log.e(TAG, "Failed to load room list: " + e.toString());
       }
     }
+
     adapter = new ArrayAdapter<String>(
-        this, android.R.layout.simple_list_item_1, roomList);
+        this, android.R.layout.simple_list_item_1, roomL//ist);
     roomListView.setAdapter(adapter);
     if (adapter.getCount() > 0) {
       roomListView.requestFocus();
       roomListView.setItemChecked(0, true);
     }
+    */
   }
 
   @Override
@@ -219,64 +288,40 @@ public class ConnectActivity extends Activity {
         loopback = true;
       }
       commandLineRun = false;
-      //connectToRoom(loopback, 0);
+      connectToRoom(loopback, 0);
     }
   };
 
-  public void connectToRoom(boolean loopback, int runTimeMs, String roomId) {
+  public void connectToRoom(boolean loopback, int runTimeMs) {
     // Get room name (random for loopback).
-    /*
+
     String roomId;
     if (loopback) {
       roomId = Integer.toString((new Random()).nextInt(100000000));
     } else {
-      roomId = getSelectedItem();
+      //roomId = getSelectedItem();
+      //푸시 메시지 받아서 넣으면 댐
+      roomId = roomId_;
+      /*
       if (roomId == null) {
-        roomId = roomEditText.getText().toString();
+        //roomId = roomEditText.getText().toString();
+        roomId = "354354359";
       }
+      */
     }
-*/
-
-    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    System.out.println("here_a");
-
-    sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-    keyprefVideoCallEnabled = getString(R.string.pref_videocall_key);
-    System.out.println("here_a");
-
-    keyprefResolution = getString(R.string.pref_resolution_key);
-    keyprefFps = getString(R.string.pref_fps_key);
-    keyprefCaptureQualitySlider = getString(R.string.pref_capturequalityslider_key);
-    keyprefVideoBitrateType = getString(R.string.pref_startvideobitrate_key);
-    keyprefVideoBitrateValue = getString(R.string.pref_startvideobitratevalue_key);
-    keyprefVideoCodec = getString(R.string.pref_videocodec_key);
-    keyprefHwCodecAcceleration = getString(R.string.pref_hwcodec_key);
-    keyprefAudioBitrateType = getString(R.string.pref_startaudiobitrate_key);
-    keyprefAudioBitrateValue = getString(R.string.pref_startaudiobitratevalue_key);
-    keyprefAudioCodec = getString(R.string.pref_audiocodec_key);
-    keyprefNoAudioProcessingPipeline = getString(R.string.pref_noaudioprocessing_key);
-    keyprefOpenSLES = getString(R.string.pref_opensles_key);
-    keyprefDisplayHud = getString(R.string.pref_displayhud_key);
-    keyprefRoomServerUrl = getString(R.string.pref_room_server_url_key);
-    keyprefRoom = getString(R.string.pref_room_key);
-    keyprefRoomList = getString(R.string.pref_room_list_key);
-
     String roomUrl = sharedPref.getString(
         keyprefRoomServerUrl,
         getString(R.string.pref_room_server_url_default));
-    System.out.println("here_a");
 
     // Video call enabled flag.
     boolean videoCallEnabled = sharedPref.getBoolean(keyprefVideoCallEnabled,
         Boolean.valueOf(getString(R.string.pref_videocall_default)));
-    System.out.println("here_b");
 
     // Get default codecs.
     String videoCodec = sharedPref.getString(keyprefVideoCodec,
         getString(R.string.pref_videocodec_default));
     String audioCodec = sharedPref.getString(keyprefAudioCodec,
         getString(R.string.pref_audiocodec_default));
-    System.out.println("here_c");
 
     // Check HW codec flag.
     boolean hwCodec = sharedPref.getBoolean(keyprefHwCodecAcceleration,
@@ -291,7 +336,6 @@ public class ConnectActivity extends Activity {
     boolean useOpenSLES = sharedPref.getBoolean(
         keyprefOpenSLES,
         Boolean.valueOf(getString(R.string.pref_opensles_default)));
-    System.out.println("here_d");
 
     // Get video resolution from settings.
     int videoWidth = 0;
@@ -309,7 +353,6 @@ public class ConnectActivity extends Activity {
         Log.e(TAG, "Wrong video resolution setting: " + resolution);
       }
     }
-    System.out.println("here_e");
 
     // Get camera fps from settings.
     int cameraFps = 0;

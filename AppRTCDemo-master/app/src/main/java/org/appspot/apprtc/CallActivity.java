@@ -251,6 +251,7 @@ public class CallActivity extends Activity
       }, runTimeMs);
     }
 
+    //연결시작
     peerConnectionClient = PeerConnectionClient.getInstance();
     peerConnectionClient.createPeerConnectionFactory(
         CallActivity.this, peerConnectionParameters, CallActivity.this);

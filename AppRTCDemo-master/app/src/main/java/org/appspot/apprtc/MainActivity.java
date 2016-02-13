@@ -20,36 +20,36 @@ public class MainActivity extends Activity {
         main01.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                main01.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn01_push));
+                main01.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn01_push2x));
 
                 Intent intent = new Intent(v.getContext(),Story.class);
                 startActivity(intent);
 
-                main01.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn01_normal));
+                main01.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn01_normal2x));
             }
         });
 
         main02.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                main02.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn02_push));
+                main02.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn02_push2x));
 
                 Intent intent = new Intent(MainActivity.this,Album.class);
                 startActivity(intent);
 
-                main02.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn02_normal));
+                main02.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn02_normal2x));
             }
         });
 
         main03.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                main03.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn03_push));
+                main03.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn03_push2x));
 
                 Intent intent = new Intent(MainActivity.this,Settings.class);
                 startActivity(intent);
 
-                main03.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn03_normal));
+                main03.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn03_normal2x));
             }
         });
     }

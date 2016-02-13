@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
-        android:background="#123456"
+        android:background="@drawable/bg_gradient"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,7 +29,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/main_btn01"
-                    android:background="@drawable/main_btn01_normal" />
+                    android:background="@drawable/main_btn01_normal2x" />
             </LinearLayout>
 
             <LinearLayout
@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/main_btn02"
-                    android:background="@drawable/main_btn02_normal" />
+                    android:background="@drawable/main_btn02_normal2x" />
             </LinearLayout>
 
             <LinearLayout
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/main_btn03"
-                    android:background="@drawable/main_btn03_normal" />
+                    android:background="@drawable/main_btn03_normal2x" />
             </LinearLayout>
 
         </LinearLayout>

@@ -11,6 +11,7 @@
 package org.appspot.apprtc;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import org.appspot.apprtc.AppRTCClient.SignalingParameters;
@@ -454,6 +455,7 @@ public class PeerConnectionClient {
         Logging.Severity.LS_INFO);
 
     //Todo
+
 
     mediaStream = factory.createLocalMediaStream("ARDAMS");
     if (videoCallEnabled) {

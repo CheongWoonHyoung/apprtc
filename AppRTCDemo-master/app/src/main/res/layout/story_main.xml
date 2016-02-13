@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="#123456"
+    android:background="@drawable/bg_gradient"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
@@ -10,9 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:background="@drawable/btn_home_normal3x"
-            android:layout_width="243px"
-            android:layout_height="243px"/>
+            android:background="@drawable/btn_home_normal2x"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:layout_marginLeft="20dp" />
         <TextView
             android:text="동화 목록"
             android:gravity="center"
@@ -28,5 +29,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/gv_storylist"
-        android:padding="10dp" />
+        android:padding="15dp" />
 </LinearLayout>
