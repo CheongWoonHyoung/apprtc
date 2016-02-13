@@ -13,8 +13,10 @@
         <Button
             android:layout_width="500px"
             android:layout_height="220px"
+            android:id="@+id/tv_back"
             android:background="@drawable/btn_back_full_normal3x"/>
         <Button
+            android:id="@+id/tv_start"
             android:layout_width="500px"
             android:layout_height="220px"
             android:layout_alignParentRight="true"
@@ -29,6 +31,10 @@
             android:layout_width="1356px"
             android:layout_height="1356px">
             <ImageView
+                android:id="@+id/iv_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <ImageView
                 android:padding="3dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,7 +42,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bookinfo_box012x"/>
+                android:src="@drawable/bookinfo_box012x"/>
         </FrameLayout>
         <RelativeLayout
             android:orientation="vertical"
@@ -47,6 +53,7 @@
             android:layout_width="1356px"
             android:layout_height="174px">
             <TextView
+                android:id="@+id/tv_single_name"
                 android:textSize="52px"
                 android:textStyle="bold"
                 android:textColor="#1e3f4c"
@@ -66,6 +73,7 @@
             android:background="@drawable/bookinfo_box032x"
             >
             <TextView
+                android:id="@+id/tv_single_description"
                 android:layout_width="1216px"
                 android:layout_height="231px"
                 android:layout_centerInParent="true"
@@ -81,6 +89,11 @@
             android:layout_below="@+id/bookinfo_3"
             android:layout_width="1356px"
             android:layout_height="174px"
-            ></LinearLayout>
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tv_single_rate"/>
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

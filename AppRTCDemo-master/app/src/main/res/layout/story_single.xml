@@ -1,95 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:background="@drawable/bg_gradient">
-
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@drawable/bg_gradient"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_gravity="left"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_back"
-            android:background="@drawable/btn_back_full_normal2x" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_start"
-            android:background="@drawable/btn_start_normal2x"
-            android:layout_alignParentEnd="true" />
-
-    </RelativeLayout>
-
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
-
-        <ImageView
-            android:layout_marginLeft="91px"
-            android:background="#123456"
-            android:layout_marginTop="55px"
-            android:layout_width="458px"
-            android:layout_height="458px"
-            android:id="@+id/iv_main" />
-
-        <ImageView
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/booklist_box01_normal3x"
-            android:layout_width="640px"
-            android:layout_height="716px" />
-
-        <TextView
-            android:textStyle="bold"
-            android:textSize="56px"
-            android:textColor="#1e3f4c"
-            android:text="text"
-            android:gravity="center"
-            android:layout_marginTop="520px"
-            android:layout_marginLeft="40px"
-            android:layout_width="560px"
-            android:layout_height="138px"
-            android:id="@+id/tv_single_name" />
-    </FrameLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="30dp"
-        android:background="#FFFFFF">
+        android:layout_height="220px">
+        <Button
+            android:layout_width="500px"
+            android:layout_height="220px"
+            android:id="@+id/tv_back"
+            android:background="@drawable/btn_back_full_normal3x"/>
+        <Button
+            android:id="@+id/tv_start"
+            android:layout_width="500px"
+            android:layout_height="220px"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/btn_start_normal3x"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/bookinfo_img"
+            android:layout_centerHorizontal="true"
+            android:layout_width="1356px"
+            android:layout_height="1356px">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/tv_single_description"
-            android:textColor="#000000"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp" />
+            <ImageView
+                android:id="@+id/iv_main"
+                android:padding="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/bookinfo_image"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bookinfo_box012x"/>
+        </FrameLayout>
+        <RelativeLayout
+            android:orientation="vertical"
+            android:id="@+id/bookinfo_2"
+            android:background="@drawable/bookinfo_box022x"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/bookinfo_img"
+            android:layout_width="1356px"
+            android:layout_height="174px">
+            <TextView
+                android:id="@+id/tv_single_name"
+                android:textSize="52px"
+                android:textStyle="bold"
+                android:textColor="#1e3f4c"
+                android:text="text"
+                android:layout_width="1276px"
+                android:layout_height="102px"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:orientation="vertical"
+            android:id="@+id/bookinfo_3"
+            android:layout_below="@+id/bookinfo_2"
+            android:layout_width="1356px"
+            android:layout_height="316px"
+            android:background="@drawable/bookinfo_box032x"
+            >
+            <TextView
+                android:id="@+id/tv_single_description"
+                android:layout_width="1216px"
+                android:layout_height="231px"
+                android:layout_centerInParent="true"
+                android:textSize="48px"
+                android:text="text"
+                android:textColor="#1e3f4c"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/tv_single_rate"
-            android:textColor="#000000" />
-    </LinearLayout>
-
+        </RelativeLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="@drawable/bookinfo_box042x"
+            android:layout_below="@+id/bookinfo_3"
+            android:layout_width="1356px"
+            android:layout_height="174px"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tv_single_rate"/>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

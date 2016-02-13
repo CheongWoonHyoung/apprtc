@@ -36,6 +36,7 @@ public class Story extends MainActivity {
     private ArrayList<HashMap<String,String>> character_list = new ArrayList<>();
     private ArrayList<HashMap<Integer,HashMap>> script_list = new ArrayList<>();
     private GridView gridView;
+    private ImageView iv_cover;
     ListAdapter adapter_story;
     private String URL = "http://blay.eerssoft.co.kr/books/list/";
 
@@ -44,6 +45,7 @@ public class Story extends MainActivity {
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.story_main);
         adapter_story = new SimpleAdapter(Story.this, story_list, R.layout.item_storylist, new String[]{"bookid","cover_small"}, new int[]{R.id.tv_story_name, R.id.iv_cover});
+
         new SHJSONParser().setCallback(callback).execute(URL);
 
     }
@@ -86,6 +88,9 @@ public class Story extends MainActivity {
                     String title = Story_single.get("title").toString();
                     String cover = Story_single.get("image").toString();
                     String cover_small = Story_single.get("image_small").toString();
+                    int cover_s= getResources().getIdentifier("org.appspot.apprtc:drawable/main_"+cover_small,null,null);
+                    ImageView iv_cover = (ImageView)findViewById(R.id.iv_cover);
+                    //iv_cover.setImageDrawable(getResources().getDrawable(cover_s));
                     String download = Story_single.get("download").toString();
                     String description = Story_single.get("description").toString();
                     String version;
@@ -194,6 +199,9 @@ public class Story extends MainActivity {
     private void setStory_list(){
         gridView = (GridView)findViewById(R.id.gv_storylist);
         if(gridView != null) {
+
+            //final String cover_small_2 = String.valueOf(getIntent().getExtras().getString("image_small"));
+            //iv_cover.setImageDrawable(getResources().getDrawable(cover_s));
             gridView.setAdapter(adapter_story);
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

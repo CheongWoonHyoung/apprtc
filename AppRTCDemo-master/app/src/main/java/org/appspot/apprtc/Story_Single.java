@@ -1,8 +1,11 @@
 package org.appspot.apprtc;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,9 +35,16 @@ public class Story_Single extends MainActivity {
         tv_single_description.setText(description);
         ImageView iv_main = (ImageView) findViewById(R.id.iv_main);
         int title_single= getResources().getIdentifier("org.appspot.apprtc:drawable/main_"+bookid,null,null);
-        iv_main.setImageDrawable(getResources().getDrawable(title_single));
+        //iv_main.setImageDrawable(getResources().getDrawable(title_single));
 
-        TextView tv_start = (TextView) findViewById(R.id.tv_start);
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),title_single);
+        Bitmap circularBitmap = ImageConverter.getRoundedCornerBitmap(bitmap, 100);
+
+        ImageView circularImageView = (ImageView)findViewById(R.id.iv_main);
+        circularImageView.setImageBitmap(circularBitmap);
+
+
+        Button tv_start = (Button) findViewById(R.id.tv_start);
 
         tv_start.setOnClickListener(new View.OnClickListener() {
             @Override
