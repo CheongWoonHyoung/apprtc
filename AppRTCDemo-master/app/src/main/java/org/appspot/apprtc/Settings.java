@@ -1,12 +1,18 @@
 package org.appspot.apprtc;
 
+
+import android.app.Activity;
+import android.os.Bundle;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+
 /**
  * Created by cheongwh on 2016. 2. 12..
  */
+
 public class Settings extends MainActivity {
     @Override
     protected void onCreate(Bundle SavedInstanceState){
@@ -21,4 +27,5 @@ public class Settings extends MainActivity {
             }
         });
     }
+
 }
