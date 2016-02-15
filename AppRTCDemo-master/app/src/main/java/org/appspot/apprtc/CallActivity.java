@@ -150,6 +150,7 @@ public class CallActivity extends Activity
   private ArrayList<HashMap<String,String>> story_list;
   private   ArrayList<HashMap<String, String>> scene_list;
 
+  private String sdRootPath;
   private String User_character_Id;
 
   int scid_loop = 0;
@@ -179,28 +180,13 @@ public class CallActivity extends Activity
 
     // Set window styles for fullscreen-window size. Needs to be done before
     // adding content.
-    /*
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    getWindow().addFlags(
-            LayoutParams.FLAG_FULLSCREEN
-                    | LayoutParams.FLAG_KEEP_SCREEN_ON
-                    | LayoutParams.FLAG_DISMISS_KEYGUARD
-                    | LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    | LayoutParams.FLAG_TURN_SCREEN_ON);
-    getWindow().getDecorView().setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                    */
-    setContentView(R.layout.activity_call);
 
+    setContentView(R.layout.activity_call);
 
     btnRecord = (ImageView) findViewById(R.id.btnRecord);
     btnStop = (ImageView) findViewById(R.id.btnStop);
-    String sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+    sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
     mFilePath = sdRootPath + "/record.mp3";
-
-
 
     iceConnected = false;
     signalingParameters = null;
@@ -404,7 +390,7 @@ public class CallActivity extends Activity
             //재생하기
             if (script_map.get("audio") == "true") {
               //재생
-              onBtnPlay();
+              onBtnPlay(mp3_filename);
             }
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
@@ -426,7 +412,7 @@ public class CallActivity extends Activity
     //뷰바꾸기
   }
 
-  public void onBtnPlay() {
+  public void onBtnPlay(String filename) {
     if( mPlayer != null ) {
       mPlayer.stop();
       mPlayer.release();
@@ -435,7 +421,8 @@ public class CallActivity extends Activity
     mPlayer = new MediaPlayer();
 
     try {
-      mPlayer.setDataSource(mFilePath);
+      filename = sdRootPath + "/" + filename;
+      mPlayer.setDataSource(filename);
       mPlayer.prepare();
     } catch(IOException e) {
       Log.d("tag", "Audio Play error");
