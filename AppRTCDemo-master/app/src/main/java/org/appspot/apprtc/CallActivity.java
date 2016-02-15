@@ -201,6 +201,7 @@ public class CallActivity extends Activity
     mFilePath = sdRootPath + "/record.mp3";
 
 
+
     iceConnected = false;
     signalingParameters = null;
     scalingType = ScalingType.SCALE_ASPECT_FILL;
