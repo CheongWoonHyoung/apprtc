@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient">
+
+    <RelativeLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:background="@drawable/btn_home_normal3x"
+            android:layout_width="243px"
+            android:layout_height="243px"
+            android:id="@+id/button2" />
+
+        <TextView
+            android:text="설정"
+            android:gravity="center"
+            android:textSize="52px"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_centerInParent="true"
+            android:layout_width="363px"
+            android:layout_height="92px" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:background="#123456"
+                android:layout_marginTop="55px"
+                android:layout_width="458px"
+                android:layout_height="458px"
+                android:layout_gravity="center_horizontal|top"
+                android:id="@+id/imageView" />
+
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/booklist_box01_normal3x"
+                android:layout_width="640px"
+                android:layout_height="716px"
+                android:layout_gravity="center_horizontal|top" />
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="56px"
+                android:textColor="#1e3f4c"
+                android:text="NAME(ID)"
+                android:gravity="center"
+                android:layout_marginTop="150dp"
+                android:layout_width="wrap_content"
+                android:layout_height="138px"
+                android:layout_gravity="center_horizontal|top" />
+        </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>
