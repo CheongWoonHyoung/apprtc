@@ -24,17 +24,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="268px"
-                    android:layout_height="268px"
+                    android:layout_width="168px"
+                    android:layout_height="168px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_1" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="340px"
-                    android:layout_height="416px"
+                    android:layout_width="240px"
+                    android:layout_height="316px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -43,7 +43,7 @@
                     android:textColor="#1e3f4c"
                     android:text="text"
                     android:gravity="center"
-                    android:layout_marginTop="135dp"
+                    android:layout_marginTop="90dp"
                     android:layout_width="wrap_content"
                     android:layout_height="138px"
                     android:layout_gravity="center_horizontal|top" />
@@ -64,17 +64,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="268px"
-                    android:layout_height="268px"
+                    android:layout_width="168px"
+                    android:layout_height="168px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_2" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="340px"
-                    android:layout_height="416px"
+                    android:layout_width="240px"
+                    android:layout_height="316px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -83,7 +83,7 @@
                     android:textColor="#1e3f4c"
                     android:text="text"
                     android:gravity="center"
-                    android:layout_marginTop="135dp"
+                    android:layout_marginTop="90dp"
                     android:layout_width="wrap_content"
                     android:layout_height="138px"
                     android:layout_gravity="center_horizontal|top" />
@@ -103,17 +103,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="268px"
-                    android:layout_height="268px"
+                    android:layout_width="168px"
+                    android:layout_height="168px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_3" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="340px"
-                    android:layout_height="416px"
+                    android:layout_width="240px"
+                    android:layout_height="316px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -122,7 +122,7 @@
                     android:textColor="#1e3f4c"
                     android:text="text"
                     android:gravity="center"
-                    android:layout_marginTop="135dp"
+                    android:layout_marginTop="90dp"
                     android:layout_width="wrap_content"
                     android:layout_height="138px"
                     android:layout_gravity="center_horizontal|top" />
@@ -164,17 +164,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="268px"
-                    android:layout_height="268px"
+                    android:layout_width="168px"
+                    android:layout_height="168px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_4" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="340px"
-                    android:layout_height="416px"
+                    android:layout_width="240px"
+                    android:layout_height="316px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -183,7 +183,7 @@
                     android:textColor="#1e3f4c"
                     android:text="text"
                     android:gravity="center"
-                    android:layout_marginTop="135dp"
+                    android:layout_marginTop="90dp"
                     android:layout_width="wrap_content"
                     android:layout_height="138px"
                     android:layout_gravity="center_horizontal|top" />
@@ -203,17 +203,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="268px"
-                    android:layout_height="268px"
+                    android:layout_width="168px"
+                    android:layout_height="168px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_5" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="340px"
-                    android:layout_height="416px"
+                    android:layout_width="240px"
+                    android:layout_height="316px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -222,7 +222,7 @@
                     android:textColor="#1e3f4c"
                     android:text="text"
                     android:gravity="center"
-                    android:layout_marginTop="135dp"
+                    android:layout_marginTop="90dp"
                     android:layout_width="wrap_content"
                     android:layout_height="138px"
                     android:layout_gravity="center_horizontal|top" />
@@ -242,17 +242,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="268px"
-                    android:layout_height="268px"
+                    android:layout_width="168px"
+                    android:layout_height="168px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_6" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="340px"
-                    android:layout_height="416px"
+                    android:layout_width="240px"
+                    android:layout_height="316px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -261,7 +261,7 @@
                     android:textColor="#1e3f4c"
                     android:text="text"
                     android:gravity="center"
-                    android:layout_marginTop="135dp"
+                    android:layout_marginTop="90dp"
                     android:layout_width="wrap_content"
                     android:layout_height="138px"
                     android:layout_gravity="center_horizontal|top" />
