@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Created by cheongwh on 2016. 2. 12..
@@ -49,8 +50,8 @@ public class Call_List extends MainActivity {
                 //다운로드시작
                 if (load_chk == true) {
                     //원래는 랜덤생성임, 테스트용 임의 생성
-                    String roomId = "357357352";
-                    //String roomId = Integer.toString((new Random()).nextInt(100000000));
+                    //String roomId = "357357352";
+                    String roomId = Integer.toString((new Random()).nextInt(100000000));
                     Intent intent = new Intent(Call_List.this, ConnectActivity.class);
                     intent.putExtra("character", character_list);
                     intent.putExtra("script", script_list);

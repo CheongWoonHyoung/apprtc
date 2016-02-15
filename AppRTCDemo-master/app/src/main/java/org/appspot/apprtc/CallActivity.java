@@ -174,6 +174,7 @@ public class CallActivity extends Activity
 
     // Set window styles for fullscreen-window size. Needs to be done before
     // adding content.
+    /*
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     getWindow().addFlags(
             LayoutParams.FLAG_FULLSCREEN
@@ -185,6 +186,7 @@ public class CallActivity extends Activity
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                    */
     setContentView(R.layout.activity_call);
 
 
@@ -192,7 +194,6 @@ public class CallActivity extends Activity
     final ImageView playBtn = (ImageView) findViewById(R.id.playBtn);
     //ImageView recordStopBtn = (ImageView) findViewById(R.id.recordStopBtn);
     filename = RECORDED_FILE.getAbsolutePath() + "/test.mp4";
-    ;
 
     iceConnected = false;
     signalingParameters = null;
@@ -219,9 +220,9 @@ public class CallActivity extends Activity
 
     // Create video renderers.
     rootEglBase = new EglBase();
-    localRender.init(rootEglBase.getContext(), null);
+    //localRender.init(rootEglBase.getContext(), null);
     remoteRender.init(rootEglBase.getContext(), null);
-    localRender.setZOrderMediaOverlay(true);
+    //localRender.setZOrderMediaOverlay(true);
     //updateVideoView();
 
     // Check for mandatory permissions.
@@ -314,7 +315,7 @@ public class CallActivity extends Activity
           FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
           int play_bg = getResources().getIdentifier(story_list.get(scid_loop).get("scid"), "drawable", getPackageName());
           fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
-          go_record(scid_loop, scene_loop);
+          //go_record(scid_loop, scene_loop);
           recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
           if (scene_loop < script_list.get(scid_loop).get(scid_loop).size()) {
             scene_loop++;
@@ -353,7 +354,6 @@ public class CallActivity extends Activity
         }
       }
     });
-
     //뷰바꾸기
   }
 
