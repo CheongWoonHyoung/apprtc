@@ -7,7 +7,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="316px"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal">
 
@@ -24,17 +24,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="168px"
-                    android:layout_height="168px"
+                    android:layout_marginTop="55px"
+                    android:layout_width="458px"
+                    android:layout_height="458px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_1" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="240px"
-                    android:layout_height="316px"
+                    android:layout_width="640px"
+                    android:layout_height="716px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -64,17 +64,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="168px"
-                    android:layout_height="168px"
+                    android:layout_marginTop="55px"
+                    android:layout_width="458px"
+                    android:layout_height="458px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_2" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="240px"
-                    android:layout_height="316px"
+                    android:layout_width="640px"
+                    android:layout_height="716px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -103,17 +103,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="168px"
-                    android:layout_height="168px"
+                    android:layout_marginTop="55px"
+                    android:layout_width="458px"
+                    android:layout_height="458px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_3" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="240px"
-                    android:layout_height="316px"
+                    android:layout_width="640px"
+                    android:layout_height="716px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -164,17 +164,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="168px"
-                    android:layout_height="168px"
+                    android:layout_marginTop="55px"
+                    android:layout_width="458px"
+                    android:layout_height="458px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_4" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="240px"
-                    android:layout_height="316px"
+                    android:layout_width="640px"
+                    android:layout_height="716px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -203,17 +203,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="168px"
-                    android:layout_height="168px"
+                    android:layout_marginTop="55px"
+                    android:layout_width="458px"
+                    android:layout_height="458px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_5" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="240px"
-                    android:layout_height="316px"
+                    android:layout_width="640px"
+                    android:layout_height="716px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView
@@ -242,17 +242,17 @@
 
                 <ImageView
                     android:background="#123456"
-                    android:layout_width="168px"
-                    android:layout_height="168px"
+                    android:layout_marginTop="55px"
+                    android:layout_width="458px"
+                    android:layout_height="458px"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_character_6" />
 
                 <ImageView
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
-                    android:layout_width="240px"
-                    android:layout_height="316px"
+                    android:layout_width="640px"
+                    android:layout_height="716px"
                     android:layout_gravity="center_horizontal|top" />
 
                 <TextView

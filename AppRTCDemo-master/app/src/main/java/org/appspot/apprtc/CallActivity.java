@@ -150,6 +150,7 @@ public class CallActivity extends Activity
   private ArrayList<HashMap<String,String>> story_list;
   private   ArrayList<HashMap<String, String>> scene_list;
 
+  private String sdRootPath;
   private String User_character_Id;
 
   int scid_loop = 0;
@@ -180,28 +181,16 @@ public class CallActivity extends Activity
 
     // Set window styles for fullscreen-window size. Needs to be done before
     // adding content.
-    /*
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    getWindow().addFlags(
-            LayoutParams.FLAG_FULLSCREEN
-                    | LayoutParams.FLAG_KEEP_SCREEN_ON
-                    | LayoutParams.FLAG_DISMISS_KEYGUARD
-                    | LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    | LayoutParams.FLAG_TURN_SCREEN_ON);
-    getWindow().getDecorView().setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                    */
-    setContentView(R.layout.activity_call);
 
+
+
+
+    setContentView(R.layout.activity_call);
     btnGrey = (ImageView)findViewById(R.id.btnStop_grey);
     btnRecord = (ImageView) findViewById(R.id.btnRecord);
     btnStop = (ImageView) findViewById(R.id.btnStop);
-    String sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+    sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
     mFilePath = sdRootPath + "/record.mp3";
-
-
 
     iceConnected = false;
     signalingParameters = null;
@@ -309,7 +298,7 @@ public class CallActivity extends Activity
 
     if (!script_list.isEmpty()){
       try {
-        HashMap<String, String> script_map = script_list.get(scid_loop).get(scid_loop);
+        HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
         FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
         int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
@@ -347,7 +336,6 @@ public class CallActivity extends Activity
 
           //내차례
           if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
-            btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
             //씬 갱신
             if (scene_chk == true) {
               scid_loop = 0;
@@ -360,7 +348,7 @@ public class CallActivity extends Activity
             TextView tv_script = (TextView) findViewById(R.id.tv_script);
             tv_script.setText(script_map.get("script"));
             onBtnRecord();
-            //go_record(scid_loop, scene_loop);
+
             btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
@@ -379,17 +367,18 @@ public class CallActivity extends Activity
     btnStop.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         //남의차례
+
         btnGrey.setVisibility(View.VISIBLE);
         btnStop.setVisibility(View.INVISIBLE);
         onBtnStop();
+
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
           System.out.println(script_map);
           Log.e("cid", script_map.get("cid"));
           Log.e("user", User_character_Id);
-          if(script_map.get("cid") != User_character_Id)
-            Log.e("error", "error");
+
           if (!script_list.isEmpty() && !Objects.equals(script_map.get("cid"), User_character_Id)) {
             btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
             //씬 갱신
@@ -406,9 +395,9 @@ public class CallActivity extends Activity
 
             String mp3_filename = script_map.get("scid");
             //재생하기
-            if (script_map.get("audio") == "true") {
+            if (Objects.equals(script_map.get("audio"), "true")) {
               //재생
-              onBtnPlay();
+              onBtnPlay(mp3_filename);
             }
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
@@ -427,10 +416,9 @@ public class CallActivity extends Activity
         }
       }
     });
-    //뷰바꾸기
   }
 
-  public void onBtnPlay() {
+  public void onBtnPlay(String filename) {
     if( mPlayer != null ) {
       mPlayer.stop();
       mPlayer.release();
@@ -439,7 +427,8 @@ public class CallActivity extends Activity
     mPlayer = new MediaPlayer();
 
     try {
-      mPlayer.setDataSource(mFilePath);
+      filename = sdRootPath + "/" + filename;
+      mPlayer.setDataSource(filename);
       mPlayer.prepare();
     } catch(IOException e) {
       Log.d("tag", "Audio Play error");

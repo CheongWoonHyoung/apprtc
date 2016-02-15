@@ -36,10 +36,10 @@ public class Story_Single extends MainActivity {
         TextView tv_single_description = (TextView) findViewById(R.id.tv_single_description);
         tv_single_description.setText(description);
         ImageView iv_main = (ImageView) findViewById(R.id.iv_main);
-        int title_single= getResources().getIdentifier("org.appspot.apprtc:drawable/main_"+bookid,null,null);
+        int title_single= getResources().getIdentifier("org.appspot.apprtc:drawable/main_" + bookid, null, null);
         //iv_main.setImageDrawable(getResources().getDrawable(title_single));
 
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),title_single);
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), title_single);
         Bitmap circularBitmap = ImageConverter.getRoundedCornerBitmap(bitmap, 100);
 
         ImageView circularImageView = (ImageView)findViewById(R.id.iv_main);
@@ -55,6 +55,15 @@ public class Story_Single extends MainActivity {
                 intent.putExtra("MaxPlayer", MaxPlayer);
                 intent.putExtra("download", download);
                 startActivity(intent);
+            }
+        });
+
+        Button tv_back = (Button) findViewById(R.id.tv_back);
+
+        tv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
