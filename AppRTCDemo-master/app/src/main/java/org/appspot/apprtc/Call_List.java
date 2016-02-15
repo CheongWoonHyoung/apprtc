@@ -1,6 +1,7 @@
 package org.appspot.apprtc;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,7 @@ public class Call_List extends MainActivity {
     protected void onCreate(Bundle SavedInstanceState) {
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.call_list);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         final String MaxPlayer = String.valueOf(getIntent().getExtras().getString("MaxPlayer"));
         String download = String.valueOf(getIntent().getExtras().getString("download"));
@@ -202,7 +204,6 @@ public class Call_List extends MainActivity {
                     }
                     story_list.add(map);
                     load_chk = true;
-                    setStory_list();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -217,9 +218,4 @@ public class Call_List extends MainActivity {
         public void cancelled() {
         }
     };
-
-    private void setStory_list() {
-
-    }
-
 }

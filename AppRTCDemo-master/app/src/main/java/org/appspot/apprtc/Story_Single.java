@@ -1,6 +1,7 @@
 package org.appspot.apprtc;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ public class Story_Single extends MainActivity {
         final String bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
         final String MaxPlayer = String.valueOf(getIntent().getExtras().getString("MaxPlayer"));
         final String download = String.valueOf(getIntent().getExtras().getString("download"));
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         if (getIntent().getExtras() == null)
             finish();

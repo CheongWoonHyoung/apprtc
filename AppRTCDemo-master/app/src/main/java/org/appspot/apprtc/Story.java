@@ -1,6 +1,7 @@
 package org.appspot.apprtc;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +44,7 @@ public class Story extends MainActivity {
     protected void onCreate(Bundle SavedInstanceState) {
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.story_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         new SHJSONParser().setCallback(callback).execute(URL);
     }
