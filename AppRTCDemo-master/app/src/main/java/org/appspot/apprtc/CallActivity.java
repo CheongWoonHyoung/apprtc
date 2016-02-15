@@ -48,6 +48,7 @@ import org.webrtc.SurfaceViewRenderer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Activity for peer connection call setup, call waiting
@@ -342,7 +343,7 @@ public class CallActivity extends Activity
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
           //내차례
-          if (!script_list.isEmpty() && script_map.get("cid") == User_character_Id) {
+          if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
             recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
             //씬 갱신
             if (scene_chk == true) {
@@ -356,7 +357,7 @@ public class CallActivity extends Activity
             TextView tv_script = (TextView) findViewById(R.id.tv_script);
             tv_script.setText(script_map.get("script"));
 
-            //go_record(scid_loop, scene_loop);
+            go_record(scid_loop, scene_loop);
             recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
@@ -383,7 +384,7 @@ public class CallActivity extends Activity
           Log.e("user", User_character_Id);
           if(script_map.get("cid") != User_character_Id)
             Log.e("error", "error");
-          if (!script_list.isEmpty() && script_map.get("cid") != User_character_Id) {
+          if (!script_list.isEmpty() && !Objects.equals(script_map.get("cid"), User_character_Id)) {
             recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
             //씬 갱신
             if (scene_chk == true) {
