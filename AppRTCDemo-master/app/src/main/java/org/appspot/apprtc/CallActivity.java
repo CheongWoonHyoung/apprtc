@@ -342,7 +342,7 @@ public class CallActivity extends Activity
             TextView tv_script = (TextView) findViewById(R.id.tv_script);
             tv_script.setText(script_map.get("script"));
             onBtnRecord();
-            //go_record(scid_loop, scene_loop);
+
             btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
