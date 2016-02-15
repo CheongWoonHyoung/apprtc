@@ -201,7 +201,7 @@ public class CallActivity extends Activity
     recordBtn = (ImageView) findViewById(R.id.recordBtn);
     playBtn = (ImageView) findViewById(R.id.playBtn);
     //ImageView recordStopBtn = (ImageView) findViewById(R.id.recordStopBtn);
-    filename = RECORDED_FILE.getAbsolutePath() + "/test.mp4";
+    filename = RECORDED_FILE.getAbsolutePath() + "/data/bookplay/test.mp4";
 
     iceConnected = false;
     signalingParameters = null;
