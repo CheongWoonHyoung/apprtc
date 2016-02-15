@@ -183,16 +183,19 @@ public class Call_List extends MainActivity {
                                 String script = scriptObj.getString("script");
                                 String script_length = Integer.toString(scripts.length());
 
+                                Log.e("스크립트", script);
                                 HashMap<String, String> script_map = new HashMap<>();
                                 script_map.put("scid", scid);
                                 script_map.put("cid", cid);
                                 script_map.put("audio", audio);
                                 script_map.put("script", script);
                                 script_map.put("script_length", script_length);
-                                scene_map_main.put(i, script_map);
+                                scene_map_main.put(j, script_map);
+                                System.out.println(j);
                             }
 
                             script_list.add(scene_map_main);
+                            System.out.println(script_list);
                         }
                     } catch (Exception ex) {
                         System.out.println(ex);

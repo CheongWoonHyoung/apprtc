@@ -151,7 +151,7 @@ public class CallActivity extends Activity
   //custom
   private ArrayList<HashMap<Integer,HashMap>> script_list;
   private ArrayList<HashMap<String,String>> story_list;
-private   ArrayList<HashMap<String, String>> scene_list;
+  private   ArrayList<HashMap<String, String>> scene_list;
 
   private String User_character_Id;
 
@@ -312,70 +312,62 @@ private   ArrayList<HashMap<String, String>> scene_list;
 
         FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
         int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
-        Log.e("play_bg", Integer.toString(play_bg));
         fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
 
         TextView tv_script = (TextView) findViewById(R.id.tv_script);
         tv_script.setText(script_map.get("script"));
 
-        Log.e("cid",script_map.get("cid"));
         if (!script_list.isEmpty() &&  script_map.get("cid") == User_character_Id) {
           recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
         }else{
           //go_record(scene_loop, scid_loop);
         }
-        Log.e("인덱스", script_map.get("script_length"));
 
         if (scid_loop < Integer.parseInt(script_map.get("script_length"))-1) {
-          Log.e("띠린띠린","띠린띠린");
           scid_loop++;
           scene_chk = false;
         } else {
           scene_chk = true;
           scene_loop++;
         }
-
       }catch(Exception ex){
-        System.out.println("here is the problme");
-        System.out.println(ex);
+        Log.e("NONO", "NONO", ex);
+
       }
     }
 
     recordBtn.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-        Log.e("recordbtn", "recordbtn");
-        Log.e("play_bg", Integer.toString(scene_loop));
-        Log.e("play_bg", Integer.toString(scid_loop));
-        HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
+        try {
+          HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
-        //내차례
-        if (!script_list.isEmpty() &&  script_map.get("cid") == User_character_Id) {
-          recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
-          //씬 갱신
-          if (scene_chk == true) {
-            scid_loop = 0;
+          //내차례
+          if (!script_list.isEmpty() && script_map.get("cid") == User_character_Id) {
+            recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
+            //씬 갱신
+            if (scene_chk == true) {
+              scid_loop = 0;
+            }
+
+            FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
+            int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
+            fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+
+            TextView tv_script = (TextView) findViewById(R.id.tv_script);
+            tv_script.setText(script_map.get("script"));
+
+            //go_record(scid_loop, scene_loop);
+            recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
+            if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
+              scid_loop++;
+              scene_chk = false;
+            } else {
+              scene_chk = true;
+              scene_loop++;
+            }
           }
-
-          FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
-          Log.e("play_bg", Integer.toString(scene_loop));
-          Log.e("play_bg", Integer.toString(scid_loop));
-          int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
-          Log.e("play_bg", Integer.toString(play_bg));
-          fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
-
-          TextView tv_script = (TextView) findViewById(R.id.tv_script);
-          tv_script.setText(script_map.get("script"));
-
-          //go_record(scid_loop, scene_loop);
-          recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
-          if (scid_loop < Integer.parseInt(script_map.get("script_length"))-1) {
-            Log.e("띠린띠린","띠린띠린");
-            scid_loop++;
-            scene_chk = false;
-          } else {
-            scene_chk = true;
-            scene_loop++;
-          }
+        }catch(Exception ex){
+          Log.e("NONO", "NONO", ex);
         }
       }
     });
@@ -383,43 +375,43 @@ private   ArrayList<HashMap<String, String>> scene_list;
     playBtn.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         //남의차례
-        Log.e("play_bg", Integer.toString(scene_loop));
-        Log.e("play_bg", Integer.toString(scid_loop));
-        HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
+        try {
+          HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
-        if (!script_list.isEmpty()&& script_map.get("cid") != User_character_Id) {
-          Log.e("playbtn", "playbtn");
-          recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
-          //씬 갱신
-          if(scene_chk == true){
-            scid_loop = 0;
+          System.out.println(script_map);
+          Log.e("cid", script_map.get("cid"));
+          Log.e("user", User_character_Id);
+          if(script_map.get("cid") != User_character_Id)
+            Log.e("error", "error");
+          if (!script_list.isEmpty() && script_map.get("cid") != User_character_Id) {
+            recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
+            //씬 갱신
+            if (scene_chk == true) {
+              scid_loop = 0;
+            }
+
+            FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
+            int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
+            fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+
+            TextView tv_script = (TextView) findViewById(R.id.tv_script);
+            tv_script.setText(script_map.get("script"));
+
+            String mp3_filename = script_map.get("scid");
+            //재생하기
+            if (script_map.get("audio") == "true") {
+              //재생
+            }
+            if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
+              scid_loop++;
+              scene_chk = false;
+            } else {
+              scene_chk = true;
+              scene_loop++;
+            }
           }
-
-          Log.e("play_bg", Integer.toString(scene_loop));
-          Log.e("play_bg", Integer.toString(scid_loop));
-          FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
-          int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
-          fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
-
-          TextView tv_script = (TextView) findViewById(R.id.tv_script);
-          tv_script.setText(script_map.get("script"));
-
-          String mp3_filename = script_map.get("scid");
-          //재생하기
-          if(script_map.get("audio") == "true"){
-            //재생
-          }
-
-          Log.e("인덱스", script_map.get("script_length"));
-
-          if (scid_loop < Integer.parseInt(script_map.get("script_length"))-1) {
-            Log.e("띠린띠린","띠린띠린");
-            scid_loop++;
-            scene_chk = false;
-          } else {
-            scene_chk = true;
-            scene_loop++;
-          }
+        }catch(Exception ex){
+          Log.e("NONO", "NONO", ex);
         }
       }
     });
@@ -460,26 +452,6 @@ private   ArrayList<HashMap<String, String>> scene_list;
     }
   }
 
-
-
-  // 녹음 중지 버튼
-    /*
-    recordStopBtn.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        if (recorder == null)
-          return;
-
-        // 녹음을 중지
-        recorder.stop();
-
-        // 오디오 녹음에 필요한  메모리를 해제한다
-        recorder.release();
-        recorder = null;
-
-        Toast.makeText(getApplicationContext(), "녹음이 중지되었습니다.", Toast.LENGTH_LONG).show();
-      }
-    });
-    */
   // Activity interfaces
   @Override
   public void onPause() {
