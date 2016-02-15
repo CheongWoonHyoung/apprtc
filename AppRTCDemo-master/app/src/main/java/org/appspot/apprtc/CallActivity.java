@@ -413,6 +413,10 @@ public class CallActivity extends Activity
               scene_chk = true;
               scene_loop++;
             }
+
+            if(scene_loop > script_list.size()){
+              //종료하시겠습니까?
+            }
           }
         }catch(Exception ex){
           Log.e("NONO", "NONO", ex);
