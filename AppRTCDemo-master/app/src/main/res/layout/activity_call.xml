@@ -65,7 +65,8 @@
                     android:layout_marginRight="40px"
                     android:layout_width="243px"
                     android:layout_height="243px"
-                    android:src="@drawable/btn_play_normal3x"/>
+                    android:src="@drawable/btn_play_normal3x"
+                    android:id="@+id/playBtn" />
                 <ImageView
                     android:layout_width="243px"
                     android:layout_height="243px"

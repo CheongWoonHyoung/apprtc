@@ -52,9 +52,9 @@ import java.util.HashMap;
  * and call view.
  */
 public class CallActivity extends Activity
-    implements AppRTCClient.SignalingEvents,
-      PeerConnectionClient.PeerConnectionEvents,
-      CallFragment.OnCallEvents {
+        implements AppRTCClient.SignalingEvents,
+        PeerConnectionClient.PeerConnectionEvents,
+        CallFragment.OnCallEvents {
 
   final private static File RECORDED_FILE = Environment.getDataDirectory();
   String filename;
@@ -66,46 +66,46 @@ public class CallActivity extends Activity
 
 
   public static final String EXTRA_ROOMID =
-      "org.appspot.apprtc.ROOMID";
+          "org.appspot.apprtc.ROOMID";
   public static final String EXTRA_LOOPBACK =
-      "org.appspot.apprtc.LOOPBACK";
+          "org.appspot.apprtc.LOOPBACK";
   public static final String EXTRA_VIDEO_CALL =
-      "org.appspot.apprtc.VIDEO_CALL";
+          "org.appspot.apprtc.VIDEO_CALL";
   public static final String EXTRA_VIDEO_WIDTH =
-      "org.appspot.apprtc.VIDEO_WIDTH";
+          "org.appspot.apprtc.VIDEO_WIDTH";
   public static final String EXTRA_VIDEO_HEIGHT =
-      "org.appspot.apprtc.VIDEO_HEIGHT";
+          "org.appspot.apprtc.VIDEO_HEIGHT";
   public static final String EXTRA_VIDEO_FPS =
-      "org.appspot.apprtc.VIDEO_FPS";
+          "org.appspot.apprtc.VIDEO_FPS";
   public static final String EXTRA_VIDEO_CAPTUREQUALITYSLIDER_ENABLED =
-      "org.appsopt.apprtc.VIDEO_CAPTUREQUALITYSLIDER";
+          "org.appsopt.apprtc.VIDEO_CAPTUREQUALITYSLIDER";
   public static final String EXTRA_VIDEO_BITRATE =
-      "org.appspot.apprtc.VIDEO_BITRATE";
+          "org.appspot.apprtc.VIDEO_BITRATE";
   public static final String EXTRA_VIDEOCODEC =
-      "org.appspot.apprtc.VIDEOCODEC";
+          "org.appspot.apprtc.VIDEOCODEC";
   public static final String EXTRA_HWCODEC_ENABLED =
-      "org.appspot.apprtc.HWCODEC";
+          "org.appspot.apprtc.HWCODEC";
   public static final String EXTRA_AUDIO_BITRATE =
-      "org.appspot.apprtc.AUDIO_BITRATE";
+          "org.appspot.apprtc.AUDIO_BITRATE";
   public static final String EXTRA_AUDIOCODEC =
-      "org.appspot.apprtc.AUDIOCODEC";
+          "org.appspot.apprtc.AUDIOCODEC";
   public static final String EXTRA_NOAUDIOPROCESSING_ENABLED =
-      "org.appspot.apprtc.NOAUDIOPROCESSING";
+          "org.appspot.apprtc.NOAUDIOPROCESSING";
   public static final String EXTRA_OPENSLES_ENABLED =
-      "org.appspot.apprtc.OPENSLES";
+          "org.appspot.apprtc.OPENSLES";
   public static final String EXTRA_DISPLAY_HUD =
-      "org.appspot.apprtc.DISPLAY_HUD";
+          "org.appspot.apprtc.DISPLAY_HUD";
   public static final String EXTRA_CMDLINE =
-      "org.appspot.apprtc.CMDLINE";
+          "org.appspot.apprtc.CMDLINE";
   public static final String EXTRA_RUNTIME =
-      "org.appspot.apprtc.RUNTIME";
+          "org.appspot.apprtc.RUNTIME";
   private static final String TAG = "CallRTCClient";
 
   // List of mandatory application permissions.
   private static final String[] MANDATORY_PERMISSIONS = {
-    "android.permission.MODIFY_AUDIO_SETTINGS",
-    "android.permission.RECORD_AUDIO",
-    "android.permission.INTERNET"
+          "android.permission.MODIFY_AUDIO_SETTINGS",
+          "android.permission.RECORD_AUDIO",
+          "android.permission.INTERNET"
   };
 
   // Peer connection statistics callback period in ms.
@@ -152,6 +152,10 @@ public class CallActivity extends Activity
 
   private String User_character_Id;
 
+  int scid_loop = 0;
+  int scene_loop = 0;
+  boolean scene_chk = false;
+
   // Controls
   CallFragment callFragment;
   HudFragment hudFragment;
@@ -160,13 +164,13 @@ public class CallActivity extends Activity
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    script_list = (ArrayList<HashMap<Integer,HashMap>>) getIntent().getSerializableExtra("script");
-    story_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("story");
+    script_list = (ArrayList<HashMap<Integer, HashMap>>) getIntent().getSerializableExtra("script");
+    story_list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("story");
 
     User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
 
     Thread.setDefaultUncaughtExceptionHandler(
-        new UnhandledExceptionHandler(this));
+            new UnhandledExceptionHandler(this));
 
     // Set window styles for fullscreen-window size. Needs to be done before
     // adding content.
@@ -185,8 +189,10 @@ public class CallActivity extends Activity
 
 
     final ImageView recordBtn = (ImageView) findViewById(R.id.recordBtn);
+    final ImageView playBtn = (ImageView) findViewById(R.id.playBtn);
     //ImageView recordStopBtn = (ImageView) findViewById(R.id.recordStopBtn);
-    filename =RECORDED_FILE.getAbsolutePath()+"/test.mp4";;
+    filename = RECORDED_FILE.getAbsolutePath() + "/test.mp4";
+    ;
 
     iceConnected = false;
     signalingParameters = null;
@@ -248,25 +254,25 @@ public class CallActivity extends Activity
     }
     boolean loopback = intent.getBooleanExtra(EXTRA_LOOPBACK, false);
     peerConnectionParameters = new PeerConnectionParameters(
-        intent.getBooleanExtra(EXTRA_VIDEO_CALL, true),
-        loopback,
-        intent.getIntExtra(EXTRA_VIDEO_WIDTH, 0),
-        intent.getIntExtra(EXTRA_VIDEO_HEIGHT, 0),
-        intent.getIntExtra(EXTRA_VIDEO_FPS, 0),
-        intent.getIntExtra(EXTRA_VIDEO_BITRATE, 0),
-        intent.getStringExtra(EXTRA_VIDEOCODEC),
-        intent.getBooleanExtra(EXTRA_HWCODEC_ENABLED, true),
-        intent.getIntExtra(EXTRA_AUDIO_BITRATE, 0),
-        intent.getStringExtra(EXTRA_AUDIOCODEC),
-        intent.getBooleanExtra(EXTRA_NOAUDIOPROCESSING_ENABLED, false),
-        intent.getBooleanExtra(EXTRA_OPENSLES_ENABLED, false));
+            intent.getBooleanExtra(EXTRA_VIDEO_CALL, true),
+            loopback,
+            intent.getIntExtra(EXTRA_VIDEO_WIDTH, 0),
+            intent.getIntExtra(EXTRA_VIDEO_HEIGHT, 0),
+            intent.getIntExtra(EXTRA_VIDEO_FPS, 0),
+            intent.getIntExtra(EXTRA_VIDEO_BITRATE, 0),
+            intent.getStringExtra(EXTRA_VIDEOCODEC),
+            intent.getBooleanExtra(EXTRA_HWCODEC_ENABLED, true),
+            intent.getIntExtra(EXTRA_AUDIO_BITRATE, 0),
+            intent.getStringExtra(EXTRA_AUDIOCODEC),
+            intent.getBooleanExtra(EXTRA_NOAUDIOPROCESSING_ENABLED, false),
+            intent.getBooleanExtra(EXTRA_OPENSLES_ENABLED, false));
     commandLineRun = intent.getBooleanExtra(EXTRA_CMDLINE, false);
     runTimeMs = intent.getIntExtra(EXTRA_RUNTIME, 0);
 
     // Create connection client and connection parameters.
     appRtcClient = new WebSocketRTCClient(this, new LooperExecutor());
     roomConnectionParameters = new RoomConnectionParameters(
-        roomUri.toString(), roomId, loopback);
+            roomUri.toString(), roomId, loopback);
 
     // Send intent arguments to fragments.
     callFragment.setArguments(intent.getExtras());
@@ -290,78 +296,104 @@ public class CallActivity extends Activity
     //연결시작
     peerConnectionClient = PeerConnectionClient.getInstance();
     peerConnectionClient.createPeerConnectionFactory(
-        CallActivity.this, peerConnectionParameters, CallActivity.this);
+            CallActivity.this, peerConnectionParameters, CallActivity.this);
 
-    //뷰바꾸기시작
-    try{
-      int scid_loop = 0;
-      while(true){
-        //이미지뷰처리
 
-        FrameLayout fl_play = (FrameLayout)findViewById(R.id.fl_play);
-        int play_bg = getResources().getIdentifier(story_list.get(scid_loop).get("scid"), "drawable", getPackageName());
-        fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+    recordBtn.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
         HashMap<String, String> script_map = script_list.get(scid_loop).get(scid_loop);
-        for(int scene_loop = 0; scene_loop < Integer.parseInt(script_map.get("script_length"));scene_loop++){
-          //오디오가 있고, 본인 차례가 아닐경우
-          if(script_map.get("audio") == "true" && script_map.get("sid") != User_character_Id) {
-            recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
-            recordBtn.setOnClickListener(new View.OnClickListener() {
-                                           public void onClick(View v) {
-                                             //Do nothing;
-                                           }});
-            String mp3_filename = script_map.get("scid");
-            //재생하기
+
+        //내차례
+        if (!script_list.isEmpty() && script_map.get("audio") == "true" && script_map.get("sid") == User_character_Id) {
+          recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
+          //씬 갱신
+          if (scene_chk == true) {
+            scene_loop = 0;
           }
-          else if(script_map.get("sid") == User_character_Id){
-            // 녹음 시작 버튼
-            recordBtn.setOnClickListener(new View.OnClickListener() {
-              public void onClick(View v) {
-                if (recorder != null) {
-                  recorder.stop();
-                  recorder.release();
-                  recorder = null;
-                }
 
-                // 실험 결과 왠만하면 아래 recorder 객체의 속성을 지정하는 순서는 이대로 하는게 좋다 위치를 바꿨을때 에러가 났었음
-                // 녹음 시작을 위해  MediaRecorder 객체  recorder를 생성한다.
-                recorder = new MediaRecorder();
-
-                // 오디오 입력 형식 설정
-                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-
-                // 음향을 저장할 방식을 설정
-                recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-
-                // 오디오 인코더 설정
-                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-
-                // 저장될 파일 지정
-                recorder.setOutputFile(filename);
-
-
-                try {
-                  Toast.makeText(getApplicationContext(), "녹음이 시작되었습니다.", Toast.LENGTH_LONG).show();
-
-                  // 녹음 준비,시작
-                  recorder.prepare();
-                  recorder.start();
-
-                  recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
-                } catch (Exception ex) {
-                  Log.e("SampleAudioRecorder", "Exception : ", ex);
-                }
-              }
-            });
+          FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
+          int play_bg = getResources().getIdentifier(story_list.get(scid_loop).get("scid"), "drawable", getPackageName());
+          fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+          go_record(scid_loop, scene_loop);
+          recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
+          if (scene_loop < script_list.get(scid_loop).get(scid_loop).size()) {
+            scene_loop++;
+          } else {
+            scene_chk = true;
+            scid_loop++;
           }
         }
-        scid_loop++;
       }
-    }catch(Exception ex){
-      System.out.println(ex);
+    });
+
+    playBtn.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        //남의차례
+        HashMap<String, String> script_map = script_list.get(scid_loop).get(scid_loop);
+        if (!script_list.isEmpty() && script_map.get("audio") == "true" && script_map.get("sid") != User_character_Id) {
+          recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
+          //씬 갱신
+          if(scene_chk == true){
+            scene_loop = 0;
+          }
+
+          FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
+          int play_bg = getResources().getIdentifier(story_list.get(scid_loop).get("scid"), "drawable", getPackageName());
+          fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+
+          String mp3_filename = script_map.get("scid");
+          //재생하기
+
+          if (scene_loop < script_list.get(scid_loop).get(scid_loop).size()){
+            scene_loop++;
+          }else{
+            scene_chk = true;
+            scid_loop++;
+          }
+        }
+      }
+    });
+
+    //뷰바꾸기
+  }
+
+  public void go_record(int scid_loop, int scene_loop){
+    if (recorder != null) {
+      recorder.stop();
+      recorder.release();
+      recorder = null;
     }
 
-    // 녹음 중지 버튼
+    // 실험 결과 왠만하면 아래 recorder 객체의 속성을 지정하는 순서는 이대로 하는게 좋다 위치를 바꿨을때 에러가 났었음
+    // 녹음 시작을 위해  MediaRecorder 객체  recorder를 생성한다.
+    recorder = new MediaRecorder();
+
+    // 오디오 입력 형식 설정
+    recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+
+    // 음향을 저장할 방식을 설정
+    recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+
+    // 오디오 인코더 설정
+    recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+
+    // 저장될 파일 지정
+    recorder.setOutputFile(filename);
+
+    try {
+      Toast.makeText(getApplicationContext(), "녹음이 시작되었습니다.", Toast.LENGTH_LONG).show();
+
+      // 녹음 준비,시작
+      recorder.prepare();
+      recorder.start();
+    } catch (Exception ex) {
+      Log.e("SampleAudioRecorder", "Exception : ", ex);
+    }
+  }
+
+
+
+  // 녹음 중지 버튼
     /*
     recordStopBtn.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
@@ -379,8 +411,6 @@ public class CallActivity extends Activity
       }
     });
     */
-  }
-
   // Activity interfaces
   @Override
   public void onPause() {
@@ -463,11 +493,11 @@ public class CallActivity extends Activity
 
     if (iceConnected) {
       localRenderLayout.setPosition(
-          LOCAL_X_CONNECTED, LOCAL_Y_CONNECTED, LOCAL_WIDTH_CONNECTED, LOCAL_HEIGHT_CONNECTED);
+              LOCAL_X_CONNECTED, LOCAL_Y_CONNECTED, LOCAL_WIDTH_CONNECTED, LOCAL_HEIGHT_CONNECTED);
       localRender.setScalingType(ScalingType.SCALE_ASPECT_FIT);
     } else {
       localRenderLayout.setPosition(
-          LOCAL_X_CONNECTING, LOCAL_Y_CONNECTING, LOCAL_WIDTH_CONNECTING, LOCAL_HEIGHT_CONNECTING);
+              LOCAL_X_CONNECTING, LOCAL_Y_CONNECTING, LOCAL_WIDTH_CONNECTING, LOCAL_HEIGHT_CONNECTING);
       localRender.setScalingType(scalingType);
     }
     localRender.setMirror(true);
@@ -485,19 +515,19 @@ public class CallActivity extends Activity
 
     // Start room connection.
     logAndToast(getString(R.string.connecting_to,
-        roomConnectionParameters.roomUrl));
+            roomConnectionParameters.roomUrl));
     appRtcClient.connectToRoom(roomConnectionParameters);
 
     // Create and audio manager that will take care of audio routing,
     // audio modes, audio device enumeration etc.
     audioManager = AppRTCAudioManager.create(this, new Runnable() {
-        // This method will be called each time the audio state (number and
-        // type of devices) has been changed.
-        @Override
-        public void run() {
-          onAudioManagerChangedState();
-        }
-      }
+              // This method will be called each time the audio state (number and
+              // type of devices) has been changed.
+              @Override
+              public void run() {
+                onAudioManagerChangedState();
+              }
+            }
     );
     // Store existing audio settings and change audio mode to
     // MODE_IN_COMMUNICATION for best possible VoIP performance.
@@ -561,16 +591,16 @@ public class CallActivity extends Activity
       disconnect();
     } else {
       new AlertDialog.Builder(this)
-          .setTitle(getText(R.string.channel_error_title))
-          .setMessage(errorMessage)
-          .setCancelable(false)
-          .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-              dialog.cancel();
-              disconnect();
-            }
-          }).create().show();
+              .setTitle(getText(R.string.channel_error_title))
+              .setMessage(errorMessage)
+              .setCancelable(false)
+              .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                  dialog.cancel();
+                  disconnect();
+                }
+              }).create().show();
     }
   }
 
@@ -605,7 +635,7 @@ public class CallActivity extends Activity
     signalingParameters = params;
     logAndToast("Creating peer connection, delay=" + delta + "ms");
     peerConnectionClient.createPeerConnection(rootEglBase.getContext(),
-        localRender, remoteRender, signalingParameters);
+            localRender, remoteRender, signalingParameters);
 
     if (signalingParameters.initiator) {
       logAndToast("Creating OFFER...");
@@ -668,7 +698,7 @@ public class CallActivity extends Activity
       public void run() {
         if (peerConnectionClient == null) {
           Log.e(TAG,
-              "Received ICE candidate for non-initilized peer connection.");
+                  "Received ICE candidate for non-initilized peer connection.");
           return;
         }
         peerConnectionClient.addRemoteIceCandidate(candidate);
