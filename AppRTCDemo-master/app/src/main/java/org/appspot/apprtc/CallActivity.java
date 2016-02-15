@@ -294,7 +294,7 @@ public class CallActivity extends Activity
 
     if (!script_list.isEmpty()){
       try {
-        HashMap<String, String> script_map = script_list.get(scid_loop).get(scid_loop);
+        HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
         FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
         int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());

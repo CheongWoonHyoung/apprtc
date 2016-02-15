@@ -5,9 +5,11 @@
     android:background="@drawable/bg_gradient">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="500px"
+        android:layout_height="220px"
         android:id="@+id/btn_invite"
         android:layout_gravity="right"
-        android:background="@drawable/btn_invite_complete_normal2x" />
+        android:background="@drawable/btn_invite_complete_normal2x"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp" />
 </LinearLayout>
