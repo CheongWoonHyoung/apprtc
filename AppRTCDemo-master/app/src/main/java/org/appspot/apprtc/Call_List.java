@@ -147,7 +147,6 @@ public class Call_List extends MainActivity {
                             String cid = sceneObj.getString("cid");
                             String name = sceneObj.getString("name");
                             String image = sceneObj.getJSONObject("image").getString("main");
-                            System.out.println("here1");
 
                             HashMap<String, String> character_map = new HashMap<>();
                             character_map.put("cid", cid);

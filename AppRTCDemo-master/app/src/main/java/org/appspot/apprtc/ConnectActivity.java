@@ -91,6 +91,9 @@ public class ConnectActivity extends Activity {
   private String User_character_Id;
   private boolean character_select;
 
+  boolean loopback;
+  int runTimeMs;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -102,6 +105,8 @@ public class ConnectActivity extends Activity {
 
     roomId_ = String.valueOf(getIntent().getExtras().getString("roomId"));
     MaxPlayer = Integer.parseInt(String.valueOf(getIntent().getExtras().getString("MaxPlayer")));
+
+
 
     // Get setting keys.
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -134,32 +139,33 @@ public class ConnectActivity extends Activity {
     for (int character_loop = 0; character_loop < 6; character_loop++) {
       if (character_loop < MaxPlayer) {
         String img_value = Integer.toString(character_loop + 1);
-        System.out.println("character_loop");
-        System.out.println(img_value);
-        System.out.println("iv_character_"+img_value);
+
         //c1,c2, 이미지 이름 찾기
         int im_temp_ = getResources().getIdentifier(character_list.get(character_loop).get("cid"), "drawable", getPackageName());
-        System.out.println(im_temp_);
         //이미지 뷰 찾기
         int iv_temp_ = getResources().getIdentifier("iv_character_"+img_value,"id", getPackageName());
+        int tv_temp_ = getResources().getIdentifier("tv_character_"+img_value, "id", getPackageName());
+
 
         ImageView iv_temp = (ImageView) findViewById(iv_temp_);
         iv_temp.setImageDrawable(getResources().getDrawable(im_temp_));
+
+        TextView tv_temp = (TextView) findViewById(tv_temp_);
+        tv_temp.setText(character_list.get(character_loop).get("name"));
       }
     }
 
     character_select = false;
-    connectButton = (ImageButton) findViewById(R.id.connect_button);
-    connectButton.setOnClickListener(connectListener);
 
     // If an implicit VIEW intent is launching the app, go directly to that URL.
     final Intent intent = getIntent();
+    loopback = intent.getBooleanExtra(CallActivity.EXTRA_LOOPBACK, false);
+    runTimeMs = intent.getIntExtra(CallActivity.EXTRA_RUNTIME, 0);
 
     LinearLayout.OnClickListener mClickListener = new View.OnClickListener() {
       public void onClick(View v) {
+        character_select = true;
         switch (v.getId()) {
-
-          //없는역할클릭예외처리해줘야함
           case R.id.character_1:
             User_character_Id = character_list.get(0).get("cid");
             break;
@@ -179,28 +185,32 @@ public class ConnectActivity extends Activity {
             User_character_Id = character_list.get(5).get("cid");
             break;
         }
+        System.out.println(User_character_Id);
+        Story_Start();
       }
     };
+    findViewById(R.id.character_1).setOnClickListener(mClickListener);
+    findViewById(R.id.character_2).setOnClickListener(mClickListener);
+    findViewById(R.id.character_3).setOnClickListener(mClickListener);
+    findViewById(R.id.character_4).setOnClickListener(mClickListener);
+    findViewById(R.id.character_5).setOnClickListener(mClickListener);
+    findViewById(R.id.character_6).setOnClickListener(mClickListener);
+  }
 
+  public void Story_Start(){
     //시작하기버튼누르면 작동하도록변경하기
-    TextView tv_startplay = (TextView) findViewById(R.id.tv_startPlay);
+    TextView tv_startplay = (TextView) findViewById(R.id.tv_storyplay);
     tv_startplay.setOnClickListener(new View.OnClickListener(){
       @Override
       public void onClick(View v) {
+        if (!commandLineRun && character_select == true) {
+          commandLineRun = true;
+          //서로 연결하기
+          connectToRoom(loopback, runTimeMs);
+          return;
+        }
       }
     });
-
-    if (!commandLineRun && character_select == true) {
-      commandLineRun = true;
-      boolean loopback = intent.getBooleanExtra(
-              CallActivity.EXTRA_LOOPBACK, false);
-      int runTimeMs = intent.getIntExtra(
-              CallActivity.EXTRA_RUNTIME, 0);
-
-      //서로 연결하기
-      connectToRoom(loopback, runTimeMs);
-      return;
-    }
   }
 
   @Override
@@ -246,9 +256,6 @@ public class ConnectActivity extends Activity {
     @Override
     public void onClick(View view) {
       boolean loopback = false;
-      if (view.getId() == R.id.connect_loopback_button) {
-        loopback = true;
-      }
       commandLineRun = false;
       connectToRoom(loopback, 0);
     }
