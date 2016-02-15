@@ -32,9 +32,7 @@ import org.appspot.apprtc.Story_Connect;
 public class Story extends MainActivity {
 
     private ArrayList<HashMap<String,String>> story_list = new ArrayList<>();
-    private ArrayList<HashMap<String,String>> scene_list = new ArrayList<>();
-    private ArrayList<HashMap<String,String>> character_list = new ArrayList<>();
-    private ArrayList<HashMap<Integer,HashMap>> script_list = new ArrayList<>();
+
     private GridView gridView;
     private ImageView iv_cover;
     ListAdapter adapter_story;
@@ -49,23 +47,7 @@ public class Story extends MainActivity {
         new SHJSONParser().setCallback(callback).execute(URL);
 
     }
-    /*
 
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("book.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    } */
 
     //리스트받아오기->그리드뷰
     private SHJSONParserCallback callback = new SHJSONParserCallback() {
@@ -88,6 +70,7 @@ public class Story extends MainActivity {
                     String title = Story_single.get("title").toString();
                     String cover = Story_single.get("image").toString();
                     String cover_small = Story_single.get("image_small").toString();
+                    cover_small = cover_small.replace("\"static\"","");
                     int cover_s= getResources().getIdentifier("org.appspot.apprtc:drawable/main_"+cover_small,null,null);
                     ImageView iv_cover = (ImageView)findViewById(R.id.iv_cover);
                     //iv_cover.setImageDrawable(getResources().getDrawable(cover_s));
@@ -114,72 +97,10 @@ public class Story extends MainActivity {
                     map.put("description", description);
                     //map.put("verson", version);
                     //map.put("displayversion", displayversion);
-                    map.put("MaxPlayer", "6");
+                    map.put("MaxPlayer", "5");
                     //map.put("character", character);
                     //map.put("scene", scene);
 
-                    try {
-                        JSONObject scene_ = new JSONObject(Scene);
-                        JSONArray scene = scene_.getJSONArray("scene");
-                        JSONObject character_ = new JSONObject(Character);
-                        JSONArray character = character_.getJSONArray("character");
-
-                        //캐릭터 파싱
-                        for (int k = 0; k < character.length(); k++){
-                            //파싱
-                            JSONObject sceneObj = character.getJSONObject(k);
-                            System.out.println(sceneObj);
-                            String cid = sceneObj.getString("cid");
-                            String name = sceneObj.getString("name");
-                            String image = sceneObj.getJSONObject("image").getString("main");
-                            System.out.println("here1");
-
-                            HashMap<String, String> character_map = new HashMap<>();
-                            character_map.put("cid", cid);
-                            character_map.put("name", name);
-                            character_map.put("image", image);
-
-                            character_list.add(character_map);
-                        }
-
-                        //스크립트 파싱
-                        for(int k = 0; k < scene.length(); k++){
-                            //파싱
-                            JSONObject characterObj = scene.getJSONObject(k);
-                            String sid = characterObj.getString("sid");
-                            String image_main = characterObj.getJSONObject("image").getString("main");
-                            String image_preview = characterObj.getJSONObject("image").getString("preview");
-
-                            HashMap<String, String> scene_map = new HashMap<>();
-                            scene_map.put("sid", sid);
-                            scene_map.put("image_main", image_main);
-                            scene_map.put("image_preview", image_preview);
-                            scene_list.add(scene_map);
-
-                            JSONArray scripts = (JSONArray) characterObj.get("scripts");
-
-                            HashMap<Integer, HashMap> scene_map_main = new HashMap<>();
-                            for (int j = 0; j < scripts.length(); j++){
-                                JSONObject scriptObj = scripts.getJSONObject(j);
-                                String scid = scriptObj.getString("scid");
-                                String cid = scriptObj.getString("cid");
-                                String audio = scriptObj.getString("audio");
-                                String script = scriptObj.getString("script");
-
-                                HashMap<String, String> script_map = new HashMap<>();
-                                script_map.put("scid", scid);
-                                script_map.put("cid", cid);
-                                script_map.put("audio", audio);
-                                script_map.put("script", script);
-                                System.out.println("here3");
-                                scene_map_main.put(i,script_map);
-                            }
-
-                            script_list.add(scene_map_main);
-                        }
-                    }catch (Exception ex) {
-                        System.out.println(ex);
-                    }
                     story_list.add(map);
                 }
             }catch (JSONException e) {
@@ -199,9 +120,6 @@ public class Story extends MainActivity {
     private void setStory_list(){
         gridView = (GridView)findViewById(R.id.gv_storylist);
         if(gridView != null) {
-
-            //final String cover_small_2 = String.valueOf(getIntent().getExtras().getString("image_small"));
-            //iv_cover.setImageDrawable(getResources().getDrawable(cover_s));
             gridView.setAdapter(adapter_story);
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -210,14 +128,11 @@ public class Story extends MainActivity {
                     intent.putExtra("title", story_list.get(position).get("title"));
                     intent.putExtra("description", story_list.get(position).get("description"));
                     intent.putExtra("bookid", story_list.get(position).get("bookid"));
-                    intent.putExtra("script", script_list.toString());
-                    intent.putExtra("character", character_list.toString());
                     intent.putExtra("MaxPlayer", story_list.get(position).get("MaxPlayer"));
+                    intent.putExtra("download", story_list.get(position).get("download"));
                     startActivity(intent);
                 }
             });
-        } else{
-            Log.e("error", "gridView is null");
         }
     }
 }

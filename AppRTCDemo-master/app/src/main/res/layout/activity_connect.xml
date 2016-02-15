@@ -21,7 +21,8 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/character_1">
 
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:orientation="vertical"
@@ -34,7 +35,8 @@
                         android:background="#123456"
                         android:layout_marginTop="55px"
                         android:layout_width="458px"
-                        android:layout_height="458px" />
+                        android:layout_height="458px"
+                        android:id="@+id/iv_character_1" />
 
                     <ImageView
                         android:layout_centerHorizontal="true"
@@ -59,7 +61,8 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/character_2">
 
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:orientation="vertical"
@@ -72,7 +75,8 @@
                         android:background="#123456"
                         android:layout_marginTop="55px"
                         android:layout_width="458px"
-                        android:layout_height="458px" />
+                        android:layout_height="458px"
+                        android:id="@+id/iv_character_2" />
 
                     <ImageView
                         android:layout_centerHorizontal="true"
@@ -96,7 +100,8 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/character_3">
 
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:orientation="vertical"
@@ -109,7 +114,8 @@
                         android:background="#123456"
                         android:layout_marginTop="55px"
                         android:layout_width="458px"
-                        android:layout_height="458px" />
+                        android:layout_height="458px"
+                        android:id="@+id/iv_character_3" />
 
                     <ImageView
                         android:layout_centerHorizontal="true"
@@ -140,7 +146,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView"
+                android:id="@+id/tv_startPlay"
                 android:background="@drawable/btn_start_normal3x" />
 
             <LinearLayout
@@ -185,7 +191,8 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/character_4">
 
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:orientation="vertical"
@@ -198,7 +205,8 @@
                         android:background="#123456"
                         android:layout_marginTop="55px"
                         android:layout_width="458px"
-                        android:layout_height="458px" />
+                        android:layout_height="458px"
+                        android:id="@+id/iv_character_4" />
 
                     <ImageView
                         android:layout_centerHorizontal="true"
@@ -222,7 +230,8 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/character_5">
 
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:orientation="vertical"
@@ -235,7 +244,8 @@
                         android:background="#123456"
                         android:layout_marginTop="55px"
                         android:layout_width="458px"
-                        android:layout_height="458px" />
+                        android:layout_height="458px"
+                        android:id="@+id/iv_character_5" />
 
                     <ImageView
                         android:layout_centerHorizontal="true"
@@ -259,7 +269,8 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/character_6">
 
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:orientation="vertical"
@@ -272,7 +283,8 @@
                         android:background="#123456"
                         android:layout_marginTop="55px"
                         android:layout_width="458px"
-                        android:layout_height="458px" />
+                        android:layout_height="458px"
+                        android:id="@+id/iv_character_6" />
 
                     <ImageView
                         android:layout_centerHorizontal="true"

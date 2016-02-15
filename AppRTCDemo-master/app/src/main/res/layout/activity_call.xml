@@ -33,7 +33,9 @@
             android:background="#DDDDDD">
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#000000"
+                android:id="@+id/fl_play">
                 <RelativeLayout
                     android:background="#FFFFFF"
                     android:layout_gravity="bottom|center_horizontal"

@@ -29,9 +29,11 @@ import android.view.inputmethod.EditorInfo;
 import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,6 +42,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -79,22 +82,27 @@ public class ConnectActivity extends Activity {
   private ArrayAdapter<String> adapter;
 
   //Custom
-  private String script;
-  private String character;
+  private ArrayList<HashMap<Integer,HashMap>> script_list;
+  private ArrayList<HashMap<String,String>> character_list;
+  private ArrayList<HashMap<String,String>> story_list;
+
   private String roomId_;
   private Integer MaxPlayer;
+  private String User_character_Id;
+  private boolean character_select;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     //Custom
-    script = String.valueOf(getIntent().getExtras().getString("script"));
-    character = String.valueOf(getIntent().getExtras().getString("character"));
+    script_list = (ArrayList<HashMap<Integer,HashMap>>) getIntent().getSerializableExtra("script");
+    character_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("character");
+    story_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("story");
+
     roomId_ = String.valueOf(getIntent().getExtras().getString("roomId"));
     MaxPlayer = Integer.parseInt(String.valueOf(getIntent().getExtras().getString("MaxPlayer")));
 
-    //Standby
     // Get setting keys.
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -121,36 +129,68 @@ public class ConnectActivity extends Activity {
 
     setContentView(R.layout.activity_connect);
 
-    //String => ArrayList
-    List<String> character_list = new ArrayList<String>(Arrays.asList(character));
-    List<String> script_list = new ArrayList<String>(Arrays.asList(script));
-
+    //custom
     //캐릭터 이미지 + 텍스트 뿌려주기
-    for (int charcter_loop = 0; charcter_loop < 6; charcter_loop++) {
-      if (charcter_loop < MaxPlayer) {
-        String img_value = Integer.toString(charcter_loop + 1);
+    for (int character_loop = 0; character_loop < 6; character_loop++) {
+      if (character_loop < MaxPlayer) {
+        String img_value = Integer.toString(character_loop + 1);
         System.out.println("character_loop");
         System.out.println(img_value);
+        System.out.println("iv_character_"+img_value);
         //c1,c2, 이미지 이름 찾기
-        int im_temp_ = getResources().getIdentifier("c" + img_value, "drawable", "org.appspot.apprtc");
+        int im_temp_ = getResources().getIdentifier(character_list.get(character_loop).get("cid"), "drawable", getPackageName());
+        System.out.println(im_temp_);
         //이미지 뷰 찾기
-        //int iv_temp_ = getResources().getIdentifier("R.id.iv_character_"+img_value,null,"org.appspot.apprtc");
+        int iv_temp_ = getResources().getIdentifier("iv_character_"+img_value,"id", getPackageName());
 
-        //ImageView iv_temp = (ImageView) findViewById(iv_temp_);
-        //iv_temp.setBackgroundDrawable(getResources().getDrawable(im_temp_));
-      } else {
-        //더미 이미지 지정
+        ImageView iv_temp = (ImageView) findViewById(iv_temp_);
+        iv_temp.setImageDrawable(getResources().getDrawable(im_temp_));
       }
     }
 
+    character_select = false;
     connectButton = (ImageButton) findViewById(R.id.connect_button);
     connectButton.setOnClickListener(connectListener);
 
     // If an implicit VIEW intent is launching the app, go directly to that URL.
     final Intent intent = getIntent();
 
-    //if ("android.intent.action.VIEW".equals(intent.getAction())
-    if (!commandLineRun) {
+    LinearLayout.OnClickListener mClickListener = new View.OnClickListener() {
+      public void onClick(View v) {
+        switch (v.getId()) {
+
+          //없는역할클릭예외처리해줘야함
+          case R.id.character_1:
+            User_character_Id = character_list.get(0).get("cid");
+            break;
+          case R.id.character_2:
+            User_character_Id = character_list.get(1).get("cid");
+            break;
+          case R.id.character_3:
+            User_character_Id = character_list.get(2).get("cid");
+            break;
+          case R.id.character_4:
+            User_character_Id = character_list.get(3).get("cid");
+            break;
+          case R.id.character_5:
+            User_character_Id = character_list.get(4).get("cid");
+            break;
+          case R.id.character_6:
+            User_character_Id = character_list.get(5).get("cid");
+            break;
+        }
+      }
+    };
+
+    //시작하기버튼누르면 작동하도록변경하기
+    TextView tv_startplay = (TextView) findViewById(R.id.tv_startPlay);
+    tv_startplay.setOnClickListener(new View.OnClickListener(){
+      @Override
+      public void onClick(View v) {
+      }
+    });
+
+    if (!commandLineRun && character_select == true) {
       commandLineRun = true;
       boolean loopback = intent.getBooleanExtra(
               CallActivity.EXTRA_LOOPBACK, false);
@@ -161,53 +201,6 @@ public class ConnectActivity extends Activity {
       connectToRoom(loopback, runTimeMs);
       return;
     }
-
-    //서로 연결했으니 이제 통신하며, 배역 선정
-    //통신이 힘들면 일단 그냥 혼자서 시작하는걸로 ㄱㄱ
-    // 위에서 이미지뷰를 선언했다고 가정하고
-    /*
-    //이미지뷰 아이디
-    String iv_id = "";
-    iv_temp.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch (View v, MotionEvent event) {
-            //사용자가 선택한 이미지뷰의 iD 값을 가져오고
-                iv_id= v.getResources().getResourceName(v.getId());
-            }
-
-        });
-     });
-     //아이디값에 따라서 캐릭터 아이디 알아내기
-     String User_character_Id = ""; //<=여기다가 넣고
-     */
-
-    //시작! 버튼 누르면
-    //Textview tv_startplay = (Button) findViewbyId(R.id.tv_startPlay);
-    //온클릭 리스너
-    /*
-    tv_startPlay.onClickLister(new View.OnClickListener() {
-      @Override
-      public void onClick(
-      ...
-          //콘텐츠 뷰 바꿔기 => Playing
-          setContentView(R.layout.playing);
-
-          //ArrayList Script_list 분해해서 진행 콘텐츠 뷰 바꾸며 진행 ㄱㄱ
-
-          //사용자 아이디면 => 녹음
-          //if (Script_list.get(index).get("Sid") == User_character_Id){
-          //녹음
-          //else{
-          //녹음 ㄴㄴ
-      }
-     */
-
-
-
-
-
-
-
   }
 
   @Override
@@ -231,42 +224,11 @@ public class ConnectActivity extends Activity {
   @Override
   public void onPause() {
     super.onPause();
-    /*
-    String room = roomEditText.getText().toString();
-    String roomListJson = new JSONArray(roomList).toString();
-    SharedPreferences.Editor editor = sharedPref.edit();
-    editor.putString(keyprefRoom, room);
-    editor.putString(keyprefRoomList, roomListJson);
-    editor.commit();*/
   }
 
   @Override
   public void onResume() {
-    super.onResume();    /*
-
-   // String room = sharedPref.getString(keyprefRoom, "");
-    //roomEditText.setText(room);
-    roomList = new ArrayList<String>();
-    String roomListJson = sharedPref.getString(keyprefRoomList, null);
-    if (roomListJson != null) {
-      try {
-        JSONArray jsonArray = new JSONArray(roomListJson);
-        for (int i = 0; i < jsonArray.length(); i++) {
-          roomList.add(jsonArray.get(i).toString());
-        }
-      } catch (JSONException e) {
-        Log.e(TAG, "Failed to load room list: " + e.toString());
-      }
-    }
-
-    adapter = new ArrayAdapter<String>(
-        this, android.R.layout.simple_list_item_1, roomL//ist);
-    roomListView.setAdapter(adapter);
-    if (adapter.getCount() > 0) {
-      roomListView.requestFocus();
-      roomListView.setItemChecked(0, true);
-    }
-    */
+    super.onResume();
   }
 
   @Override
@@ -421,6 +383,12 @@ public class ConnectActivity extends Activity {
       intent.putExtra(CallActivity.EXTRA_DISPLAY_HUD, displayHud);
       intent.putExtra(CallActivity.EXTRA_CMDLINE, commandLineRun);
       intent.putExtra(CallActivity.EXTRA_RUNTIME, runTimeMs);
+
+      //custom
+      intent.putExtra("character", character_list);
+      intent.putExtra("script", script_list);
+      intent.putExtra("story", story_list);
+      intent.putExtra("User", User_character_Id);
 
       startActivityForResult(intent, CONNECTION_REQUEST);
     }

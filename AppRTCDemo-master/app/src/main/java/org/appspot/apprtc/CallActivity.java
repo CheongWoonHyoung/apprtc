@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -43,6 +44,8 @@ import org.webrtc.RendererCommon.ScalingType;
 import org.webrtc.SurfaceViewRenderer;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Activity for peer connection call setup, call waiting
@@ -143,6 +146,12 @@ public class CallActivity extends Activity
   private boolean callControlFragmentVisible = true;
   private long callStartedTimeMs = 0;
 
+  //custom
+  private ArrayList<HashMap<Integer,HashMap>> script_list;
+  private ArrayList<HashMap<String,String>> story_list;
+
+  private String User_character_Id;
+
   // Controls
   CallFragment callFragment;
   HudFragment hudFragment;
@@ -150,6 +159,12 @@ public class CallActivity extends Activity
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    script_list = (ArrayList<HashMap<Integer,HashMap>>) getIntent().getSerializableExtra("script");
+    story_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("story");
+
+    User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
+
     Thread.setDefaultUncaughtExceptionHandler(
         new UnhandledExceptionHandler(this));
 
@@ -157,19 +172,19 @@ public class CallActivity extends Activity
     // adding content.
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     getWindow().addFlags(
-        LayoutParams.FLAG_FULLSCREEN
-        | LayoutParams.FLAG_KEEP_SCREEN_ON
-        | LayoutParams.FLAG_DISMISS_KEYGUARD
-        | LayoutParams.FLAG_SHOW_WHEN_LOCKED
-        | LayoutParams.FLAG_TURN_SCREEN_ON);
+            LayoutParams.FLAG_FULLSCREEN
+                    | LayoutParams.FLAG_KEEP_SCREEN_ON
+                    | LayoutParams.FLAG_DISMISS_KEYGUARD
+                    | LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                    | LayoutParams.FLAG_TURN_SCREEN_ON);
     getWindow().getDecorView().setSystemUiVisibility(
-        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        | View.SYSTEM_UI_FLAG_FULLSCREEN
-        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     setContentView(R.layout.activity_call);
 
 
-    ImageView recordBtn = (ImageView) findViewById(R.id.recordBtn);
+    final ImageView recordBtn = (ImageView) findViewById(R.id.recordBtn);
     //ImageView recordStopBtn = (ImageView) findViewById(R.id.recordStopBtn);
     filename =RECORDED_FILE.getAbsolutePath()+"/test.mp4";;
 
@@ -277,48 +292,74 @@ public class CallActivity extends Activity
     peerConnectionClient.createPeerConnectionFactory(
         CallActivity.this, peerConnectionParameters, CallActivity.this);
 
+    //뷰바꾸기시작
+    try{
+      int scid_loop = 0;
+      while(true){
+        //이미지뷰처리
+
+        FrameLayout fl_play = (FrameLayout)findViewById(R.id.fl_play);
+        int play_bg = getResources().getIdentifier(story_list.get(scid_loop).get("scid"), "drawable", getPackageName());
+        fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+        HashMap<String, String> script_map = script_list.get(scid_loop).get(scid_loop);
+        for(int scene_loop = 0; scene_loop < Integer.parseInt(script_map.get("script_length"));scene_loop++){
+          //오디오가 있고, 본인 차례가 아닐경우
+          if(script_map.get("audio") == "true" && script_map.get("sid") != User_character_Id) {
+            recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
+            recordBtn.setOnClickListener(new View.OnClickListener() {
+                                           public void onClick(View v) {
+                                             //Do nothing;
+                                           }});
+            String mp3_filename = script_map.get("scid");
+            //재생하기
+          }
+          else if(script_map.get("sid") == User_character_Id){
+            // 녹음 시작 버튼
+            recordBtn.setOnClickListener(new View.OnClickListener() {
+              public void onClick(View v) {
+                if (recorder != null) {
+                  recorder.stop();
+                  recorder.release();
+                  recorder = null;
+                }
+
+                // 실험 결과 왠만하면 아래 recorder 객체의 속성을 지정하는 순서는 이대로 하는게 좋다 위치를 바꿨을때 에러가 났었음
+                // 녹음 시작을 위해  MediaRecorder 객체  recorder를 생성한다.
+                recorder = new MediaRecorder();
+
+                // 오디오 입력 형식 설정
+                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+
+                // 음향을 저장할 방식을 설정
+                recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+
+                // 오디오 인코더 설정
+                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+
+                // 저장될 파일 지정
+                recorder.setOutputFile(filename);
 
 
+                try {
+                  Toast.makeText(getApplicationContext(), "녹음이 시작되었습니다.", Toast.LENGTH_LONG).show();
 
+                  // 녹음 준비,시작
+                  recorder.prepare();
+                  recorder.start();
 
-
-    // 녹음 시작 버튼
-    recordBtn.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        if (recorder != null) {
-          recorder.stop();
-          recorder.release();
-          recorder = null;
+                  recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
+                } catch (Exception ex) {
+                  Log.e("SampleAudioRecorder", "Exception : ", ex);
+                }
+              }
+            });
+          }
         }
-
-        // 실험 결과 왠만하면 아래 recorder 객체의 속성을 지정하는 순서는 이대로 하는게 좋다 위치를 바꿨을때 에러가 났었음
-        // 녹음 시작을 위해  MediaRecorder 객체  recorder를 생성한다.
-        recorder = new MediaRecorder();
-
-        // 오디오 입력 형식 설정
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-
-        // 음향을 저장할 방식을 설정
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-
-        // 오디오 인코더 설정
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-
-        // 저장될 파일 지정
-        recorder.setOutputFile(filename);
-
-
-        try {
-          Toast.makeText(getApplicationContext(), "녹음이 시작되었습니다.", Toast.LENGTH_LONG).show();
-
-          // 녹음 준비,시작
-          recorder.prepare();
-          recorder.start();
-        } catch (Exception ex) {
-          Log.e("SampleAudioRecorder", "Exception : ", ex);
-        }
+        scid_loop++;
       }
-    });
+    }catch(Exception ex){
+      System.out.println(ex);
+    }
 
     // 녹음 중지 버튼
     /*
@@ -338,10 +379,6 @@ public class CallActivity extends Activity
       }
     });
     */
-
-
-
-
   }
 
   // Activity interfaces

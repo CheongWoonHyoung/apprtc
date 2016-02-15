@@ -21,9 +21,8 @@ public class Story_Single extends MainActivity {
         final String title = String.valueOf(getIntent().getExtras().getString("title"));
         final String description = String.valueOf(getIntent().getExtras().getString("description"));
         final String bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
-        final String character = String.valueOf(getIntent().getExtras().getString("character"));
-        final String script = String.valueOf(getIntent().getExtras().getString("script"));
         final String MaxPlayer = String.valueOf(getIntent().getExtras().getString("MaxPlayer"));
+        final String download = String.valueOf(getIntent().getExtras().getString("download"));
 
         if (getIntent().getExtras() == null)
             finish();
@@ -50,9 +49,8 @@ public class Story_Single extends MainActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Story_Single.this,Call_List.class);
-                intent.putExtra("character", character);
-                intent.putExtra("script", script);
                 intent.putExtra("MaxPlayer", MaxPlayer);
+                intent.putExtra("download", download);
                 startActivity(intent);
             }
         });
