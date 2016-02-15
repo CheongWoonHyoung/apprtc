@@ -58,6 +58,7 @@ public class Call_List extends MainActivity {
                     intent.putExtra("roomId", roomId);
                     intent.putExtra("MaxPlayer", MaxPlayer);
                     intent.putExtra("story", story_list);
+                    intent.putExtra("scene_list", scene_list);
                     //친구도 room Id 넘겨주기
                     //친구한테 푸시 메시지
                     startActivity(intent);

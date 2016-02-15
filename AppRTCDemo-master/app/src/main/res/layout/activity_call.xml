@@ -49,7 +49,8 @@
                         android:textColor="#1e3f4c"
                         android:textSize="56px"
                         android:layout_width="1794px"
-                        android:layout_height="240px" />
+                        android:layout_height="240px"
+                        android:id="@+id/tv_script" />
                 </RelativeLayout>
                 <ImageView
                     android:id="@+id/recordBtn"

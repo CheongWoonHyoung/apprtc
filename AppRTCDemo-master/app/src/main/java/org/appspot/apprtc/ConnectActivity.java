@@ -85,6 +85,7 @@ public class ConnectActivity extends Activity {
   private ArrayList<HashMap<Integer,HashMap>> script_list;
   private ArrayList<HashMap<String,String>> character_list;
   private ArrayList<HashMap<String,String>> story_list;
+  ArrayList<HashMap<String, String>> scene_list;
 
   private String roomId_;
   private Integer MaxPlayer;
@@ -102,6 +103,7 @@ public class ConnectActivity extends Activity {
     script_list = (ArrayList<HashMap<Integer,HashMap>>) getIntent().getSerializableExtra("script");
     character_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("character");
     story_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("story");
+    scene_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("scene_list");
 
     roomId_ = String.valueOf(getIntent().getExtras().getString("roomId"));
     MaxPlayer = Integer.parseInt(String.valueOf(getIntent().getExtras().getString("MaxPlayer")));
@@ -383,6 +385,8 @@ public class ConnectActivity extends Activity {
       intent.putExtra("script", script_list);
       intent.putExtra("story", story_list);
       intent.putExtra("User", User_character_Id);
+      intent.putExtra("scene_list", scene_list);
+
 
       startActivityForResult(intent, CONNECTION_REQUEST);
     }
