@@ -64,15 +64,15 @@ public class Story extends MainActivity {
                 for(int i = 0; i< Story_arr.length(); i++) {
                     JSONObject Story_single = Story_arr.getJSONObject(i);
 
-                    Integer idx;
+                    //String idx = Story_single.get("idx").toString();
                     String bookid = Story_single.get("bookid").toString();
                     String title = Story_single.get("title").toString();
                     String cover = Story_single.get("image").toString();
                     String cover_small = Story_single.get("image_small").toString();
                     String download = Story_single.get("download").toString();
                     String description = Story_single.get("description").toString();
-                    String version;
-                    String displayversion;
+                    //String version = Story_single.get("version").toString();
+                    //String displayversion = Story_single.get("displayversion").toString();
 
                     cover = cover.replace("/static/","");
                     cover = cover.replace(".jpg","");
