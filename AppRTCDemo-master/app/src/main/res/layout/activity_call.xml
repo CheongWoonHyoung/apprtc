@@ -53,7 +53,7 @@
                         android:id="@+id/tv_script" />
                 </RelativeLayout>
                 <ImageView
-                    android:id="@+id/recordBtn"
+                    android:id="@+id/btnRecord"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="200px"
                     android:layout_marginLeft="50px"
@@ -67,7 +67,7 @@
                     android:layout_width="243px"
                     android:layout_height="243px"
                     android:src="@drawable/btn_play_normal3x"
-                    android:id="@+id/playBtn" />
+                    android:id="@+id/btnStop" />
                 <ImageView
                     android:layout_width="243px"
                     android:layout_height="243px"

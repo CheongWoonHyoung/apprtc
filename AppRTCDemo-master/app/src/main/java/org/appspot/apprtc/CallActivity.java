@@ -46,6 +46,7 @@ import org.webrtc.RendererCommon.ScalingType;
 import org.webrtc.SurfaceViewRenderer;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -57,14 +58,9 @@ import java.util.Objects;
 public class CallActivity extends Activity
         implements AppRTCClient.SignalingEvents,
         PeerConnectionClient.PeerConnectionEvents,
-        CallFragment.OnCallEvents {
+        CallFragment.OnCallEvents,MediaRecorder.OnInfoListener {
 
-  final private static File RECORDED_FILE = Environment.getDataDirectory();
-  String filename;
-  // MediaPlayer 클래스에 재생에 관련된 메서드와 멤버변수가 저장어되있다.
-  MediaPlayer player;
-  // MediaRecorder 클래스에  녹음에 관련된 메서드와 멤버 변수가 저장되어있다.
-  MediaRecorder recorder;
+
 
 
 
@@ -148,7 +144,7 @@ public class CallActivity extends Activity
   private boolean isError;
   private boolean callControlFragmentVisible = true;
   private long callStartedTimeMs = 0;
-
+  String mFilePath;
   //custom
   private ArrayList<HashMap<Integer,HashMap>> script_list;
   private ArrayList<HashMap<String,String>> story_list;
@@ -160,9 +156,10 @@ public class CallActivity extends Activity
   int scene_loop = 0;
   boolean scene_chk = false;
 
-  ImageView recordBtn;
-  ImageView playBtn;
-
+  ImageView btnRecord;
+  ImageView btnStop;
+  MediaPlayer mPlayer = null;
+  MediaRecorder mRecorder = null;
   // Controls
   CallFragment callFragment;
   HudFragment hudFragment;
@@ -198,10 +195,11 @@ public class CallActivity extends Activity
     setContentView(R.layout.activity_call);
 
 
-    recordBtn = (ImageView) findViewById(R.id.recordBtn);
-    playBtn = (ImageView) findViewById(R.id.playBtn);
-    //ImageView recordStopBtn = (ImageView) findViewById(R.id.recordStopBtn);
-    filename = RECORDED_FILE.getAbsolutePath() + "/test.mp4";
+    btnRecord = (ImageView) findViewById(R.id.btnRecord);
+    btnStop = (ImageView) findViewById(R.id.btnStop);
+    String sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+    mFilePath = sdRootPath + "/record.mp3";
+
 
     iceConnected = false;
     signalingParameters = null;
@@ -319,9 +317,10 @@ public class CallActivity extends Activity
         tv_script.setText(script_map.get("script"));
 
         if (!script_list.isEmpty() &&  script_map.get("cid") == User_character_Id) {
-          recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
+          btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
         }else{
           //go_record(scene_loop, scid_loop);
+          onBtnRecord();
         }
 
         if (scid_loop < Integer.parseInt(script_map.get("script_length"))-1) {
@@ -337,14 +336,14 @@ public class CallActivity extends Activity
       }
     }
 
-    recordBtn.setOnClickListener(new View.OnClickListener() {
+    btnRecord.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
           //내차례
           if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
-            recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
+            btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
             //씬 갱신
             if (scene_chk == true) {
               scid_loop = 0;
@@ -356,9 +355,9 @@ public class CallActivity extends Activity
 
             TextView tv_script = (TextView) findViewById(R.id.tv_script);
             tv_script.setText(script_map.get("script"));
-
-            go_record(scid_loop, scene_loop);
-            recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
+            onBtnRecord();
+            //go_record(scid_loop, scene_loop);
+            btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
               scene_chk = false;
@@ -373,9 +372,11 @@ public class CallActivity extends Activity
       }
     });
 
-    playBtn.setOnClickListener(new View.OnClickListener() {
+    btnStop.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         //남의차례
+
+        onBtnStop();
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
@@ -385,7 +386,7 @@ public class CallActivity extends Activity
           if(script_map.get("cid") != User_character_Id)
             Log.e("error", "error");
           if (!script_list.isEmpty() && !Objects.equals(script_map.get("cid"), User_character_Id)) {
-            recordBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
+            btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
             //씬 갱신
             if (scene_chk == true) {
               scid_loop = 0;
@@ -402,6 +403,7 @@ public class CallActivity extends Activity
             //재생하기
             if (script_map.get("audio") == "true") {
               //재생
+              onBtnPlay();
             }
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
@@ -419,38 +421,69 @@ public class CallActivity extends Activity
     //뷰바꾸기
   }
 
-  public void go_record(int scid_loop, int scene_loop){
-    if (recorder != null) {
-      recorder.stop();
-      recorder.release();
-      recorder = null;
+  public void onBtnPlay() {
+    if( mPlayer != null ) {
+      mPlayer.stop();
+      mPlayer.release();
+      mPlayer = null;
     }
-
-    // 실험 결과 왠만하면 아래 recorder 객체의 속성을 지정하는 순서는 이대로 하는게 좋다 위치를 바꿨을때 에러가 났었음
-    // 녹음 시작을 위해  MediaRecorder 객체  recorder를 생성한다.
-    recorder = new MediaRecorder();
-
-    // 오디오 입력 형식 설정
-    recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-
-    // 음향을 저장할 방식을 설정
-    recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-
-    // 오디오 인코더 설정
-    recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-
-    // 저장될 파일 지정
-    recorder.setOutputFile(filename);
+    mPlayer = new MediaPlayer();
 
     try {
-      Toast.makeText(getApplicationContext(), "녹음이 시작되었습니다.", Toast.LENGTH_LONG).show();
-
-      // 녹음 준비,시작
-      recorder.prepare();
-      recorder.start();
-    } catch (Exception ex) {
-      Log.e("SampleAudioRecorder", "Exception : ", ex);
+      mPlayer.setDataSource(mFilePath);
+      mPlayer.prepare();
+    } catch(IOException e) {
+      Log.d("tag", "Audio Play error");
+      return;
     }
+    mPlayer.start();
+  }
+
+  public void onBtnRecord() {
+    if( mRecorder != null ) {
+      mRecorder.release();
+      mRecorder = null;
+    }
+    mRecorder = new MediaRecorder();
+    mRecorder.setOutputFile(mFilePath);
+    mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+    mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+    mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+    mRecorder.setMaxDuration(5 * 1000);
+    mRecorder.setMaxFileSize(5 * 1000 * 1000);
+    mRecorder.setOnInfoListener(this);
+
+    try {
+      mRecorder.prepare();
+    } catch(IOException e) {
+      Log.d("tag", "Record Prepare error");
+    }
+    mRecorder.start();
+
+    // 버튼 활성/비활성 설정
+    btnRecord.setEnabled(false);
+    btnStop.setEnabled(true);
+    //mBtnPlay.setEnabled(false);
+  }
+
+  public void onInfo(MediaRecorder mr, int what, int extra) {
+    switch( what ) {
+      case MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED :
+      case MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED :
+        onBtnStop();
+        break;
+    }
+  }
+
+
+  public void onBtnStop() {
+    mRecorder.stop();
+    mRecorder.release();
+
+    // 버튼 활성/비활성 설정
+    btnRecord.setEnabled(true);
+    btnStop.setEnabled(false);
   }
 
   // Activity interfaces
