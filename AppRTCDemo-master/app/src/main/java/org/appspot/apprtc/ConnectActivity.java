@@ -264,20 +264,7 @@ public class ConnectActivity extends Activity {
   public void connectToRoom(boolean loopback, int runTimeMs) {
     // Get room name (random for loopback).
 
-    String roomId;
-    if (loopback) {
-      roomId = Integer.toString((new Random()).nextInt(100000000));
-    } else {
-      //roomId = getSelectedItem();
-      //푸시 메시지 받아서 넣으면 댐
-      roomId = roomId_;
-      /*
-      if (roomId == null) {
-        //roomId = roomEditText.getText().toString();
-        roomId = "354354359";
-      }
-      */
-    }
+    String roomId = roomId_;
     String roomUrl = sharedPref.getString(
         keyprefRoomServerUrl,
         getString(R.string.pref_room_server_url_default));
