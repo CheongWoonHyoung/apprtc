@@ -330,7 +330,6 @@ public class CallActivity extends Activity
 
           //내차례
           if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
-            btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
             //씬 갱신
             if (scene_chk == true) {
               scid_loop = 0;
@@ -363,15 +362,14 @@ public class CallActivity extends Activity
       public void onClick(View v) {
         //남의차례
 
-        onBtnStop();
+        //onBtnStop();
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
           System.out.println(script_map);
           Log.e("cid", script_map.get("cid"));
           Log.e("user", User_character_Id);
-          if(script_map.get("cid") != User_character_Id)
-            Log.e("error", "error");
+
           if (!script_list.isEmpty() && !Objects.equals(script_map.get("cid"), User_character_Id)) {
             btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
             //씬 갱신
@@ -388,7 +386,7 @@ public class CallActivity extends Activity
 
             String mp3_filename = script_map.get("scid");
             //재생하기
-            if (script_map.get("audio") == "true") {
+            if (Objects.equals(script_map.get("audio"), "true")) {
               //재생
               onBtnPlay(mp3_filename);
             }
@@ -409,7 +407,6 @@ public class CallActivity extends Activity
         }
       }
     });
-    //뷰바꾸기
   }
 
   public void onBtnPlay(String filename) {
