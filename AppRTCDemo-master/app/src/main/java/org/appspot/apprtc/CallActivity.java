@@ -156,6 +156,7 @@ public class CallActivity extends Activity
   int scene_loop = 0;
   boolean scene_chk = false;
 
+  ImageView btnGrey;
   ImageView btnRecord;
   ImageView btnStop;
   MediaPlayer mPlayer = null;
@@ -194,7 +195,7 @@ public class CallActivity extends Activity
                     */
     setContentView(R.layout.activity_call);
 
-
+    btnGrey = (ImageView)findViewById(R.id.btnStop_grey);
     btnRecord = (ImageView) findViewById(R.id.btnRecord);
     btnStop = (ImageView) findViewById(R.id.btnStop);
     String sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -339,6 +340,8 @@ public class CallActivity extends Activity
 
     btnRecord.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
+        btnGrey.setVisibility(View.INVISIBLE);
+        btnStop.setVisibility(View.VISIBLE);
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
@@ -376,7 +379,8 @@ public class CallActivity extends Activity
     btnStop.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         //남의차례
-
+        btnGrey.setVisibility(View.VISIBLE);
+        btnStop.setVisibility(View.INVISIBLE);
         onBtnStop();
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
