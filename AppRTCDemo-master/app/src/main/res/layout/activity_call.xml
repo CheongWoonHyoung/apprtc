@@ -61,7 +61,7 @@
                     android:layout_height="243px"
                     android:src="@drawable/btn_voice_normal3x"/>
                 <ImageView
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     android:layout_gravity="right|bottom"
                     android:layout_marginBottom="40px"
                     android:layout_marginRight="40px"
@@ -71,7 +71,7 @@
                     android:id="@+id/btnStop_grey" />
 
                 <ImageView
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     android:layout_gravity="right|bottom"
                     android:layout_marginBottom="40px"
                     android:layout_marginRight="40px"

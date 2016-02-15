@@ -311,7 +311,7 @@ public class CallActivity extends Activity
           btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
         }else{
           //go_record(scene_loop, scid_loop);
-          onBtnRecord();
+          //onBtnRecord();
         }
 
         if (scid_loop < Integer.parseInt(script_map.get("script_length"))-1) {
@@ -329,8 +329,6 @@ public class CallActivity extends Activity
 
     btnRecord.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-        btnGrey.setVisibility(View.INVISIBLE);
-        btnStop.setVisibility(View.VISIBLE);
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
@@ -347,7 +345,7 @@ public class CallActivity extends Activity
 
             TextView tv_script = (TextView) findViewById(R.id.tv_script);
             tv_script.setText(script_map.get("script"));
-            onBtnRecord();
+            //onBtnRecord();
 
             btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
@@ -367,10 +365,6 @@ public class CallActivity extends Activity
     btnStop.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         //남의차례
-
-        btnGrey.setVisibility(View.VISIBLE);
-        btnStop.setVisibility(View.INVISIBLE);
-        onBtnStop();
 
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
@@ -397,7 +391,7 @@ public class CallActivity extends Activity
             //재생하기
             if (Objects.equals(script_map.get("audio"), "true")) {
               //재생
-              onBtnPlay(mp3_filename);
+              //onBtnPlay(mp3_filename);
             }
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
