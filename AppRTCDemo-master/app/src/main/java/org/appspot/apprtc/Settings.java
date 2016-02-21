@@ -87,7 +87,9 @@ public class Settings extends MainActivity {
         friend_list = this.getSharedPreferences(getPackageName(),
                 Activity.MODE_PRIVATE);
         friend_list_editor = friend_list.edit();
-
+        friend_list_editor.putString("nadong","nadong");
+        friend_list_editor.commit();
+        System.out.println(friend_list_editor);
         Button btn_invite_friend = (Button)findViewById(R.id.btn_invite_friend);
         btn_invite_friend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,9 +100,13 @@ public class Settings extends MainActivity {
 
                 aDialog.setPositiveButton("친구추가", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        et_friend_id = (EditText) findViewById(R.id.et_friend_id);
-                        String friend_id = et_friend_id.getText().toString();
-                        friend_list_editor.putString(friend_id, friend_id);
+                        try {
+                            et_friend_id = (EditText) findViewById(R.id.et_friend_id);
+                            String friend_id = et_friend_id.getText().toString();
+                            friend_list_editor.putString(friend_id, friend_id);
+                        } catch (Exception ex) {
+                            Log.e("error", "null", ex);
+                        }
                     }
                 });
                 aDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
