@@ -22,7 +22,7 @@ public class Settings extends MainActivity {
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.settings);
 
-        Button btn_home = (Button) findViewById(R.id.btn_home);
+        Button btn_home = (Button) findViewById(R.id.btn_home3);
         btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,6 +36,8 @@ public class Settings extends MainActivity {
 
         //친구한테 초대받기 설정
         Switch switch_invite = (Switch)findViewById(R.id.switch_invite);
+        //switch_invite.setThumbResource(R.drawable.apptheme_switch_thumb_holo_light);
+        //switch_invite.setTrackResource(R.drawable.apptheme_switch_track_holo_light);
         switch_invite.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton cb, boolean isChecking) {
                 if (isChecking) {
