@@ -21,6 +21,7 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -157,11 +158,13 @@ public class CallActivity extends Activity
   int scene_loop = 0;
   boolean scene_chk = false;
 
-  ImageView btnGrey;
+  ImageView btnRecord_grey;
+  ImageView btnStop_grey;
   ImageView btnRecord;
   ImageView btnStop;
   MediaPlayer mPlayer = null;
   MediaRecorder mRecorder = null;
+  boolean btnRecord_clicked = false;
   // Controls
   CallFragment callFragment;
   HudFragment hudFragment;
@@ -182,13 +185,13 @@ public class CallActivity extends Activity
     // Set window styles for fullscreen-window size. Needs to be done before
     // adding content.
 
-
-
-
     setContentView(R.layout.activity_call);
-    btnGrey = (ImageView)findViewById(R.id.btnStop_grey);
     btnRecord = (ImageView) findViewById(R.id.btnRecord);
     btnStop = (ImageView) findViewById(R.id.btnStop);
+
+    btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
+    btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
+
     sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
     mFilePath = sdRootPath + "/record.mp3";
 
@@ -308,7 +311,7 @@ public class CallActivity extends Activity
         tv_script.setText(script_map.get("script"));
 
         if (!script_list.isEmpty() &&  script_map.get("cid") == User_character_Id) {
-          btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
+          //btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
         }else{
           //go_record(scene_loop, scid_loop);
           //onBtnRecord();
@@ -329,8 +332,20 @@ public class CallActivity extends Activity
 
     btnRecord.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
+        if(btnRecord_clicked == true){
+
+        }else{
+          btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
+          btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
+          btnRecord_clicked = true;
+
+          onBtnRecord();
+        }
+        Log.d("Record", "Record btn pushd");
         try {
+          Log.d("Record","section A");
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
+
 
           //내차례
           if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
@@ -345,9 +360,9 @@ public class CallActivity extends Activity
 
             TextView tv_script = (TextView) findViewById(R.id.tv_script);
             tv_script.setText(script_map.get("script"));
-            //onBtnRecord();
 
-            btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
+
+            //btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
               scene_chk = false;
@@ -365,11 +380,20 @@ public class CallActivity extends Activity
     btnStop.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         //남의차례
+        if(btnRecord_clicked == true){
+          btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
+          btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
+          btnRecord_clicked = false;
+
+          onBtnStop();
+        }else{
+
+        }
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
           if (!script_list.isEmpty() && !Objects.equals(script_map.get("cid"), User_character_Id)) {
-            btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
+            //btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
             //씬 갱신
             if (scene_chk == true) {
               scid_loop = 0;
@@ -401,13 +425,13 @@ public class CallActivity extends Activity
             }
           }
         }catch(Exception ex){
-          Log.e("NONO", "NONO", ex);
+          Log.e("Record", "NONO", ex);
         }
       }
     });
   }
 
-  public void onBtnPlay(String filename) {
+  public void onBtnPlay() {
     if( mPlayer != null ) {
       mPlayer.stop();
       mPlayer.release();
@@ -416,8 +440,7 @@ public class CallActivity extends Activity
     mPlayer = new MediaPlayer();
 
     try {
-      filename = sdRootPath + "/" + filename;
-      mPlayer.setDataSource(filename);
+      mPlayer.setDataSource(mFilePath);
       mPlayer.prepare();
     } catch(IOException e) {
       Log.d("tag", "Audio Play error");
@@ -427,6 +450,8 @@ public class CallActivity extends Activity
   }
 
   public void onBtnRecord() {
+
+    Log.d("Record", "Record Started");
     if( mRecorder != null ) {
       mRecorder.release();
       mRecorder = null;
@@ -449,8 +474,8 @@ public class CallActivity extends Activity
     mRecorder.start();
 
     // 버튼 활성/비활성 설정
-    btnRecord.setEnabled(false);
-    btnStop.setEnabled(true);
+    //btnRecord.setEnabled(false);
+    //btnStop.setEnabled(true);
     //mBtnPlay.setEnabled(false);
   }
 
@@ -466,11 +491,12 @@ public class CallActivity extends Activity
 
   public void onBtnStop() {
     mRecorder.stop();
+    mRecorder.reset();
     mRecorder.release();
-
+    Log.d("Record","Record Stopped");
     // 버튼 활성/비활성 설정
-    btnRecord.setEnabled(true);
-    btnStop.setEnabled(false);
+    //btnRecord.setEnabled(true);
+    //btnStop.setEnabled(false);
   }
 
   // Activity interfaces
