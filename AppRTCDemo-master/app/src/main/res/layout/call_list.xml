@@ -4,12 +4,69 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient">
 
-    <Button
-        android:layout_width="500px"
+    <RelativeLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_width="match_parent"
         android:layout_height="220px"
-        android:id="@+id/btn_invite"
-        android:layout_gravity="right"
-        android:background="@drawable/btn_invite_complete_normal2x"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp" />
+        android:id="@+id/btn_invite">
+
+        <Button
+            android:layout_width="500px"
+            android:layout_height="220px"
+            android:id="@+id/btn_back2"
+            android:background="@drawable/btn_back_full_normal3x" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="500px"
+            android:layout_height="220px"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/btn_invite_complete_normal3x" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New AutoCompleteTextView"
+            android:id="@+id/et_search_friend" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="검색하기;"
+            android:id="@+id/btn_search_friend" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="300px"
+        android:layout_marginTop="15dp">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lv_friend_selected" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="300px"
+        android:layout_marginTop="15dp">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lv_search_result" />
+    </LinearLayout>
+
 </LinearLayout>

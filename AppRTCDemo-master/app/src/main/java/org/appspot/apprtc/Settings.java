@@ -98,13 +98,9 @@ public class Settings extends MainActivity {
 
                 aDialog.setPositiveButton("친구추가", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            et_friend_id= (EditText) findViewById(R.id.et_friend_id);
-                            String friend_id = et_friend_id.getText().toString();
-                            friend_list_editor.putString(friend_id, friend_id);
-                        }catch(Exception ex){
-                            Log.e("Friend_list_error", "occured", ex);
-                        }
+                        et_friend_id = (EditText) findViewById(R.id.et_friend_id);
+                        String friend_id = et_friend_id.getText().toString();
+                        friend_list_editor.putString(friend_id, friend_id);
                     }
                 });
                 aDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
