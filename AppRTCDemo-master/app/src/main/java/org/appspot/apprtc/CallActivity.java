@@ -365,13 +365,8 @@ public class CallActivity extends Activity
     btnStop.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         //남의차례
-
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
-
-          System.out.println(script_map);
-          Log.e("cid", script_map.get("cid"));
-          Log.e("user", User_character_Id);
 
           if (!script_list.isEmpty() && !Objects.equals(script_map.get("cid"), User_character_Id)) {
             btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
