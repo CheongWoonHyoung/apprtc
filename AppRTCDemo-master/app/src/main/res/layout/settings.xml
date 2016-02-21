@@ -70,8 +70,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="40dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -181,6 +180,23 @@
                     android:thumb="@drawable/switch_thumb"
                     android:track="@drawable/apptheme_switch_thumb_disabled_holo_light"/>
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="15dp" >
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="친구 초대하기"
+                android:id="@+id/btn_invite_friend"
+                android:background="@android:color/transparent"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
         </LinearLayout>
     </LinearLayout>
 
