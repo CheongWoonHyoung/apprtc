@@ -13,7 +13,7 @@
             android:background="@drawable/btn_home_normal3x"
             android:layout_width="243px"
             android:layout_height="243px"
-            android:id="@+id/button" />
+            android:id="@+id/btn_home2" />
 
         <TextView
             android:text="동화 목록"

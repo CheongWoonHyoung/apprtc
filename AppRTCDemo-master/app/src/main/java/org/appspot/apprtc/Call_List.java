@@ -1,11 +1,15 @@
 package org.appspot.apprtc;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import org.json.JSONArray;
@@ -14,12 +18,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 /**
  * Created by cheongwh on 2016. 2. 12..
  */
 public class Call_List extends MainActivity {
+
+    public SharedPreferences friend_list;
 
     private ArrayList<HashMap<String, String>> story_list = new ArrayList<>();
     private ArrayList<HashMap<String, String>> scene_list = new ArrayList<>();
@@ -66,6 +73,32 @@ public class Call_List extends MainActivity {
                     startActivity(intent);
                 } else {
                     Log.e("Loading", "Loading");
+                }
+            }
+        });
+
+        Button btn_back2 = (Button) findViewById(R.id.btn_back2);
+        btn_back2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        //친구 목록
+        friend_list = this.getSharedPreferences(getPackageName(),
+                Activity.MODE_PRIVATE);
+        //친구 찾기
+        Button btn_search_friend = (Button) findViewById(R.id.btn_search_friend);
+        btn_search_friend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AutoCompleteTextView et_search_friend = (AutoCompleteTextView) findViewById(R.id.et_search_friend);
+                String friend_id_search = friend_list.getString(et_search_friend.getText().toString(), "");
+                if(Objects.equals(friend_id_search,"")){
+                    //Do nothing
+                }else{
+                    //찾았으면 리스트 뷰에 올려야지 ㅇㅇ
                 }
             }
         });

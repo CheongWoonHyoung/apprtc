@@ -13,7 +13,7 @@
             android:background="@drawable/btn_home_normal3x"
             android:layout_width="243px"
             android:layout_height="243px"
-            android:id="@+id/button2" />
+            android:id="@+id/btn_home3" />
 
         <TextView
             android:text="설정"
@@ -30,7 +30,8 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp">
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
@@ -69,8 +70,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="15dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -82,10 +82,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
+                android:text="친구의 동화 초대"
                 android:id="@+id/textView"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp" />
+                android:layout_marginBottom="15dp"
+                android:textSize="15dp"
+                android:textColor="#000000"
+                android:paddingLeft="20dp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -97,7 +100,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="New Switch"
-                    android:id="@+id/switch_invite" />
+                    android:id="@+id/switch_invite"
+                    android:textOn="On"
+                    android:textOff="Off"
+                    android:checked="false"
+                    android:thumb="@drawable/switch_thumb"
+                    android:track="@drawable/apptheme_switch_thumb_disabled_holo_light"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -112,10 +120,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
+                android:text="새로운 사람의 동화 초대"
                 android:id="@+id/textView2"
                 android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="15dp"
+                android:paddingLeft="20dp"
+                android:textColor="#000000"
+                android:textSize="15dp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -127,7 +138,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="New Switch"
-                    android:id="@+id/switch_new" />
+                    android:id="@+id/switch_new"
+                    android:textOn="On"
+                    android:textOff="Off"
+                    android:thumb="@drawable/switch_thumb"
+                    android:track="@drawable/apptheme_switch_thumb_disabled_holo_light"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -141,10 +156,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
+                android:text="기타 메시지 알림"
                 android:id="@+id/textView3"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp" />
+                android:layout_marginBottom="15dp"
+                android:paddingLeft="20dp"
+                android:textColor="#000000"
+                android:textSize="15dp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -156,8 +174,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="New Switch"
-                    android:id="@+id/switch_etc" />
+                    android:id="@+id/switch_etc"
+                    android:textOn="On"
+                    android:textOff="Off"
+                    android:thumb="@drawable/switch_thumb"
+                    android:track="@drawable/apptheme_switch_thumb_disabled_holo_light"/>
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="15dp" >
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="친구 초대하기"
+                android:id="@+id/btn_invite_friend"
+                android:background="@android:color/transparent"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
         </LinearLayout>
     </LinearLayout>
 

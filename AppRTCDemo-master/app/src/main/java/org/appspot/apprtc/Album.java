@@ -13,7 +13,7 @@ public class Album extends MainActivity {
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.album_main);
 
-        Button btn_home = (Button) findViewById(R.id.btn_home);
+        Button btn_home = (Button) findViewById(R.id.btn_home2);
         btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
