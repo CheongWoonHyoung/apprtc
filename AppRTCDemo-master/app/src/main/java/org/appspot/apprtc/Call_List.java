@@ -95,8 +95,8 @@ public class Call_List extends MainActivity {
             public void onClick(View v) {
                 AutoCompleteTextView et_search_friend = (AutoCompleteTextView) findViewById(R.id.et_search_friend);
                 Log.e("null_test", et_search_friend.getText().toString());
-                //String friend_id_search = friend_list.getString(et_search_friend.getText().toString(), "");
-                String friend_id_search = friend_list.getString("nadong", "");
+                String friend_id_search = friend_list.getString(et_search_friend.getText().toString(), "");
+                //String friend_id_search = friend_list.getString("nadong", "");
 
                 if(Objects.equals(friend_id_search,"")){
                     //Do nothing
