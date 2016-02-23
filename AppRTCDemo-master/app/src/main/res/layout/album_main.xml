@@ -26,9 +26,12 @@
             android:layout_height="92px" />
     </RelativeLayout>
 
-    <ListView
+    <GridView
+        android:stretchMode="columnWidth"
+        android:numColumns="2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView" />
+        android:id="@+id/gv_playlist"
+        android:padding="5dp" />
 
 </LinearLayout>

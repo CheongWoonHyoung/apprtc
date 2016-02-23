@@ -8,7 +8,8 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_width="match_parent"
-        android:layout_height="220px">
+        android:layout_height="220px"
+        >
 
         <Button
             android:layout_width="500px"
