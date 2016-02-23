@@ -7,14 +7,21 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,10 +39,18 @@ public class Call_List extends MainActivity {
     private ArrayList<HashMap<String, String>> scene_list = new ArrayList<>();
     private ArrayList<HashMap<String, String>> character_list = new ArrayList<>();
     private ArrayList<HashMap<Integer, HashMap>> script_list = new ArrayList<>();
+    private HashMap<String, String> friend_map = new HashMap<>();
+    private ArrayList<HashMap<String, String>> friend_map_list = new ArrayList<>();
+
+    private ListView lv_friend_selected;
+    private SimpleAdapter selected_friend;
+
     private boolean load_chk = false;
 
     private String character = "";
     private String script = "";
+    private Integer num_friend;
+    private String friend_id_search;
 
     @Override
     protected void onCreate(Bundle SavedInstanceState) {
@@ -43,23 +58,24 @@ public class Call_List extends MainActivity {
         setContentView(R.layout.call_list);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        num_friend = 0;
         final String MaxPlayer = String.valueOf(getIntent().getExtras().getString("MaxPlayer"));
         String download = String.valueOf(getIntent().getExtras().getString("download"));
-        // 콜 리스트 뿌려주기 => 설정에서 등록한 사람만 뿌려주면 댐 ㅇㅇ
-        // 친구 선택
 
         download = "http://blay.eerssoft.co.kr/books/list/";
         new SHJSONParser().setCallback(callback).execute(download);
 
+        lv_friend_selected = (ListView) findViewById(R.id.lv_friend_selected);
+        selected_friend = new SimpleAdapter(Call_List.this, friend_map_list, R.layout.item_friend, new String[]{"friend_id"}, new int[]{R.id.tv_selected_friend_id});
+
+        //Button: 친구초대
         Button btn_invite = (Button) findViewById(R.id.btn_invite);
         btn_invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //setContentView
-                //다운로드시작
+
                 if (load_chk == true) {
-                    //원래는 랜덤생성임, 테스트용 임의 생성
-                    //String roomId = "357357352";
+
                     String roomId = Integer.toString((new Random()).nextInt(100000000));
                     Intent intent = new Intent(Call_List.this, ConnectActivity.class);
                     intent.putExtra("character", character_list);
@@ -72,11 +88,12 @@ public class Call_List extends MainActivity {
                     //친구한테 푸시 메시지
                     startActivity(intent);
                 } else {
-                    Log.e("Loading", "Loading");
+                    Log.e("Error", "Friend Inviting");
                 }
             }
         });
 
+        //Button: 뒤로가기
         Button btn_back2 = (Button) findViewById(R.id.btn_back2);
         btn_back2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +102,7 @@ public class Call_List extends MainActivity {
             }
         });
 
-        //친구 목록
+        //SharedPref: 친구 목록
         friend_list = this.getSharedPreferences(getPackageName(),
                 Activity.MODE_PRIVATE);
         //친구 찾기
@@ -94,21 +111,42 @@ public class Call_List extends MainActivity {
             @Override
             public void onClick(View v) {
                 AutoCompleteTextView et_search_friend = (AutoCompleteTextView) findViewById(R.id.et_search_friend);
-                Log.e("null_test", et_search_friend.getText().toString());
-                String friend_id_search = friend_list.getString(et_search_friend.getText().toString(), "");
-                //String friend_id_search = friend_list.getString("nadong", "");
+                friend_id_search = friend_list.getString(et_search_friend.getText().toString(), "");
 
-                if(Objects.equals(friend_id_search,"")){
-                    //Do nothing
-                    Log.e("notfound", "notfound");
-                }else{
-                    //찾았으면 리스트 뷰에 올려야지 ㅇㅇ
-                    Log.e("found", friend_id_search);
+                if (Objects.equals(friend_id_search, "")) {
+                    Toast.makeText(getApplicationContext(), "검색결과가 없습니다", Toast.LENGTH_SHORT);
+                } else {
+                    final TextView tv_searched_friend_id = (TextView) findViewById(R.id.tv_searched_friend_id);
+                    tv_searched_friend_id.setText(friend_id_search);
+                    tv_searched_friend_id.setVisibility(View.VISIBLE);
+                    tv_searched_friend_id.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            tv_searched_friend_id.setVisibility(View.INVISIBLE);
+                            boolean friend_chk = false;
+                            for(int i = 0; i< friend_map_list.size(); i++){
+                                if(friend_map_list.get(i).get("friend_id") == friend_id_search)
+                                    friend_chk = true;
+                            }
+                            //Exception: 기존에 있는친구인지, 최대 초대 인원 미만인지
+                            if(friend_chk == false && friend_map_list.size() < Integer.parseInt(MaxPlayer)) {
+                                friend_map.put("friend_id", friend_id_search);
+                                num_friend++;
+                                friend_id_search = "";
+                                friend_map_list.add(friend_map);
+                                lv_friend_selected.setAdapter(selected_friend);
+                                selected_friend.notifyDataSetChanged();
+                            }
+                            if(friend_chk == true)
+                                Toast.makeText(getApplicationContext(), "이미 추가한 친구입니다", Toast.LENGTH_SHORT);
+                            if(friend_map_list.size() + 1 == Integer.parseInt(MaxPlayer))
+                                Toast.makeText(getApplicationContext(), "더 이상 초대할 수 없습니다", Toast.LENGTH_SHORT);
+                        }
+                    });
                 }
             }
         });
     }
-
     /*
     public String loadJSONFromAsset() {
         String json = null;
@@ -133,7 +171,6 @@ public class Call_List extends MainActivity {
             try {
                 if (json == null || (Integer) json.get("result") != 0) {
                     //TODO: error
-                    System.out.println("error");
                     return;
                 }
 
@@ -231,14 +268,11 @@ public class Call_List extends MainActivity {
                                 script_map.put("script", script);
                                 script_map.put("script_length", script_length);
                                 scene_map_main.put(j, script_map);
-                                System.out.println(j);
                             }
-
                             script_list.add(scene_map_main);
-                            System.out.println(script_list);
                         }
-                    } catch (Exception ex) {
-                        System.out.println(ex);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     story_list.add(map);
                     load_chk = true;

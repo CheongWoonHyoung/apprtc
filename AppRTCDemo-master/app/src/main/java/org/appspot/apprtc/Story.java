@@ -36,7 +36,6 @@ public class Story extends MainActivity {
     private ArrayList<HashMap<String,String>> story_list = new ArrayList<>();
 
     private GridView gridView;
-    private ImageView iv_cover;
     ListAdapter adapter_story;
     private String URL = "http://blay.eerssoft.co.kr/books/list/";
 

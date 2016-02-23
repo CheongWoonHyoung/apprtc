@@ -15,7 +15,6 @@ import android.widget.TextView;
  */
 public class Story_Single extends MainActivity {
 
-    //스토리에대한설명및별점보여주기
     @Override
     protected void onCreate(Bundle SavedInstanceState) {
         super.onCreate(SavedInstanceState);
@@ -35,9 +34,7 @@ public class Story_Single extends MainActivity {
         tv_single_name.setText(title);
         TextView tv_single_description = (TextView) findViewById(R.id.tv_single_description);
         tv_single_description.setText(description);
-        ImageView iv_main = (ImageView) findViewById(R.id.iv_main);
         int title_single= getResources().getIdentifier("org.appspot.apprtc:drawable/main_" + bookid, null, null);
-        //iv_main.setImageDrawable(getResources().getDrawable(title_single));
 
         Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), title_single);
         Bitmap circularBitmap = ImageConverter.getRoundedCornerBitmap(bitmap, 100);
@@ -67,8 +64,4 @@ public class Story_Single extends MainActivity {
             }
         });
     }
-
-    //시작하기
-    //인텐트
-    //친구추가목록 인텐트
 }

@@ -28,15 +28,16 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="30dp">
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/et_search_friend" />
+            android:id="@+id/et_search_friend"
+            android:hint="Search" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="검색하기"
             android:id="@+id/btn_search_friend" />
@@ -44,27 +45,63 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="300px"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp">
 
-        <ListView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/lv_friend_selected" />
+            android:text="초대한 친구"
+            android:id="@+id/textView4"
+            android:paddingLeft="20dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="600px"
+            android:layout_marginTop="15dp">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lv_friend_selected" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="300px"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp">
 
-        <ListView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/lv_search_result" />
+            android:text="검색결과"
+            android:id="@+id/textView5"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:paddingLeft="20dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/tv_searched_friend_id"
+                android:background="#FFFFFF"
+                android:padding="20dp"
+                android:visibility="invisible"
+                android:textColor="#000000" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

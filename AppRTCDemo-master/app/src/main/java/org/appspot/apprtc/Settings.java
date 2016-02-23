@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
+
+import java.util.Objects;
 
 
 /**
@@ -85,12 +88,12 @@ public class Settings extends MainActivity {
             }
         });
 
+        //SharedPref: 친구목록
         friend_list = this.getSharedPreferences(getPackageName(),
                 Activity.MODE_PRIVATE);
         friend_list_editor = friend_list.edit();
-        friend_list_editor.putString("nadong","nadong");
-        friend_list_editor.commit();
-        System.out.println(friend_list_editor);
+
+        //Button: 친구초대
         Button btn_invite_friend = (Button)findViewById(R.id.btn_invite_friend);
         btn_invite_friend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,13 +108,18 @@ public class Settings extends MainActivity {
 
                 aDialog.setPositiveButton("친구추가", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            String friend_id = et_friend_id.getText().toString();
-                            friend_list_editor.putString(friend_id, friend_id);
-                            friend_list_editor.commit();
-                            Log.e("friend_id", friend_id);
-                        } catch (Exception ex) {
-                            Log.e("error", "friend_list", ex);
+                        String friend_id_search = friend_list.getString(et_friend_id.getText().toString(), "");
+                        if (Objects.equals(friend_id_search, "")) {
+                            try {
+                                String friend_id = et_friend_id.getText().toString();
+                                friend_list_editor.putString(friend_id, friend_id);
+                                friend_list_editor.commit();
+                                Log.e("friend_id", friend_id);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "이미 등록된 친구입니다", Toast.LENGTH_SHORT);
                         }
                     }
                 });
