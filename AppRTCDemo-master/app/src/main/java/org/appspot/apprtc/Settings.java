@@ -119,7 +119,7 @@ public class Settings extends MainActivity {
                                 e.printStackTrace();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "이미 등록된 친구입니다", Toast.LENGTH_SHORT);
+                            Toast.makeText(getApplicationContext(), "이미 등록된 친구입니다", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -39,7 +39,6 @@ public class Call_List extends MainActivity {
     private ArrayList<HashMap<String, String>> scene_list = new ArrayList<>();
     private ArrayList<HashMap<String, String>> character_list = new ArrayList<>();
     private ArrayList<HashMap<Integer, HashMap>> script_list = new ArrayList<>();
-    private HashMap<String, String> friend_map = new HashMap<>();
     private ArrayList<HashMap<String, String>> friend_map_list = new ArrayList<>();
 
     private ListView lv_friend_selected;
@@ -67,6 +66,7 @@ public class Call_List extends MainActivity {
 
         lv_friend_selected = (ListView) findViewById(R.id.lv_friend_selected);
         selected_friend = new SimpleAdapter(Call_List.this, friend_map_list, R.layout.item_friend, new String[]{"friend_id"}, new int[]{R.id.tv_selected_friend_id});
+        lv_friend_selected.setAdapter(selected_friend);
 
         //Button: 친구초대
         Button btn_invite = (Button) findViewById(R.id.btn_invite);
@@ -128,19 +128,21 @@ public class Call_List extends MainActivity {
                                 if(friend_map_list.get(i).get("friend_id") == friend_id_search)
                                     friend_chk = true;
                             }
+
                             //Exception: 기존에 있는친구인지, 최대 초대 인원 미만인지
                             if(friend_chk == false && friend_map_list.size() < Integer.parseInt(MaxPlayer)) {
+                                HashMap<String, String> friend_map = new HashMap<>();
                                 friend_map.put("friend_id", friend_id_search);
                                 num_friend++;
                                 friend_id_search = "";
                                 friend_map_list.add(friend_map);
-                                lv_friend_selected.setAdapter(selected_friend);
+                                System.out.println(friend_map);
                                 selected_friend.notifyDataSetChanged();
                             }
                             if(friend_chk == true)
-                                Toast.makeText(getApplicationContext(), "이미 추가한 친구입니다", Toast.LENGTH_SHORT);
+                                Toast.makeText(getApplicationContext(), "이미 추가한 친구입니다", Toast.LENGTH_SHORT).show();
                             if(friend_map_list.size() + 1 == Integer.parseInt(MaxPlayer))
-                                Toast.makeText(getApplicationContext(), "더 이상 초대할 수 없습니다", Toast.LENGTH_SHORT);
+                                Toast.makeText(getApplicationContext(), "더 이상 초대할 수 없습니다", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
