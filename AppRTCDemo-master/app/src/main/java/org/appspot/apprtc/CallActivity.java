@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.media.MediaPlayer;
@@ -29,10 +30,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -145,26 +148,29 @@ public class CallActivity extends Activity
   private boolean isError;
   private boolean callControlFragmentVisible = true;
   private long callStartedTimeMs = 0;
-  String mFilePath;
   //custom
   private ArrayList<HashMap<Integer,HashMap>> script_list;
   private ArrayList<HashMap<String,String>> story_list;
-  private   ArrayList<HashMap<String, String>> scene_list;
+  private ArrayList<HashMap<String, String>> scene_list;
+
+  public SharedPreferences album_list;
+  public SharedPreferences.Editor album_list_editor;
 
   private String sdRootPath;
   private String User_character_Id;
+  private String bookid;
+  String mFilePath;
 
   int scid_loop = 0;
   int scene_loop = 0;
   boolean scene_chk = false;
 
-  ImageView btnRecord_grey;
-  ImageView btnStop_grey;
   ImageView btnRecord;
   ImageView btnStop;
   MediaPlayer mPlayer = null;
   MediaRecorder mRecorder = null;
   boolean myturn = false;
+
   // Controls
   CallFragment callFragment;
   HudFragment hudFragment;
@@ -178,12 +184,11 @@ public class CallActivity extends Activity
     scene_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("scene_list");
 
     User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
+    bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
+
 
     Thread.setDefaultUncaughtExceptionHandler(
             new UnhandledExceptionHandler(this));
-
-    // Set window styles for fullscreen-window size. Needs to be done before
-    // adding content.
 
     setContentView(R.layout.activity_call);
     btnRecord = (ImageView) findViewById(R.id.btnRecord);
@@ -221,10 +226,7 @@ public class CallActivity extends Activity
 
     // Create video renderers.
     rootEglBase = new EglBase();
-    //localRender.init(rootEglBase.getContext(), null);
     remoteRender.init(rootEglBase.getContext(), null);
-    //localRender.setZOrderMediaOverlay(true);
-    //updateVideoView();
 
     // Check for mandatory permissions.
     for (String permission : MANDATORY_PERMISSIONS) {
@@ -299,6 +301,11 @@ public class CallActivity extends Activity
     peerConnectionClient = PeerConnectionClient.getInstance();
     peerConnectionClient.createPeerConnectionFactory(
             CallActivity.this, peerConnectionParameters, CallActivity.this);
+
+    //SharedPref: 친구목록
+    album_list = this.getSharedPreferences(getPackageName(),
+            Activity.MODE_PRIVATE);
+    album_list_editor = album_list.edit();
 
     if (!script_list.isEmpty()){
       try {
@@ -428,7 +435,7 @@ public class CallActivity extends Activity
             }
 
             if(scene_loop > script_list.size()){
-              //종료하시겠습니까?
+              Save();
             }
           }
         }catch(Exception ex){
@@ -436,6 +443,31 @@ public class CallActivity extends Activity
         }
       }
     });
+  }
+
+  public void Save(){
+    LayoutInflater layoutInflater = LayoutInflater.from(CallActivity.this);
+    AlertDialog.Builder aDialog = new AlertDialog.Builder(CallActivity.this);
+    aDialog.setTitle("종료하시겠습니까");
+
+    aDialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int which) {
+        //저장하기
+        //앨범 리스트 갯수 업데이트
+        album_list_editor.putInt("album_length", album_list.getInt("album_length", 0) + 1);
+        //앨범 인덱스 & Key
+        String album_key  = Integer.toString(album_list.getInt("album_length", 0));
+        album_list_editor.putString(album_key, bookid);
+      }
+    });
+
+    aDialog.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int which) {
+        //Do Nothing
+      }
+    });
+    AlertDialog ad = aDialog.create();
+    ad.show();
   }
 
   public void onBtnPlay() {

@@ -51,6 +51,7 @@ public class Story_Single extends MainActivity {
                 Intent intent = new Intent(Story_Single.this,Call_List.class);
                 intent.putExtra("MaxPlayer", MaxPlayer);
                 intent.putExtra("download", download);
+                intent.putExtra("bookid", bookid);
                 startActivity(intent);
             }
         });

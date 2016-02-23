@@ -59,6 +59,7 @@ public class Call_List extends MainActivity {
 
         num_friend = 0;
         final String MaxPlayer = String.valueOf(getIntent().getExtras().getString("MaxPlayer"));
+        final String bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
         String download = String.valueOf(getIntent().getExtras().getString("download"));
 
         download = "http://blay.eerssoft.co.kr/books/list/";
@@ -84,6 +85,7 @@ public class Call_List extends MainActivity {
                     intent.putExtra("MaxPlayer", MaxPlayer);
                     intent.putExtra("story", story_list);
                     intent.putExtra("scene_list", scene_list);
+                    intent.putExtra("bookid", bookid);
                     //친구도 room Id 넘겨주기
                     //친구한테 푸시 메시지
                     startActivity(intent);
