@@ -34,13 +34,12 @@
         <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New AutoCompleteTextView"
             android:id="@+id/et_search_friend" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="검색하기;"
+            android:text="검색하기"
             android:id="@+id/btn_search_friend" />
 
     </LinearLayout>

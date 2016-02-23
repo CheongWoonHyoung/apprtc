@@ -3,12 +3,14 @@ package org.appspot.apprtc;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -21,7 +23,6 @@ import android.widget.Switch;
  */
 
 public class Settings extends MainActivity {
-    private EditText et_friend_id;
     public SharedPreferences friend_list;
     public SharedPreferences.Editor friend_list_editor;
 
@@ -87,24 +88,37 @@ public class Settings extends MainActivity {
         friend_list = this.getSharedPreferences(getPackageName(),
                 Activity.MODE_PRIVATE);
         friend_list_editor = friend_list.edit();
-
+        friend_list_editor.putString("nadong","nadong");
+        friend_list_editor.commit();
+        System.out.println(friend_list_editor);
         Button btn_invite_friend = (Button)findViewById(R.id.btn_invite_friend);
         btn_invite_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LayoutInflater layoutInflater = LayoutInflater.from(Settings.this);
+                View promptView = layoutInflater.inflate(R.layout.invite_friend, null);
+
                 AlertDialog.Builder aDialog = new AlertDialog.Builder(Settings.this);
                 aDialog.setTitle("친구 아이디를 입력해 주세요");
-                aDialog.setView(R.layout.invite_friend);
+                aDialog.setView(promptView);
+                final EditText et_friend_id = (EditText) promptView.findViewById(R.id.et_friend_id);
 
                 aDialog.setPositiveButton("친구추가", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        et_friend_id = (EditText) findViewById(R.id.et_friend_id);
-                        String friend_id = et_friend_id.getText().toString();
-                        friend_list_editor.putString(friend_id, friend_id);
+                        try {
+                            String friend_id = et_friend_id.getText().toString();
+                            friend_list_editor.putString(friend_id, friend_id);
+                            friend_list_editor.commit();
+                            Log.e("friend_id", friend_id);
+                        } catch (Exception ex) {
+                            Log.e("error", "friend_list", ex);
+                        }
                     }
                 });
+
                 aDialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        //Do Nothing
                     }
                 });
                 AlertDialog ad = aDialog.create();
@@ -112,5 +126,4 @@ public class Settings extends MainActivity {
             }
         });
     }
-
 }
