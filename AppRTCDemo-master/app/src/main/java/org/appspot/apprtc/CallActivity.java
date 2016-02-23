@@ -164,7 +164,7 @@ public class CallActivity extends Activity
   ImageView btnStop;
   MediaPlayer mPlayer = null;
   MediaRecorder mRecorder = null;
-  boolean btnRecord_clicked = false;
+  boolean myturn = false;
   // Controls
   CallFragment callFragment;
   HudFragment hudFragment;
@@ -191,9 +191,10 @@ public class CallActivity extends Activity
 
     btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
     btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
+    btnStop.setEnabled(false);
 
     sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-    mFilePath = sdRootPath + "/record.mp3";
+    mFilePath = sdRootPath + "/.mp3";
 
     iceConnected = false;
     signalingParameters = null;
@@ -332,19 +333,24 @@ public class CallActivity extends Activity
 
     btnRecord.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-        if(btnRecord_clicked == true){
 
-        }else{
-          btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
-          btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
-          btnRecord_clicked = true;
-
-          onBtnRecord();
-        }
         Log.d("Record", "Record btn pushd");
         try {
           Log.d("Record","section A");
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
+
+          String mp3_filename ="/"+ scene_list.get(scene_loop).get("sid")+".mp3";
+
+          if(myturn == true){
+
+          }else{
+            btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
+            btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
+            myturn = true;
+            btnRecord.setEnabled(false);
+            btnStop.setEnabled(true);
+            onBtnRecord(mp3_filename);
+          }
 
 
           //내차례
@@ -380,11 +386,12 @@ public class CallActivity extends Activity
     btnStop.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
         //남의차례
-        if(btnRecord_clicked == true){
+        if(myturn == true){
           btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
           btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
-          btnRecord_clicked = false;
-
+          myturn = false;
+          btnStop.setEnabled(false);
+          btnRecord.setEnabled(true);
           onBtnStop();
         }else{
 
@@ -406,7 +413,7 @@ public class CallActivity extends Activity
             TextView tv_script = (TextView) findViewById(R.id.tv_script);
             tv_script.setText(script_map.get("script"));
 
-            String mp3_filename = script_map.get("scid");
+
             //재생하기
             if (Objects.equals(script_map.get("audio"), "true")) {
               //재생
@@ -449,7 +456,7 @@ public class CallActivity extends Activity
     mPlayer.start();
   }
 
-  public void onBtnRecord() {
+  public void onBtnRecord(String num) {
 
     Log.d("Record", "Record Started");
     if( mRecorder != null ) {
@@ -457,7 +464,7 @@ public class CallActivity extends Activity
       mRecorder = null;
     }
     mRecorder = new MediaRecorder();
-    mRecorder.setOutputFile(mFilePath);
+    mRecorder.setOutputFile(sdRootPath + num);
     mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
     mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
     mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
