@@ -205,6 +205,14 @@ public class CallActivity extends Activity
     btnRecord.setEnabled(false);
     ///////////////////////////////////////////////////////////////////////
 
+    album_list = this.getSharedPreferences(getPackageName(),
+            Activity.MODE_PRIVATE);
+    album_list_editor = album_list.edit();
+    album_list_editor.putString("1", "redhood");
+    album_list_editor.putString("redhood", "1");
+    album_list_editor.putInt("album_length", 1);
+    album_list_editor.commit();
+
     sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
     mFilePath = sdRootPath + "/.mp3";
 
@@ -432,7 +440,6 @@ public class CallActivity extends Activity
   }
 
   public void Save(final String idx){
-    LayoutInflater layoutInflater = LayoutInflater.from(CallActivity.this);
     AlertDialog.Builder aDialog = new AlertDialog.Builder(CallActivity.this);
     aDialog.setTitle("종료하시겠습니까");
 
@@ -440,11 +447,14 @@ public class CallActivity extends Activity
       public void onClick(DialogInterface dialog, int which) {
         //저장하기
         //앨범 리스트 갯수 업데이트
-        album_list_editor.putInt("album_length", album_list.getInt("album_length", 0) + 1);
+        album_list_editor.putInt("album_length", album_list.getInt("album_length", 0)+1);
         //앨범 인덱스 & Key
         String album_key  = Integer.toString(album_list.getInt("album_length", 0));
-        album_list_editor.putString(album_key, bookid);
-        album_list_editor.putString(bookid, idx);
+        if(bookid != null && idx != null) {
+          album_list_editor.putString(album_key, bookid);
+          album_list_editor.putString(bookid, idx);
+          album_list_editor.commit();
+        }
       }
     });
 

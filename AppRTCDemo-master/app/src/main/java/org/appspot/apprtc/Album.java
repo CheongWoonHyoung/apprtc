@@ -1,5 +1,6 @@
 package org.appspot.apprtc;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -40,6 +41,8 @@ public class Album extends MainActivity {
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.album_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        album_list = this.getSharedPreferences(getPackageName(),
+                Activity.MODE_PRIVATE);
 
         new SHJSONParser().setCallback(callback).execute(URL);
 
@@ -60,10 +63,8 @@ public class Album extends MainActivity {
             try {
                 if (json == null || (Integer) json.get("result") != 0) {
                     //TODO: error
-                    System.out.println("error");
                     return;
                 }
-
                 story_list.clear();
                 JSONArray Story_arr = (JSONArray) json.get("list");
                 for(int i = 0; i< Story_arr.length(); i++) {
@@ -76,13 +77,11 @@ public class Album extends MainActivity {
                     String cover_small = Story_single.get("image_small").toString();
                     String download = Story_single.get("download").toString();
                     String description = Story_single.get("description").toString();
-                    String version = Story_single.get("version").toString();
-                    String displayversion = Story_single.get("displayversion").toString();
+                    //String version = Story_single.get("version").toString();
+                    //String displayversion = Story_single.get("displayversion").toString();
 
                     cover = cover.replace("/static/","");
                     cover = cover.replace(".jpg","");
-
-                    Log.e("bookid", bookid);
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("bookid", bookid);
@@ -91,8 +90,8 @@ public class Album extends MainActivity {
                     map.put("cover_small", cover_small);
                     map.put("download", download);
                     map.put("description", description);
-                    map.put("verson", version);
-                    map.put("displayversion", displayversion);
+                    //map.put("verson", version);
+                    //map.put("displayversion", displayversion);
                     map.put("MaxPlayer", "5");
                     //map.put("character", character);
                     //map.put("scene", scene);
@@ -103,25 +102,30 @@ public class Album extends MainActivity {
                 e.printStackTrace();
             }
 
-            Integer album_length = album_list.getInt("album_length", -1) + 1;
+            Integer album_length = album_list.getInt("album_length", -1);
+            System.out.println("===========albumlength=============");
+            System.out.println(album_length);
+            System.out.println(album_list.getInt("album_length", -1));
             for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
                 try{
                     HashMap<String, String> album_map = new HashMap<>();
-                    Integer idx_ = Integer.parseInt(album_list.getString(Integer.toString(adapter_loop), ""), 0);
+                    Integer idx_ = Integer.parseInt(album_list.getString(Integer.toString(adapter_loop+1), ""), 0);
                     String cover_id = story_list.get(idx_).get("cover");
                     album_map.put("bookid", story_list.get(idx_).get("bookid"));
                     album_map.put("cover", cover_id);
+                    System.out.println(album_map);
                     album_arraylist.add(album_map);
                 }catch(Exception e){
                     e.printStackTrace();
                 }
             }
 
+            System.out.println(album_arraylist);
             adapter_story = new SimpleAdapter(Album.this, album_arraylist, R.layout.item_albumlist, new String[]{"bookid"}, new int[]{R.id.tv_story_name_play}){
                 @Override
                 public View getView (int position, View convertView, ViewGroup parent) {
                     View view = super.getView(position, convertView, parent);
-                    Integer album_length = album_list.getInt("album_length", -1) + 1;
+                    Integer album_length = album_list.getInt("album_length", -1);
                     for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
                         try{
                             Integer idx_ = Integer.parseInt(album_list.getString(Integer.toString(adapter_loop),""), 0);
