@@ -90,6 +90,7 @@ public class ConnectActivity extends Activity {
   private String roomId_;
   private Integer MaxPlayer;
   private String User_character_Id;
+  private String idx;
   private String bookid;
   private boolean character_select;
 
@@ -106,6 +107,7 @@ public class ConnectActivity extends Activity {
     story_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("story");
     scene_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("scene_list");
     bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
+    idx = String.valueOf(getIntent().getExtras().getString("idx"));
 
     roomId_ = String.valueOf(getIntent().getExtras().getString("roomId"));
     MaxPlayer = Integer.parseInt(String.valueOf(getIntent().getExtras().getString("MaxPlayer")));
@@ -387,6 +389,7 @@ public class ConnectActivity extends Activity {
       intent.putExtra("story", story_list);
       intent.putExtra("User", User_character_Id);
       intent.putExtra("scene_list", scene_list);
+      intent.putExtra("idx", idx);
       intent.putExtra("bookid", bookid);
 
       startActivityForResult(intent, CONNECTION_REQUEST);

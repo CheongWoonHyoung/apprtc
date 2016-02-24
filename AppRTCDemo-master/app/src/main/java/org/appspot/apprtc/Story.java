@@ -73,7 +73,7 @@ public class Story extends MainActivity {
                 for(int i = 0; i< Story_arr.length(); i++) {
                     JSONObject Story_single = Story_arr.getJSONObject(i);
 
-                    //String idx = Story_single.get("idx").toString();
+                    String idx = Story_single.get("idx").toString();
                     String bookid = Story_single.get("bookid").toString();
                     String title = Story_single.get("title").toString();
                     String cover = Story_single.get("image").toString();
@@ -89,7 +89,7 @@ public class Story extends MainActivity {
                     Log.e("bookid", bookid);
 
                     HashMap<String, String> map = new HashMap<>();
-                    //map.put("idx",idx);
+                    map.put("idx",idx);
                     map.put("bookid", bookid);
                     map.put("title", title);
                     map.put("cover", cover);
@@ -144,6 +144,7 @@ public class Story extends MainActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(Story.this, Story_Single .class);
+                    intent.putExtra("idx", story_list.get(position).get("idx"));
                     intent.putExtra("title", story_list.get(position).get("title"));
                     intent.putExtra("description", story_list.get(position).get("description"));
                     intent.putExtra("bookid", story_list.get(position).get("bookid"));

@@ -18,6 +18,7 @@ public class Story_Single extends MainActivity {
     @Override
     protected void onCreate(Bundle SavedInstanceState) {
         super.onCreate(SavedInstanceState);
+        final String idx = String.valueOf(getIntent().getExtras().getString("idx"));
         final String title = String.valueOf(getIntent().getExtras().getString("title"));
         final String description = String.valueOf(getIntent().getExtras().getString("description"));
         final String bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
@@ -49,6 +50,7 @@ public class Story_Single extends MainActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Story_Single.this,Call_List.class);
+                intent.putExtra("idx", idx);
                 intent.putExtra("MaxPlayer", MaxPlayer);
                 intent.putExtra("download", download);
                 intent.putExtra("bookid", bookid);

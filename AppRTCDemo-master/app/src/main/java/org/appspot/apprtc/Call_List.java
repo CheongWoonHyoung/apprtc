@@ -59,6 +59,7 @@ public class Call_List extends MainActivity {
 
         num_friend = 0;
         final String MaxPlayer = String.valueOf(getIntent().getExtras().getString("MaxPlayer"));
+        final String idx = String.valueOf(getIntent().getExtras().getString("idx"));
         final String bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
         String download = String.valueOf(getIntent().getExtras().getString("download"));
 
@@ -79,6 +80,7 @@ public class Call_List extends MainActivity {
 
                     String roomId = Integer.toString((new Random()).nextInt(100000000));
                     Intent intent = new Intent(Call_List.this, ConnectActivity.class);
+                    intent.putExtra("idx", idx);
                     intent.putExtra("character", character_list);
                     intent.putExtra("script", script_list);
                     intent.putExtra("roomId", roomId);
@@ -182,7 +184,7 @@ public class Call_List extends MainActivity {
                 for (int i = 0; i < Story_arr.length(); i++) {
                     JSONObject Story_single = Story_arr.getJSONObject(i);
 
-                    Integer idx;
+                    String idx = Story_single.get("idx").toString();
                     String bookid = Story_single.get("bookid").toString();
                     String title = Story_single.get("title").toString();
                     String cover = Story_single.get("image").toString();
@@ -203,7 +205,7 @@ public class Call_List extends MainActivity {
                     Log.e("bookid", bookid);
 
                     HashMap<String, String> map = new HashMap<>();
-                    //map.put("idx",idx);
+                    map.put("idx",idx);
                     map.put("bookid", bookid);
                     map.put("title", title);
                     map.put("cover", cover);

@@ -159,6 +159,7 @@ public class CallActivity extends Activity
 
   private String sdRootPath;
   private String User_character_Id;
+  private String idx;
   private String bookid;
   String mFilePath;
 
@@ -185,6 +186,7 @@ public class CallActivity extends Activity
     scene_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("scene_list");
 
     User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
+    idx= String.valueOf(getIntent().getExtras().getString("idx"));
     bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
 
     active = false;
@@ -382,9 +384,8 @@ public class CallActivity extends Activity
       public void onClick(View v) {
 
         try {
-
           if(scene_loop > script_list.size()){
-            Save();
+            Save(idx);
           }
 
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
@@ -413,15 +414,12 @@ public class CallActivity extends Activity
           HashMap<String, String> script_map_after = script_list.get(scene_loop).get(scid_loop);
           if (!script_list.isEmpty() && !Objects.equals(script_map_after.get("cid"), User_character_Id)) {
             Log.d("flow", "section B");
+            Log.e("cid", script_map_after.get("cid"));
             btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
             btnRecord.setEnabled(true);
             btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
             btnStop.setEnabled(false);
-
-
           }
-
-
         }catch(Exception ex){
           Log.e("Record", "NONO", ex);
         }
@@ -429,7 +427,7 @@ public class CallActivity extends Activity
     });
   }
 
-  public void Save(){
+  public void Save(final String idx){
     LayoutInflater layoutInflater = LayoutInflater.from(CallActivity.this);
     AlertDialog.Builder aDialog = new AlertDialog.Builder(CallActivity.this);
     aDialog.setTitle("종료하시겠습니까");
@@ -442,6 +440,7 @@ public class CallActivity extends Activity
         //앨범 인덱스 & Key
         String album_key  = Integer.toString(album_list.getInt("album_length", 0));
         album_list_editor.putString(album_key, bookid);
+        album_list_editor.putString(bookid, idx);
       }
     });
 

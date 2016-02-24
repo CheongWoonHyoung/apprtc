@@ -1,6 +1,7 @@
 package org.appspot.apprtc;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,11 +26,14 @@ import java.util.HashMap;
  */
 public class Album extends MainActivity {
     private ArrayList<HashMap<String,String>> story_list = new ArrayList<>();
+    private ArrayList<HashMap<String,String>> album_arraylist = new ArrayList<>();
+
 
     private GridView gridView;
-    private ImageView iv_cover;
     ListAdapter adapter_story;
-    private String URL = "http://blay.eerssoft.co.kr/books/list/";
+    private final String URL = "http://blay.eerssoft.co.kr/books/list/";
+
+    public SharedPreferences album_list;
 
     @Override
     protected void onCreate(Bundle SavedInstanceState) {
@@ -72,8 +76,8 @@ public class Album extends MainActivity {
                     String cover_small = Story_single.get("image_small").toString();
                     String download = Story_single.get("download").toString();
                     String description = Story_single.get("description").toString();
-                    //String version = Story_single.get("version").toString();
-                    //String displayversion = Story_single.get("displayversion").toString();
+                    String version = Story_single.get("version").toString();
+                    String displayversion = Story_single.get("displayversion").toString();
 
                     cover = cover.replace("/static/","");
                     cover = cover.replace(".jpg","");
@@ -81,15 +85,14 @@ public class Album extends MainActivity {
                     Log.e("bookid", bookid);
 
                     HashMap<String, String> map = new HashMap<>();
-                    //map.put("idx",idx);
                     map.put("bookid", bookid);
                     map.put("title", title);
                     map.put("cover", cover);
                     map.put("cover_small", cover_small);
                     map.put("download", download);
                     map.put("description", description);
-                    //map.put("verson", version);
-                    //map.put("displayversion", displayversion);
+                    map.put("verson", version);
+                    map.put("displayversion", displayversion);
                     map.put("MaxPlayer", "5");
                     //map.put("character", character);
                     //map.put("scene", scene);
@@ -100,25 +103,41 @@ public class Album extends MainActivity {
                 e.printStackTrace();
             }
 
-            adapter_story = new SimpleAdapter(Album.this, story_list, R.layout.item_albumlist, new String[]{"bookid"}, new int[]{R.id.tv_story_name_play}){
+            Integer album_length = album_list.getInt("album_length", -1) + 1;
+            for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
+                try{
+                    HashMap<String, String> album_map = new HashMap<>();
+                    Integer idx_ = Integer.parseInt(album_list.getString(Integer.toString(adapter_loop), ""), 0);
+                    String cover_id = story_list.get(idx_).get("cover");
+                    album_map.put("bookid", story_list.get(idx_).get("bookid"));
+                    album_map.put("cover", cover_id);
+                    album_arraylist.add(album_map);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            adapter_story = new SimpleAdapter(Album.this, album_arraylist, R.layout.item_albumlist, new String[]{"bookid"}, new int[]{R.id.tv_story_name_play}){
                 @Override
                 public View getView (int position, View convertView, ViewGroup parent) {
                     View view = super.getView(position, convertView, parent);
-                    for(int adapter_loop = 0; adapter_loop<story_list.size(); adapter_loop++){
+                    Integer album_length = album_list.getInt("album_length", -1) + 1;
+                    for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
                         try{
-                            String cover_Id = story_list.get(adapter_loop).get("cover");
+                            Integer idx_ = Integer.parseInt(album_list.getString(Integer.toString(adapter_loop),""), 0);
+                            String cover_Id = story_list.get(idx_).get("cover");
                             Log.e("cover", cover_Id);
                             int cover= getResources().getIdentifier("main_" + cover_Id, "drawable", getPackageName());
                             ImageView iv_cover = (ImageView)findViewById(R.id.iv_cover_play);
                             iv_cover.setImageDrawable(getResources().getDrawable(cover));
-                        }catch(Exception ex){
-                            System.out.println(ex);
+                        }catch(Exception e){
+                            e.printStackTrace();
                         }
                     }
                     return view;
                 }
             };
-            setStory_list();
+            setAlbum_list();
         }
         @Override
         public void exceptionOccured(Exception e) {
@@ -128,7 +147,7 @@ public class Album extends MainActivity {
         }
     };
 
-    private void setStory_list(){
+    private void setAlbum_list(){
         gridView = (GridView)findViewById(R.id.gv_playlist);
         if(gridView != null) {
             gridView.setAdapter(adapter_story);
