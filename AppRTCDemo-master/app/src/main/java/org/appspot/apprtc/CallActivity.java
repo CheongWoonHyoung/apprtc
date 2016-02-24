@@ -140,6 +140,7 @@ public class CallActivity extends Activity
   private ScalingType scalingType;
   private Toast logToast;
   private boolean commandLineRun;
+  private boolean active;
   private int runTimeMs;
   private boolean activityRunning;
   private RoomConnectionParameters roomConnectionParameters;
@@ -186,6 +187,7 @@ public class CallActivity extends Activity
     User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
     bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
 
+    active = false;
 
     Thread.setDefaultUncaughtExceptionHandler(
             new UnhandledExceptionHandler(this));
@@ -194,9 +196,12 @@ public class CallActivity extends Activity
     btnRecord = (ImageView) findViewById(R.id.btnRecord);
     btnStop = (ImageView) findViewById(R.id.btnStop);
 
-    btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
-    btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
-    btnStop.setEnabled(false);
+    //////////initial setting//////////////////////////////////////////////
+    btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
+    btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
+    btnStop.setEnabled(true);
+    btnRecord.setEnabled(false);
+    ///////////////////////////////////////////////////////////////////////
 
     sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
     mFilePath = sdRootPath + "/.mp3";
@@ -341,49 +346,32 @@ public class CallActivity extends Activity
     btnRecord.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
 
-        Log.d("Record", "Record btn pushd");
         try {
-          Log.d("Record","section A");
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
-
           String mp3_filename ="/"+ scene_list.get(scene_loop).get("sid")+".mp3";
-
-          if(myturn == true){
-
-          }else{
-            btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
-            btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
-            myturn = true;
-            btnRecord.setEnabled(false);
-            btnStop.setEnabled(true);
-            onBtnRecord(mp3_filename);
-          }
-
+          Log.d("flow", "section click");
 
           //내차례
-          if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
-            //씬 갱신
-            if (scene_chk == true) {
-              scid_loop = 0;
+          if ( Objects.equals(script_map.get("cid"), User_character_Id)) {
+            Log.d("flow", "section C");
+            if(active == false){
+              Log.d("flow", "section D");
+              active = true;
+              onBtnRecord(mp3_filename);
+              btnRecord.setBackgroundResource(R.drawable.btn_voice_push3x);
+
+            }else if(active == true){
+              Log.d("flow", "section E");
+              active = false;
+              onBtnStop();
+              btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
+              btnRecord.setEnabled(false);
+              btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
+              btnStop.setEnabled(true);
             }
-
-            FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
-            int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
-            fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
-
-            TextView tv_script = (TextView) findViewById(R.id.tv_script);
-            tv_script.setText(script_map.get("script"));
-
-
-            //btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
-            if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
-              scid_loop++;
-              scene_chk = false;
-            } else {
-              scene_chk = true;
-              scene_loop++;
-            }
+            Log.d("flow", "section F");
           }
+          Log.d("flow", "section G");
         }catch(Exception ex){
           Log.e("NONO", "NONO", ex);
         }
@@ -392,52 +380,48 @@ public class CallActivity extends Activity
 
     btnStop.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-        //남의차례
-        if(myturn == true){
-          btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
-          btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
-          myturn = false;
-          btnStop.setEnabled(false);
-          btnRecord.setEnabled(true);
-          onBtnStop();
-        }else{
 
-        }
         try {
-          HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
-          if (!script_list.isEmpty() && !Objects.equals(script_map.get("cid"), User_character_Id)) {
-            //btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
-            //씬 갱신
-            if (scene_chk == true) {
-              scid_loop = 0;
-            }
-
-            FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
-            int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
-            fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
-
-            TextView tv_script = (TextView) findViewById(R.id.tv_script);
-            tv_script.setText(script_map.get("script"));
-
-
-            //재생하기
-            if (Objects.equals(script_map.get("audio"), "true")) {
-              //재생
-              //onBtnPlay(mp3_filename);
-            }
-            if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
-              scid_loop++;
-              scene_chk = false;
-            } else {
-              scene_chk = true;
-              scene_loop++;
-            }
-
-            if(scene_loop > script_list.size()){
-              Save();
-            }
+          if(scene_loop > script_list.size()){
+            Save();
           }
+
+          HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
+          ///////////씬 갱신//////////////////////////////////////////////////////////////////////////////////////////////////
+          if (scene_chk == true) {
+            scid_loop = 0;
+          }
+
+          FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
+          int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
+          fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+
+          TextView tv_script = (TextView) findViewById(R.id.tv_script);
+          tv_script.setText(script_map.get("script"));
+
+          if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
+            scid_loop++;
+            scene_chk = false;
+          } else {
+            scene_chk = true;
+            scene_loop++;
+          }
+          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+          Log.d("flow", "section A");
+          HashMap<String, String> script_map_after = script_list.get(scene_loop).get(scid_loop);
+          if (!script_list.isEmpty() && !Objects.equals(script_map_after.get("cid"), User_character_Id)) {
+            Log.d("flow", "section B");
+            btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
+            btnRecord.setEnabled(true);
+            btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
+            btnStop.setEnabled(false);
+
+
+          }
+
+
         }catch(Exception ex){
           Log.e("Record", "NONO", ex);
         }
