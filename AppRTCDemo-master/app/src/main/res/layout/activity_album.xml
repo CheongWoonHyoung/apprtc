@@ -52,14 +52,7 @@
                         android:layout_height="240px"
                         android:id="@+id/tv_script_play" />
                 </RelativeLayout>
-                <ImageView
-                    android:id="@+id/btnRecord_play"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="200px"
-                    android:layout_marginLeft="50px"
-                    android:layout_width="243px"
-                    android:layout_height="243px"
-                    />
+
 
 
 

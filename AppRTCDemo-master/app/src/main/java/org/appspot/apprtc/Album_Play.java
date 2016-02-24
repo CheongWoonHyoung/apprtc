@@ -129,6 +129,7 @@ public class Album_Play extends Activity implements AppRTCClient.SignalingEvents
     private ArrayList<HashMap<String,String>> story_list;
     private   ArrayList<HashMap<String, String>> scene_list;
 
+    private boolean playing;
     private String sdRootPath;
     private String User_character_Id;
 
@@ -164,10 +165,10 @@ public class Album_Play extends Activity implements AppRTCClient.SignalingEvents
         // adding content.
 
         setContentView(R.layout.activity_album);
-        btnRecord = (ImageView) findViewById(R.id.btnRecord_play);
+
+        playing = false;
         btnStop = (ImageView) findViewById(R.id.btnStop_play);
 
-        btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
         btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
 
         sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -308,43 +309,38 @@ public class Album_Play extends Activity implements AppRTCClient.SignalingEvents
             }
         }
 
-        btnRecord.setOnClickListener(new View.OnClickListener() {
+
+        btnStop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Log.d("Record", "Record btn pushd");
                 try {
-                    Log.d("Record","section A");
                     HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
+                    String scene_loop_string = String.valueOf(scene_loop);
+                    String scid_loop_string = String.valueOf(scid_loop);
 
-                    String mp3_filename ="/"+ scene_list.get(scene_loop).get("sid")+".mp3";
+                    if(playing == false){
+                        btnStop.setBackgroundResource(R.drawable.btn_play_push3x);
+                        String filepath = sdRootPath + "/"+ scene_loop_string + scid_loop_string +".mp3";
 
-                    if(btnRecord_clicked == true){
+                        onBtnPlay(filepath);
 
-                    }else{
-                        btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
+                        playing = true;
+
+                    }else if(playing == true){
                         btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
-                        btnRecord_clicked = true;
 
-                        onBtnRecord(mp3_filename);
-                    }
-
-
-                    //내차례
-                    if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
-                        //씬 갱신
+                        ///////////씬 갱신//////////////////////////////////////////////////////////////////////////////////////////////////
                         if (scene_chk == true) {
                             scid_loop = 0;
                         }
 
-                        FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play_play);
+                        FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
                         int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
                         fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
 
-                        TextView tv_script = (TextView) findViewById(R.id.tv_script_play);
+                        TextView tv_script = (TextView) findViewById(R.id.tv_script);
                         tv_script.setText(script_map.get("script"));
 
-
-                        //btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_normal));
                         if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
                             scid_loop++;
                             scene_chk = false;
@@ -352,28 +348,11 @@ public class Album_Play extends Activity implements AppRTCClient.SignalingEvents
                             scene_chk = true;
                             scene_loop++;
                         }
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        
+                        playing = false;
+
                     }
-                }catch(Exception ex){
-                    Log.e("NONO", "NONO", ex);
-                }
-            }
-        });
-
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //남의차례
-                if(btnRecord_clicked == true){
-                    btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
-                    btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
-                    btnRecord_clicked = false;
-
-                    onBtnStop();
-                }else{
-
-                }
-                try {
-                    HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
-
                     if (!script_list.isEmpty() && !Objects.equals(script_map.get("cid"), User_character_Id)) {
                         //btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_inactive));
                         //씬 갱신
@@ -413,7 +392,7 @@ public class Album_Play extends Activity implements AppRTCClient.SignalingEvents
         });
     }
 
-    public void onBtnPlay() {
+    public void onBtnPlay(String filepath) {
         if( mPlayer != null ) {
             mPlayer.stop();
             mPlayer.release();
@@ -422,7 +401,7 @@ public class Album_Play extends Activity implements AppRTCClient.SignalingEvents
         mPlayer = new MediaPlayer();
 
         try {
-            mPlayer.setDataSource(mFilePath);
+            mPlayer.setDataSource(filepath);
             mPlayer.prepare();
         } catch(IOException e) {
             Log.d("tag", "Audio Play error");
