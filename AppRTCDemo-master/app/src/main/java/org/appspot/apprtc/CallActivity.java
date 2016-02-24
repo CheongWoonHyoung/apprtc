@@ -350,7 +350,11 @@ public class CallActivity extends Activity
 
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
-          String mp3_filename ="/"+ scene_list.get(scene_loop).get("sid")+".mp3";
+
+          String scene_loop_string = String.valueOf(scene_loop);
+          String scid_loop_string = String.valueOf(scid_loop);
+
+          String mp3_filename ="/"+ scene_loop_string + scid_loop_string +".mp3";
           Log.d("flow", "section click");
 
           //내차례
@@ -412,7 +416,7 @@ public class CallActivity extends Activity
 
           Log.d("flow", "section A");
           HashMap<String, String> script_map_after = script_list.get(scene_loop).get(scid_loop);
-          if (!script_list.isEmpty() && !Objects.equals(script_map_after.get("cid"), User_character_Id)) {
+          if (!script_list.isEmpty() && Objects.equals(script_map_after.get("cid"), User_character_Id)) {
             Log.d("flow", "section B");
             Log.e("cid", script_map_after.get("cid"));
             btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
