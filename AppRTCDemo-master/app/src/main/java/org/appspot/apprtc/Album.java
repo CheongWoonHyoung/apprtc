@@ -109,7 +109,8 @@ public class Album extends MainActivity {
             for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
                 try{
                     HashMap<String, String> album_map = new HashMap<>();
-                    Integer idx_ = Integer.parseInt(album_list.getString(Integer.toString(adapter_loop+1), ""), 0);
+                    System.out.println(album_list.getString(Integer.toString(adapter_loop+1), ""));
+                    Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop + 1), ""),""));
                     String cover_id = story_list.get(idx_).get("cover");
                     album_map.put("bookid", story_list.get(idx_).get("bookid"));
                     album_map.put("cover", cover_id);
@@ -128,10 +129,10 @@ public class Album extends MainActivity {
                     Integer album_length = album_list.getInt("album_length", -1);
                     for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
                         try{
-                            Integer idx_ = Integer.parseInt(album_list.getString(Integer.toString(adapter_loop),""), 0);
-                            String cover_Id = story_list.get(idx_).get("cover");
-                            Log.e("cover", cover_Id);
-                            int cover= getResources().getIdentifier("main_" + cover_Id, "drawable", getPackageName());
+                            Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop + 1), ""),""));
+                            String cover_id = story_list.get(idx_).get("cover");
+                            Log.e("cover", cover_id);
+                            int cover= getResources().getIdentifier("main_" + cover_id, "drawable", getPackageName());
                             ImageView iv_cover = (ImageView)findViewById(R.id.iv_cover_play);
                             iv_cover.setImageDrawable(getResources().getDrawable(cover));
                         }catch(Exception e){
