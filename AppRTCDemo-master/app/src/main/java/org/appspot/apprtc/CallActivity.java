@@ -208,10 +208,6 @@ public class CallActivity extends Activity
     album_list = this.getSharedPreferences(getPackageName(),
             Activity.MODE_PRIVATE);
     album_list_editor = album_list.edit();
-    album_list_editor.putString("1", "redhood");
-    album_list_editor.putString("redhood", "0");
-    album_list_editor.putInt("album_length", 1);
-    album_list_editor.commit();
 
     sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
     mFilePath = sdRootPath + "/.mp3";
