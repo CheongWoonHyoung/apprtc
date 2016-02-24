@@ -32,7 +32,7 @@
                     android:id="@+id/iv_character_1" />
 
                 <ImageView
-                    android:backgroundTint="#000000"
+                    android:id="@+id/box1"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
                     android:layout_width="640px"
@@ -75,6 +75,7 @@
                     android:id="@+id/iv_character_2" />
 
                 <ImageView
+                    android:id="@+id/box2"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
                     android:layout_width="640px"
@@ -116,6 +117,7 @@
                     android:id="@+id/iv_character_3" />
 
                 <ImageView
+                    android:id="@+id/box3"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
                     android:layout_width="640px"
@@ -144,7 +146,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_storyplay"
@@ -179,6 +181,7 @@
                     android:id="@+id/iv_character_4" />
 
                 <ImageView
+                    android:id="@+id/box4"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
                     android:layout_width="640px"
@@ -220,6 +223,7 @@
                     android:id="@+id/iv_character_5" />
 
                 <ImageView
+                    android:id="@+id/box5"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
                     android:layout_width="640px"
@@ -261,6 +265,7 @@
                     android:id="@+id/iv_character_6" />
 
                 <ImageView
+                    android:id="@+id/box6"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/booklist_box01_normal3x"
                     android:layout_width="640px"

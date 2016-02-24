@@ -222,7 +222,7 @@ public class Album_Play extends Activity {
 
         mRecorder.setMaxDuration(5 * 1000);
         mRecorder.setMaxFileSize(5 * 1000 * 1000);
-        mRecorder.setOnInfoListener(this);
+        //mRecorder.setOnInfoListener(this);
 
         try {
             mRecorder.prepare();

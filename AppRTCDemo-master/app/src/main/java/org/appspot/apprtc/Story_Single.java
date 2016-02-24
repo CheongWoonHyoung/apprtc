@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,26 +45,40 @@ public class Story_Single extends MainActivity {
         circularImageView.setImageBitmap(circularBitmap);
 
 
-        Button tv_start = (Button) findViewById(R.id.tv_start);
+        final Button tv_start = (Button) findViewById(R.id.tv_start);
 
-        tv_start.setOnClickListener(new View.OnClickListener() {
+        tv_start.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Story_Single.this,Call_List.class);
-                intent.putExtra("idx", idx);
-                intent.putExtra("MaxPlayer", MaxPlayer);
-                intent.putExtra("download", download);
-                intent.putExtra("bookid", bookid);
-                startActivity(intent);
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    tv_start.setBackgroundResource(R.drawable.btn_start_push3x);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    tv_start.setBackgroundResource(R.drawable.btn_start_normal3x);
+                    Intent intent = new Intent(Story_Single.this,Call_List.class);
+                    intent.putExtra("idx", idx);
+                    intent.putExtra("MaxPlayer", MaxPlayer);
+                    intent.putExtra("download", download);
+                    intent.putExtra("bookid", bookid);
+                    startActivity(intent);
+                }
+                return false;
             }
         });
 
-        Button tv_back = (Button) findViewById(R.id.tv_back);
+        final Button tv_back = (Button) findViewById(R.id.tv_back);
 
-        tv_back.setOnClickListener(new View.OnClickListener() {
+        tv_back.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                finish();
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    tv_back.setBackgroundResource(R.drawable.btn_back_full_push3x);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    tv_back.setBackgroundResource(R.drawable.btn_back_full_normal3x);
+                    finish();
+                }
+                return false;
             }
         });
     }

@@ -97,6 +97,8 @@ public class ConnectActivity extends Activity {
   boolean loopback;
   int runTimeMs;
 
+  ImageView box1, box2, box3, box4, box5, box6;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -162,6 +164,13 @@ public class ConnectActivity extends Activity {
 
     character_select = false;
 
+    box1 = (ImageView)findViewById(R.id.box1);
+    box2 = (ImageView)findViewById(R.id.box2);
+    box3 = (ImageView)findViewById(R.id.box3);
+    box4 = (ImageView)findViewById(R.id.box4);
+    box5 = (ImageView)findViewById(R.id.box5);
+    box6 = (ImageView)findViewById(R.id.box6);
+
     // If an implicit VIEW intent is launching the app, go directly to that URL.
     final Intent intent = getIntent();
     loopback = intent.getBooleanExtra(CallActivity.EXTRA_LOOPBACK, false);
@@ -173,21 +182,27 @@ public class ConnectActivity extends Activity {
         switch (v.getId()) {
           case R.id.character_1:
             User_character_Id = character_list.get(0).get("cid");
+            box1.setBackgroundResource(R.drawable.booklist_box01_push3x);
             break;
           case R.id.character_2:
             User_character_Id = character_list.get(1).get("cid");
+            box2.setBackgroundResource(R.drawable.booklist_box01_push3x);
             break;
           case R.id.character_3:
             User_character_Id = character_list.get(2).get("cid");
+            box3.setBackgroundResource(R.drawable.booklist_box01_push3x);
             break;
           case R.id.character_4:
             User_character_Id = character_list.get(3).get("cid");
+            box4.setBackgroundResource(R.drawable.booklist_box01_push3x);
             break;
           case R.id.character_5:
             User_character_Id = character_list.get(4).get("cid");
+            box5.setBackgroundResource(R.drawable.booklist_box01_push3x);
             break;
           case R.id.character_6:
             User_character_Id = character_list.get(5).get("cid");
+            box6.setBackgroundResource(R.drawable.booklist_box01_push3x);
             break;
         }
         System.out.println(User_character_Id);
@@ -204,13 +219,14 @@ public class ConnectActivity extends Activity {
 
   public void Story_Start(){
     //시작하기버튼누르면 작동하도록변경하기
-    TextView tv_startplay = (TextView) findViewById(R.id.tv_storyplay);
+    final ImageView tv_startplay = (ImageView) findViewById(R.id.tv_storyplay);
     tv_startplay.setOnClickListener(new View.OnClickListener(){
       @Override
       public void onClick(View v) {
         if (!commandLineRun && character_select == true) {
           commandLineRun = true;
           //서로 연결하기
+          tv_startplay.setBackgroundResource(R.drawable.btn_start_push3x);
           connectToRoom(loopback, runTimeMs);
           return;
         }

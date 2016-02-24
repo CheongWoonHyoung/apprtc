@@ -20,39 +20,48 @@ public class MainActivity extends Activity {
         final Button main02 = (Button)findViewById(R.id.main_btn02);
         final Button main03 = (Button)findViewById(R.id.main_btn03);
 
-        main01.setOnClickListener(new View.OnClickListener(){
+        main01.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                main01.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn01_push2x));
-
-                Intent intent = new Intent(v.getContext(),Story.class);
-                startActivity(intent);
-
-                main01.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn01_normal2x));
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if(action == MotionEvent.ACTION_DOWN){
+                    main01.setBackgroundResource(R.drawable.main_btn01_push2x);
+                }else if(action == MotionEvent.ACTION_UP){
+                    main01.setBackgroundResource(R.drawable.main_btn01_normal2x);
+                    Intent intent = new Intent(MainActivity.this,Story.class);
+                    startActivity(intent);
+                }
+                return true;
             }
         });
 
-        main02.setOnClickListener(new View.OnClickListener(){
+        main02.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                main02.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn02_push2x));
-
-                Intent intent = new Intent(MainActivity.this,Album.class);
-                startActivity(intent);
-
-                main02.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn02_normal2x));
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    main02.setBackgroundResource(R.drawable.main_btn02_push2x);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    main02.setBackgroundResource(R.drawable.main_btn02_normal2x);
+                    Intent intent = new Intent(MainActivity.this, Album.class);
+                    startActivity(intent);
+                }
+                return true;
             }
         });
 
-        main03.setOnClickListener(new View.OnClickListener(){
+        main03.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                main03.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn03_push2x));
-
-                Intent intent = new Intent(MainActivity.this,Settings.class);
-                startActivity(intent);
-
-                main03.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_btn03_normal2x));
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    main03.setBackgroundResource(R.drawable.main_btn03_push2x);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    main03.setBackgroundResource(R.drawable.main_btn03_normal2x);
+                    Intent intent = new Intent(MainActivity.this, Settings.class);
+                    startActivity(intent);
+                }
+                return true;
             }
         });
     }

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -71,7 +72,7 @@ public class Call_List extends MainActivity {
         lv_friend_selected.setAdapter(selected_friend);
 
         //Button: 친구초대
-        Button btn_invite = (Button) findViewById(R.id.btn_invite);
+        final Button btn_invite = (Button) findViewById(R.id.btn_invite);
         btn_invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,9 +97,39 @@ public class Call_List extends MainActivity {
                 }
             }
         });
+        btn_invite.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    btn_invite.setBackgroundResource(R.drawable.btn_invite_complete_push3x);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    btn_invite.setBackgroundResource(R.drawable.btn_invite_complete_normal3x);
+                    if (load_chk == true) {
+
+                        String roomId = Integer.toString((new Random()).nextInt(100000000));
+                        Intent intent = new Intent(Call_List.this, ConnectActivity.class);
+                        intent.putExtra("idx", idx);
+                        intent.putExtra("character", character_list);
+                        intent.putExtra("script", script_list);
+                        intent.putExtra("roomId", roomId);
+                        intent.putExtra("MaxPlayer", MaxPlayer);
+                        intent.putExtra("story", story_list);
+                        intent.putExtra("scene_list", scene_list);
+                        intent.putExtra("bookid", bookid);
+                        //친구도 room Id 넘겨주기
+                        //친구한테 푸시 메시지
+                        startActivity(intent);
+                    } else {
+                        Log.e("Error", "Friend Inviting");
+                    }
+                }
+                return true;
+            }
+        });
 
         //Button: 뒤로가기
-        Button btn_back2 = (Button) findViewById(R.id.btn_back2);
+        final Button btn_back2 = (Button) findViewById(R.id.btn_back2);
         btn_back2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +137,19 @@ public class Call_List extends MainActivity {
             }
         });
 
+        btn_back2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    btn_back2.setBackgroundResource(R.drawable.btn_back_full_push3x);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    btn_back2.setBackgroundResource(R.drawable.btn_back_full_normal3x);
+                    finish();
+                }
+                return true;
+            }
+        });
         //SharedPref: 친구 목록
         friend_list = this.getSharedPreferences(getPackageName(),
                 Activity.MODE_PRIVATE);

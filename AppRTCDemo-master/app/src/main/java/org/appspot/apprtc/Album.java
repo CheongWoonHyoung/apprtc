@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,11 +47,19 @@ public class Album extends MainActivity {
 
         new SHJSONParser().setCallback(callback).execute(URL);
 
-        Button btn_home = (Button) findViewById(R.id.btn_home2);
-        btn_home.setOnClickListener(new View.OnClickListener() {
+        final Button btn_home = (Button) findViewById(R.id.btn_home2);
+        
+        btn_home.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                finish();
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    btn_home.setBackgroundResource(R.drawable.btn_home_push2x);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    btn_home.setBackgroundResource(R.drawable.btn_home_normal2x);
+                    finish();
+                }
+                return true;
             }
         });
     }
