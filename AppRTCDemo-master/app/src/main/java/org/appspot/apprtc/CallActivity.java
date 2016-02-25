@@ -362,7 +362,7 @@ public class CallActivity extends Activity
           Log.d("flow", "section click");
 
           //내차례
-          if ( Objects.equals(script_map.get("cid"), User_character_Id)) {
+
             Log.d("flow", "section C");
             if(active == false){
               Log.d("flow", "section D");
@@ -380,7 +380,7 @@ public class CallActivity extends Activity
               btnStop.setEnabled(true);
             }
             Log.d("flow", "section F");
-          }
+
           Log.d("flow", "section G");
         }catch(Exception e){
           e.printStackTrace();
@@ -419,10 +419,9 @@ public class CallActivity extends Activity
           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
           Log.d("flow", "section A");
-          HashMap<String, String> script_map_after = script_list.get(scene_loop).get(scid_loop);
-          if (!script_list.isEmpty() && Objects.equals(script_map_after.get("cid"), User_character_Id)) {
+          if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
             Log.d("flow", "section B");
-            Log.e("cid", script_map_after.get("cid"));
+            Log.e("cid", script_map.get("cid"));
             btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
             btnRecord.setEnabled(true);
             btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
