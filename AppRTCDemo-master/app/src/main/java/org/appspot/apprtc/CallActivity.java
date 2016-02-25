@@ -353,11 +353,13 @@ public class CallActivity extends Activity
 
           Log.e("scene_loop", scene_loop_string);
           Log.e("scid_loop", scid_loop_string);
-          String mp3_filename ="/"+ scene_loop_string + scid_loop_string +".mp3";
+          String mp3_filename ="/"+ script_map.get("scid") +".mp3";
           Log.d("flow", "section click");
 
           //내차례
+
           if(Objects.equals(script_map.get("cid"), User_character_Id)) {
+
             Log.d("flow", "section C");
             if (active == false) {
               Log.d("flow", "section D");
@@ -419,6 +421,15 @@ public class CallActivity extends Activity
           fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
           TextView tv_script = (TextView) findViewById(R.id.tv_script);
           tv_script.setText(script_map_bef.get("script"));
+          
+
+          if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
+            scid_loop++;
+            scene_chk = false;
+          } else {
+            scene_chk = true;
+            scene_loop++;
+          }
 
 
           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -468,7 +479,7 @@ public class CallActivity extends Activity
     ad.show();
   }
 
-  public void onBtnPlay() {
+  public void onBtnPlay(String mFilePath) {
     if( mPlayer != null ) {
       mPlayer.stop();
       mPlayer.release();
@@ -478,6 +489,7 @@ public class CallActivity extends Activity
 
     try {
       mPlayer.setDataSource(mFilePath);
+      Log.e("path", mFilePath);
       mPlayer.prepare();
     } catch(IOException e) {
       Log.d("tag", "Audio Play error");
