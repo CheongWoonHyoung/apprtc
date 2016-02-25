@@ -18,6 +18,7 @@ import org.appspot.apprtc.util.LooperExecutor;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -162,6 +163,8 @@ public class CallActivity extends Activity
   private String idx;
   private String bookid;
   String mFilePath;
+
+  private MediaPlayer mp;
 
   int scid_loop = 0;
   int scene_loop = 0;
@@ -330,7 +333,7 @@ public class CallActivity extends Activity
 
         TextView tv_script = (TextView) findViewById(R.id.tv_script);
         tv_script.setText(script_map.get("script"));
-
+        Play(script_map);
 
       }catch(Exception ex){
         Log.e("NONO", "NONO", ex);
@@ -431,13 +434,40 @@ public class CallActivity extends Activity
             btnRecord.setEnabled(true);
             btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
             btnStop.setEnabled(false);
+
+          }else{
+            Play(script_map_aft);
           }
+
         }catch(Exception e){
           e.printStackTrace();
         }
       }
     });
   }
+
+ public void Play(HashMap<String, String> script_map){
+   if( mp == null){
+     mp = new MediaPlayer();
+   }
+   try{
+     int tmpID = getApplicationContext().getResources().getIdentifier(script_map.get("scid"), "raw", getPackageName());
+     Context con = getApplicationContext();
+     mp = new MediaPlayer();
+     mp = MediaPlayer.create(con, tmpID);
+     mp.start();
+   }catch (Exception e){
+
+   }
+
+   mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+     @Override
+     public void onCompletion(MediaPlayer mp) {
+
+     }
+   });
+ }
+
 
   public void Save(final String idx){
     AlertDialog.Builder aDialog = new AlertDialog.Builder(CallActivity.this);
