@@ -67,7 +67,7 @@ public class Album extends Activity {
         });
     }
 
-    //리스트받아오기->그리드뷰
+    //리스트받아오기
     private SHJSONParserCallback callback = new SHJSONParserCallback() {
         @Override
         public void onResult(JSONObject json, int parserTag) {
@@ -213,7 +213,7 @@ public class Album extends Activity {
                             Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop + 1), ""),""));
                             String cover_id = story_list.get(idx_).get("cover");
                             System.out.println(cover_id);
-                            int cover= getResources().getIdentifier("main_" + cover_id, "drawable", getPackageName());
+                            int cover= getResources().getIdentifier(cover_id, "drawable", getPackageName());
                             ImageView iv_cover = (ImageView)findViewById(R.id.iv_cover_play);
                             iv_cover.setImageDrawable(getResources().getDrawable(cover));
                         }catch(Exception e){
@@ -236,11 +236,7 @@ public class Album extends Activity {
     private void setAlbum_list(){
         gridView = (GridView)findViewById(R.id.gv_playlist);
         if(gridView != null) {
-            try {
                 gridView.setAdapter(adapter_story);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

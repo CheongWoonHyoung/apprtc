@@ -1,10 +1,14 @@
 package org.appspot.apprtc;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -63,6 +70,8 @@ public class Call_List extends MainActivity {
         final String idx = String.valueOf(getIntent().getExtras().getString("idx"));
         final String bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
         String download = String.valueOf(getIntent().getExtras().getString("download"));
+        //링크에서 다운받을 시
+        //file_download(download);
 
         download = "http://blay.eerssoft.co.kr/books/list/";
         new SHJSONParser().setCallback(callback).execute(download);
@@ -197,11 +206,35 @@ public class Call_List extends MainActivity {
             }
         });
     }
-    /*
+
+    public void file_download(String uRl) {
+        String sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        File direct = new File(sdRootPath+ "/Bookplay_json_files");
+
+        if (!direct.exists()) {
+            direct.mkdirs();
+        }
+
+        DownloadManager mgr = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        Uri downloadUri = Uri.parse(uRl);
+        DownloadManager.Request request = new DownloadManager.Request(
+                downloadUri);
+
+        request.setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_WIFI
+                        | DownloadManager.Request.NETWORK_MOBILE)
+                .setAllowedOverRoaming(false).setTitle("Demo")
+                .setDescription("Something useful. No, really.")
+                .setDestinationInExternalPublicDir("/Bookplay_json_files", "test.jpg");
+
+        mgr.enqueue(request);
+    }
+
     public String loadJSONFromAsset() {
         String json = null;
         try {
-            InputStream is = getAssets().open("book.json");
+            InputStream is = getAssets().open("some_name");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -212,7 +245,7 @@ public class Call_List extends MainActivity {
             return null;
         }
         return json;
-    } */
+    }
 
     //리스트받아오기->그리드뷰
     private SHJSONParserCallback callback = new SHJSONParserCallback() {
@@ -257,8 +290,6 @@ public class Call_List extends MainActivity {
                     //map.put("verson", version);
                     //map.put("displayversion", displayversion);
                     map.put("MaxPlayer", "5");
-                    //map.put("character", character);
-                    //map.put("scene", scene);
 
                     try {
                         JSONObject scene_ = new JSONObject(Scene);
@@ -270,7 +301,6 @@ public class Call_List extends MainActivity {
                         for (int k = 0; k < character.length(); k++) {
                             //파싱
                             JSONObject sceneObj = character.getJSONObject(k);
-                            System.out.println(sceneObj);
                             String cid = sceneObj.getString("cid");
                             String name = sceneObj.getString("name");
                             String image = sceneObj.getJSONObject("image").getString("main");
@@ -308,7 +338,6 @@ public class Call_List extends MainActivity {
                                 String script = scriptObj.getString("script");
                                 String script_length = Integer.toString(scripts.length());
 
-                                Log.e("스크립트", script);
                                 HashMap<String, String> script_map = new HashMap<>();
                                 script_map.put("scid", scid);
                                 script_map.put("cid", cid);

@@ -107,8 +107,7 @@ public class Story extends MainActivity {
                     //map.put("verson", version);
                     //map.put("displayversion", displayversion);
                     map.put("MaxPlayer", "5");
-                    //map.put("character", character);
-                    //map.put("scene", scene);
+
 
                     story_list.add(map);
                 }
@@ -123,12 +122,11 @@ public class Story extends MainActivity {
                     for(int adapter_loop = 0; adapter_loop<story_list.size(); adapter_loop++){
                         try{
                             String cover_Id = story_list.get(adapter_loop).get("cover");
-                            Log.e("cover", cover_Id);
-                            int cover= getResources().getIdentifier("main_" + cover_Id, "drawable", getPackageName());
+                            int cover= getResources().getIdentifier(cover_Id, "drawable", getPackageName());
                             ImageView iv_cover = (ImageView)findViewById(R.id.iv_cover);
                             iv_cover.setImageDrawable(getResources().getDrawable(cover));
-                        }catch(Exception ex){
-                            System.out.println(ex);
+                        }catch(Exception e){
+                            e.printStackTrace();
                         }
                     }
                     return view;
