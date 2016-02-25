@@ -188,7 +188,8 @@ public class CallActivity extends Activity
     User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
     idx= String.valueOf(getIntent().getExtras().getString("idx"));
     bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
-
+    Log.d("ghost", "initial" + String.valueOf(scene_loop));
+    Log.d("ghost", "initial" + String.valueOf(scid_loop));
     active = false;
 
     Thread.setDefaultUncaughtExceptionHandler(
@@ -318,6 +319,7 @@ public class CallActivity extends Activity
             Activity.MODE_PRIVATE);
     album_list_editor = album_list.edit();
 
+
     if (!script_list.isEmpty()){
       try {
         HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
@@ -329,28 +331,19 @@ public class CallActivity extends Activity
         TextView tv_script = (TextView) findViewById(R.id.tv_script);
         tv_script.setText(script_map.get("script"));
 
-        if (!script_list.isEmpty() &&  script_map.get("cid") == User_character_Id) {
-          btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
-          btnRecord.setEnabled(true);
-          btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
-          btnStop.setEnabled(false);
-        }
 
-        if (scid_loop < Integer.parseInt(script_map.get("script_length"))-1) {
-          scid_loop++;
-          scene_chk = false;
-        } else {
-          scene_chk = true;
-          scene_loop++;
-        }
       }catch(Exception ex){
         Log.e("NONO", "NONO", ex);
 
       }
     }
 
+
     btnRecord.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
+
+        Log.d("ghost", "btnRecord" + String.valueOf(scene_loop));
+        Log.d("ghost", "btnRecord" + String.valueOf(scid_loop));
 
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
@@ -364,15 +357,15 @@ public class CallActivity extends Activity
           Log.d("flow", "section click");
 
           //내차례
-
+          if(Objects.equals(script_map.get("cid"), User_character_Id)) {
             Log.d("flow", "section C");
-            if(active == false){
+            if (active == false) {
               Log.d("flow", "section D");
               active = true;
               onBtnRecord(mp3_filename);
               btnRecord.setBackgroundResource(R.drawable.btn_voice_push3x);
 
-            }else if(active == true){
+            } else if (active == true) {
               Log.d("flow", "section E");
               active = false;
               onBtnStop();
@@ -380,13 +373,13 @@ public class CallActivity extends Activity
               btnRecord.setEnabled(false);
               btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
               btnStop.setEnabled(true);
-              if(scene_loop == script_list.size()){
+              if (scene_loop == script_list.size()) {
                 Log.e("loop_end", "here_ended");
                 Save(idx);
               }
             }
             Log.d("flow", "section F");
-
+          }
           Log.d("flow", "section G");
         }catch(Exception e){
           e.printStackTrace();
@@ -396,7 +389,8 @@ public class CallActivity extends Activity
 
     btnStop.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-
+        Log.d("ghost", "btnStop" + String.valueOf(scene_loop));
+        Log.d("ghost", "btnStop" + String.valueOf(scid_loop));
         try {
           if(scene_loop == script_list.size()){
             Log.e("loop_end", "here_ended");
@@ -405,22 +399,6 @@ public class CallActivity extends Activity
 
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
           ///////////씬 갱신//////////////////////////////////////////////////////////////////////////////////////////////////
-          if (scene_chk == true) {
-            scid_loop = 0;
-          }
-
-          String scene_loop_string = String.valueOf(scene_loop);
-          String scid_loop_string = String.valueOf(scid_loop);
-
-          Log.e("scene_loop", scene_loop_string);
-          Log.e("scid_loop", scid_loop_string);
-          FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
-          int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
-          fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
-
-          TextView tv_script = (TextView) findViewById(R.id.tv_script);
-          tv_script.setText(script_map.get("script"));
-
           if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
             scid_loop++;
             scene_chk = false;
@@ -428,12 +406,27 @@ public class CallActivity extends Activity
             scene_chk = true;
             scene_loop++;
           }
-          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          Log.d("ghost", "btnStop" + String.valueOf(scene_loop));
+          Log.d("ghost", "btnStop" + String.valueOf(scid_loop));
+          if (scene_chk == true) {
+            scid_loop = 0;
+          }
 
+          HashMap<String, String> script_map_bef = script_list.get(scene_loop).get(scid_loop);
+          FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
+          int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
+
+          fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+          TextView tv_script = (TextView) findViewById(R.id.tv_script);
+          tv_script.setText(script_map_bef.get("script"));
+
+
+          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          HashMap<String, String> script_map_aft = script_list.get(scene_loop).get(scid_loop);
           Log.d("flow", "section A");
-          if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
+          if (!script_list.isEmpty() && Objects.equals(script_map_aft.get("cid"), User_character_Id)) {
             Log.d("flow", "section B");
-            Log.e("cid_play_loop", script_map.get("cid"));
+            Log.e("cid_play_loop", script_map_aft.get("cid"));
             btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
             btnRecord.setEnabled(true);
             btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
