@@ -48,7 +48,7 @@ public class Album extends MainActivity {
         new SHJSONParser().setCallback(callback).execute(URL);
 
         final Button btn_home = (Button) findViewById(R.id.btn_home2);
-        
+
         btn_home.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

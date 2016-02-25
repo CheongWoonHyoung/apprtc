@@ -330,10 +330,10 @@ public class CallActivity extends Activity
         tv_script.setText(script_map.get("script"));
 
         if (!script_list.isEmpty() &&  script_map.get("cid") == User_character_Id) {
-          //btnRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.btn_voice_push));
-        }else{
-          //go_record(scene_loop, scid_loop);
-          //onBtnRecord();
+          btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
+          btnRecord.setEnabled(true);
+          btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
+          btnStop.setEnabled(false);
         }
 
         if (scid_loop < Integer.parseInt(script_map.get("script_length"))-1) {
