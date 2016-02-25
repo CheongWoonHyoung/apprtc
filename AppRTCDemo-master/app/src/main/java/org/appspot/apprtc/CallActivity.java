@@ -358,6 +358,8 @@ public class CallActivity extends Activity
           String scene_loop_string = String.valueOf(scene_loop);
           String scid_loop_string = String.valueOf(scid_loop);
 
+          Log.e("scene_loop", scene_loop_string);
+          Log.e("scid_loop", scid_loop_string);
           String mp3_filename ="/"+ scene_loop_string + scid_loop_string +".mp3";
           Log.d("flow", "section click");
 
@@ -378,6 +380,10 @@ public class CallActivity extends Activity
               btnRecord.setEnabled(false);
               btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
               btnStop.setEnabled(true);
+              if(scene_loop == script_list.size()){
+                Log.e("loop_end", "here_ended");
+                Save(idx);
+              }
             }
             Log.d("flow", "section F");
 
@@ -392,7 +398,8 @@ public class CallActivity extends Activity
       public void onClick(View v) {
 
         try {
-          if(scene_loop > script_list.size()){
+          if(scene_loop == script_list.size()){
+            Log.e("loop_end", "here_ended");
             Save(idx);
           }
 
@@ -402,6 +409,11 @@ public class CallActivity extends Activity
             scid_loop = 0;
           }
 
+          String scene_loop_string = String.valueOf(scene_loop);
+          String scid_loop_string = String.valueOf(scid_loop);
+
+          Log.e("scene_loop", scene_loop_string);
+          Log.e("scid_loop", scid_loop_string);
           FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
           int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
           fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
@@ -421,14 +433,14 @@ public class CallActivity extends Activity
           Log.d("flow", "section A");
           if (!script_list.isEmpty() && Objects.equals(script_map.get("cid"), User_character_Id)) {
             Log.d("flow", "section B");
-            Log.e("cid", script_map.get("cid"));
+            Log.e("cid_play_loop", script_map.get("cid"));
             btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
             btnRecord.setEnabled(true);
             btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
             btnStop.setEnabled(false);
           }
-        }catch(Exception ex){
-          Log.e("Record", "NONO", ex);
+        }catch(Exception e){
+          e.printStackTrace();
         }
       }
     });
@@ -442,14 +454,15 @@ public class CallActivity extends Activity
       public void onClick(DialogInterface dialog, int which) {
         //저장하기
         //앨범 리스트 갯수 업데이트
-        album_list_editor.putInt("album_length", album_list.getInt("album_length", 0)+1);
+        album_list_editor.putInt("album_length", album_list.getInt("album_length", 0) + 1);
         //앨범 인덱스 & Key
-        String album_key  = Integer.toString(album_list.getInt("album_length", 0));
-        if(bookid != null && idx != null) {
+        String album_key = Integer.toString(album_list.getInt("album_length", 0));
+        if (bookid != null && idx != null) {
           album_list_editor.putString(album_key, bookid);
           album_list_editor.putString(bookid, idx);
           album_list_editor.commit();
         }
+        finish();
       }
     });
 
