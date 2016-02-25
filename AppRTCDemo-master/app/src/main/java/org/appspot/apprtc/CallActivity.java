@@ -32,6 +32,7 @@ import android.os.Handler;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
@@ -356,11 +357,11 @@ public class CallActivity extends Activity
 
           Log.e("scene_loop", scene_loop_string);
           Log.e("scid_loop", scid_loop_string);
-          String mp3_filename ="/"+ scene_loop_string + scid_loop_string +".mp3";
+          String mp3_filename = "/" + scene_loop_string + scid_loop_string + ".mp3";
           Log.d("flow", "section click");
 
           //내차례
-          if(Objects.equals(script_map.get("cid"), User_character_Id)) {
+          if (Objects.equals(script_map.get("cid"), User_character_Id)) {
             Log.d("flow", "section C");
             if (active == false) {
               Log.d("flow", "section D");
@@ -384,66 +385,75 @@ public class CallActivity extends Activity
             Log.d("flow", "section F");
           }
           Log.d("flow", "section G");
-        }catch(Exception e){
+        } catch (Exception e) {
           e.printStackTrace();
         }
       }
     });
 
-    btnStop.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        Log.d("ghost", "btnStop" + String.valueOf(scene_loop));
-        Log.d("ghost", "btnStop" + String.valueOf(scid_loop));
-        try {
-          if(scene_loop == script_list.size()){
-            Log.e("loop_end", "here_ended");
-            Save(idx);
+    btnStop.setOnTouchListener(new View.OnTouchListener() {
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        int action = event.getAction();
+        if (action == MotionEvent.ACTION_DOWN) {
+          btnStop.setBackgroundResource(R.drawable.btn_play_push3x);
+        } else if (action == MotionEvent.ACTION_UP) {
+          btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
+          try {
+            if (scene_loop == script_list.size()) {
+              Log.e("loop_end", "here_ended");
+              Save(idx);
+            }
+
+            HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
+            ///////////씬 갱신//////////////////////////////////////////////////////////////////////////////////////////////////
+            if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
+              scid_loop++;
+              scene_chk = false;
+            } else {
+              scene_chk = true;
+              scene_loop++;
+            }
+            Log.d("ghost", "btnStop" + String.valueOf(scene_loop));
+            Log.d("ghost", "btnStop" + String.valueOf(scid_loop));
+            if (scene_chk == true) {
+              scid_loop = 0;
+            }
+
+            HashMap<String, String> script_map_bef = script_list.get(scene_loop).get(scid_loop);
+            FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
+            int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
+
+            fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+            TextView tv_script = (TextView) findViewById(R.id.tv_script);
+            tv_script.setText(script_map_bef.get("script"));
+
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            HashMap<String, String> script_map_aft = script_list.get(scene_loop).get(scid_loop);
+            Log.d("flow", "section A");
+            if (!script_list.isEmpty() && Objects.equals(script_map_aft.get("cid"), User_character_Id)) {
+              Log.d("flow", "section B");
+              Log.e("cid_play_loop", script_map_aft.get("cid"));
+              btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
+              btnRecord.setEnabled(true);
+              btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
+              btnStop.setEnabled(false);
+
+            } else {
+              Play(script_map_aft);
+            }
+
+          } catch (Exception e) {
+            e.printStackTrace();
           }
-
-          HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
-          ///////////씬 갱신//////////////////////////////////////////////////////////////////////////////////////////////////
-          if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
-            scid_loop++;
-            scene_chk = false;
-          } else {
-            scene_chk = true;
-            scene_loop++;
-          }
-          Log.d("ghost", "btnStop" + String.valueOf(scene_loop));
-          Log.d("ghost", "btnStop" + String.valueOf(scid_loop));
-          if (scene_chk == true) {
-            scid_loop = 0;
-          }
-
-          HashMap<String, String> script_map_bef = script_list.get(scene_loop).get(scid_loop);
-          FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
-          int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
-
-          fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
-          TextView tv_script = (TextView) findViewById(R.id.tv_script);
-          tv_script.setText(script_map_bef.get("script"));
-
-
-          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          HashMap<String, String> script_map_aft = script_list.get(scene_loop).get(scid_loop);
-          Log.d("flow", "section A");
-          if (!script_list.isEmpty() && Objects.equals(script_map_aft.get("cid"), User_character_Id)) {
-            Log.d("flow", "section B");
-            Log.e("cid_play_loop", script_map_aft.get("cid"));
-            btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
-            btnRecord.setEnabled(true);
-            btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
-            btnStop.setEnabled(false);
-
-          }else{
-            Play(script_map_aft);
-          }
-
-        }catch(Exception e){
-          e.printStackTrace();
         }
+
+        return true;
       }
     });
+
+
   }
 
  public void Play(HashMap<String, String> script_map){
@@ -456,6 +466,8 @@ public class CallActivity extends Activity
      mp = new MediaPlayer();
      mp = MediaPlayer.create(con, tmpID);
      mp.start();
+     btnStop.setEnabled(false);
+     btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
    }catch (Exception e){
 
    }
@@ -463,7 +475,8 @@ public class CallActivity extends Activity
    mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
      @Override
      public void onCompletion(MediaPlayer mp) {
-
+       btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
+       btnStop.setEnabled(true);
      }
    });
  }
