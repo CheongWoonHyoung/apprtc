@@ -1,10 +1,14 @@
 package org.appspot.apprtc;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -63,9 +70,12 @@ public class Call_List extends MainActivity {
         final String idx = String.valueOf(getIntent().getExtras().getString("idx"));
         final String bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
         String download = String.valueOf(getIntent().getExtras().getString("download"));
+        //링크에서 다운받을 시
+        //file_download(download);
 
         download = "http://blay.eerssoft.co.kr/books/list/";
-        new SHJSONParser().setCallback(callback).execute(download);
+        JSONParser();
+        //new SHJSONParser().setCallback(callback).execute(download);
 
         lv_friend_selected = (ListView) findViewById(R.id.lv_friend_selected);
         selected_friend = new SimpleAdapter(Call_List.this, friend_map_list, R.layout.item_friend, new String[]{"friend_id"}, new int[]{R.id.tv_selected_friend_id});
@@ -197,11 +207,35 @@ public class Call_List extends MainActivity {
             }
         });
     }
-    /*
+
+    public void file_download(String uRl) {
+        String sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        File direct = new File(sdRootPath+ "/Bookplay_json_files");
+
+        if (!direct.exists()) {
+            direct.mkdirs();
+        }
+
+        DownloadManager mgr = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        Uri downloadUri = Uri.parse(uRl);
+        DownloadManager.Request request = new DownloadManager.Request(
+                downloadUri);
+
+        request.setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_WIFI
+                        | DownloadManager.Request.NETWORK_MOBILE)
+                .setAllowedOverRoaming(false).setTitle("Demo")
+                .setDescription("Something useful. No, really.")
+                .setDestinationInExternalPublicDir("/Bookplay_json_files", "test.jpg");
+
+        mgr.enqueue(request);
+    }
+
     public String loadJSONFromAsset() {
         String json = null;
         try {
-            InputStream is = getAssets().open("book.json");
+            InputStream is = getAssets().open("some_name");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -212,8 +246,80 @@ public class Call_List extends MainActivity {
             return null;
         }
         return json;
-    } */
+    }
+    private void JSONParser() {
+        try {
 
+            //String Character = loadJSONFromAsset();
+            String Character = "{\"character\":[{\"cid\":\"c1\",\"name\":\"빨간 모자\",\"image\":{\"main\":\"c.jpg\"}},{\"cid\":\"c2\",\"name\":\"늑대\",\"image\":{\"main\":\"c2.jpg\"}},{\"cid\":\"c3\",\"name\":\"할머니\",\"image\":{\"main\":\"c3.jpg\"}},{\"cid\":\"c4\",\"name\":\"사냥꾼\",\"image\":{\"main\":\"c4.jpg\"}},{\"cid\":\"c5\",\"name\":\"엄마\",\"image\":{\"main\":\"c5.jpg\"}},{\"cid\":\"c6\",\"name\":\"내레이션\",\"image\":{\"main\":\"c6.jpg\"}}]}";
+            //String scene = loadJSONFromAsset();
+            String Scene = "{\"scene\":[{\"sid\":\"s001\",\"image\":{\"main\":\"s001.jpg\",\"preview\":\"s001.jpg\"},\"scripts\":[{\"scid\":\"s001c001\",\"cid\":\"c6\",\"audio\":true,\"script\":\"Little Red Riding Hood\"}]},{\"sid\":\"s002\",\"image\":{\"main\":\"s002.jpg\",\"preview\":\"s002.jpg\"},\"scripts\":[{\"scid\":\"s002c001\",\"cid\":\"c6\",\"audio\":true,\"script\":\"Little Red Riding Hood lived in the red roof house.\"},{\"scid\":\"s002c002\",\"cid\":\"c6\",\"audio\":true,\"script\":\"Little Red lived with Mom there.\"},{\"scid\":\"s002c003\",\"cid\":\"c5\",\"audio\":true,\"script\":\"Take Jam and bread to Grandma.\"},{\"scid\":\"s002c004\",\"cid\":\"c1\",\"audio\":true,\"script\":\"Yes, Mom\"},{\"scid\":\"s002c005\",\"cid\":\"c5\",\"audio\":true,\"script\":\"And milk, too?\"},{\"scid\":\"s002c006\",\"cid\":\"c1\",\"audio\":true,\"script\":\"Yes, Mom\"},{\"scid\":\"s002c007\",\"cid\":\"c6\",\"audio\":true,\"script\":\"The wolf lived in the woods.\"},{\"scid\":\"s002c008\",\"cid\":\"c5\",\"audio\":true,\"script\":\"The wolf is big and bad. It can eat you.\"},{\"scid\":\"s002c009\",\"cid\":\"c1\",\"audio\":true,\"script\":\"I'm not scared. I can take food to Grandma.\"}]}]}";
+
+            try {
+                JSONObject scene_ = new JSONObject(Scene);
+                JSONArray scene = scene_.getJSONArray("scene");
+                JSONObject character_ = new JSONObject(Character);
+                JSONArray character = character_.getJSONArray("character");
+
+                //캐릭터 파싱
+                for (int k = 0; k < character.length(); k++) {
+                    //파싱
+                    JSONObject sceneObj = character.getJSONObject(k);
+                    String cid = sceneObj.getString("cid");
+                    String name = sceneObj.getString("name");
+                    String image = sceneObj.getJSONObject("image").getString("main");
+
+                    HashMap<String, String> character_map = new HashMap<>();
+                    character_map.put("cid", cid);
+                    character_map.put("name", name);
+                    character_map.put("image", image);
+
+                    character_list.add(character_map);
+                }
+
+                //스크립트 파싱
+                for (int k = 0; k < scene.length(); k++) {
+                    //파싱
+                    JSONObject characterObj = scene.getJSONObject(k);
+                    String sid = characterObj.getString("sid");
+                    String image_main = characterObj.getJSONObject("image").getString("main");
+                    String image_preview = characterObj.getJSONObject("image").getString("preview");
+
+                    HashMap<String, String> scene_map = new HashMap<>();
+                    scene_map.put("sid", sid);
+                    scene_map.put("image_main", image_main);
+                    scene_map.put("image_preview", image_preview);
+                    scene_list.add(scene_map);
+
+                    JSONArray scripts = (JSONArray) characterObj.get("scripts");
+
+                    HashMap<Integer, HashMap> scene_map_main = new HashMap<>();
+                    for (int j = 0; j < scripts.length(); j++) {
+                        JSONObject scriptObj = scripts.getJSONObject(j);
+                        String scid = scriptObj.getString("scid");
+                        String cid = scriptObj.getString("cid");
+                        String audio = scriptObj.getString("audio");
+                        String script = scriptObj.getString("script");
+                        String script_length = Integer.toString(scripts.length());
+
+                        HashMap<String, String> script_map = new HashMap<>();
+                        script_map.put("scid", scid);
+                        script_map.put("cid", cid);
+                        script_map.put("audio", audio);
+                        script_map.put("script", script);
+                        script_map.put("script_length", script_length);
+                        scene_map_main.put(j, script_map);
+                    }
+                    script_list.add(scene_map_main);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            load_chk = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     //리스트받아오기->그리드뷰
     private SHJSONParserCallback callback = new SHJSONParserCallback() {
         @Override
@@ -233,9 +339,7 @@ public class Call_List extends MainActivity {
                     String title = Story_single.get("title").toString();
                     String cover = Story_single.get("image").toString();
                     String cover_small = Story_single.get("image_small").toString();
-                    int cover_s = getResources().getIdentifier("org.appspot.apprtc:drawable/main_" + cover_small, null, null);
-                    ImageView iv_cover = (ImageView) findViewById(R.id.iv_cover);
-                    //iv_cover.setImageDrawable(getResources().getDrawable(cover_s));
+
                     String download = Story_single.get("download").toString();
                     String description = Story_single.get("description").toString();
                     String version;
@@ -259,8 +363,6 @@ public class Call_List extends MainActivity {
                     //map.put("verson", version);
                     //map.put("displayversion", displayversion);
                     map.put("MaxPlayer", "5");
-                    //map.put("character", character);
-                    //map.put("scene", scene);
 
                     try {
                         JSONObject scene_ = new JSONObject(Scene);
@@ -272,7 +374,6 @@ public class Call_List extends MainActivity {
                         for (int k = 0; k < character.length(); k++) {
                             //파싱
                             JSONObject sceneObj = character.getJSONObject(k);
-                            System.out.println(sceneObj);
                             String cid = sceneObj.getString("cid");
                             String name = sceneObj.getString("name");
                             String image = sceneObj.getJSONObject("image").getString("main");
@@ -310,7 +411,6 @@ public class Call_List extends MainActivity {
                                 String script = scriptObj.getString("script");
                                 String script_length = Integer.toString(scripts.length());
 
-                                Log.e("스크립트", script);
                                 HashMap<String, String> script_map = new HashMap<>();
                                 script_map.put("scid", scid);
                                 script_map.put("cid", cid);

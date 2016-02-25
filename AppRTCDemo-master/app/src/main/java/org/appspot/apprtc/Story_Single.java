@@ -36,7 +36,7 @@ public class Story_Single extends MainActivity {
         tv_single_name.setText(title);
         TextView tv_single_description = (TextView) findViewById(R.id.tv_single_description);
         tv_single_description.setText(description);
-        int title_single= getResources().getIdentifier("org.appspot.apprtc:drawable/main_" + bookid, null, null);
+        int title_single= getResources().getIdentifier("org.appspot.apprtc:drawable/" + bookid, null, null);
 
         Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), title_single);
         Bitmap circularBitmap = ImageConverter.getRoundedCornerBitmap(bitmap, 100);

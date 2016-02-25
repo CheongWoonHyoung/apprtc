@@ -382,8 +382,8 @@ public class CallActivity extends Activity
             Log.d("flow", "section F");
           }
           Log.d("flow", "section G");
-        }catch(Exception ex){
-          Log.e("NONO", "NONO", ex);
+        }catch(Exception e){
+          e.printStackTrace();
         }
       }
     });
