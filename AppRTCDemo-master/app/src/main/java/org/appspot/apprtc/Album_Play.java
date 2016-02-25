@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -55,17 +56,14 @@ public class Album_Play extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        script_list = (ArrayList<HashMap<Integer, HashMap>>) getIntent().getSerializableExtra("script");
+        script_list = (ArrayList<HashMap<Integer, HashMap>>) getIntent().getSerializableExtra("script_list");
         story_list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("story");
         scene_list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("scene_list");
 
         User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
 
-        Thread.setDefaultUncaughtExceptionHandler(
-                new UnhandledExceptionHandler(this));
-
-
         setContentView(R.layout.activity_album);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         playing = false;
         btnStop = (ImageView) findViewById(R.id.btnStop_play);
@@ -256,4 +254,13 @@ public class Album_Play extends Activity {
         //btnStop.setEnabled(false);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

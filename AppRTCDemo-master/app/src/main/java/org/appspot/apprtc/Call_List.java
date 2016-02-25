@@ -233,9 +233,7 @@ public class Call_List extends MainActivity {
                     String title = Story_single.get("title").toString();
                     String cover = Story_single.get("image").toString();
                     String cover_small = Story_single.get("image_small").toString();
-                    int cover_s = getResources().getIdentifier("org.appspot.apprtc:drawable/main_" + cover_small, null, null);
-                    ImageView iv_cover = (ImageView) findViewById(R.id.iv_cover);
-                    //iv_cover.setImageDrawable(getResources().getDrawable(cover_s));
+
                     String download = Story_single.get("download").toString();
                     String description = Story_single.get("description").toString();
                     String version;
