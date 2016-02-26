@@ -41,6 +41,7 @@ public class Album_Play extends Activity {
     private boolean playing;
     private String sdRootPath;
     private String User_character_Id;
+    private String record_path;
 
     int scid_loop = 0;
     int scene_loop = 0;
@@ -64,9 +65,8 @@ public class Album_Play extends Activity {
         story_list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("story");
         scene_list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("scene_list");
 
-        System.out.println("script_list");
-        System.out.println(script_list);
         User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
+        record_path = String.valueOf(getIntent().getExtras().getString("record_path"));
 
         setContentView(R.layout.activity_album);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);

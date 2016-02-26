@@ -54,6 +54,7 @@ import org.webrtc.SurfaceViewRenderer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -177,6 +178,11 @@ public class CallActivity extends Activity
   MediaRecorder mRecorder = null;
   boolean myturn = false;
 
+  String curr_year;
+  String curr_month;
+  String curr_date;
+  String curr_time;
+  String time_stamp;
   // Controls
   CallFragment callFragment;
   HudFragment hudFragment;
@@ -203,12 +209,27 @@ public class CallActivity extends Activity
     btnStop = (ImageView) findViewById(R.id.btnStop);
 
     //Record Initial Setting
+    curr_year = String.valueOf(new Date().getYear() - 100 + 2000);
+    int curr_month_ = new Date().getMonth();
+    if(curr_month_ < 10){
+      curr_month = "0" + String.valueOf(curr_month_);
+    }else {
+      curr_month = String.valueOf(curr_month_);
+    }
+    int curr_date_ = new Date().getDate();
+    if(curr_date_ < 10){
+      curr_date = "0" + String.valueOf(curr_date_);
+    }else {
+      curr_date = String.valueOf(curr_date_);
+    }
+    curr_time = String.valueOf(new Date().getTime());
+    time_stamp = curr_year+curr_month+curr_date+curr_time;
     btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
     btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
     btnStop.setEnabled(true);
     btnRecord.setEnabled(false);
     sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-    mFilePath = sdRootPath + "/.mp3";
+    mFilePath = sdRootPath + "/BookPlay/"+time_stamp+"/.mp3";
 
     //Album Save Initial Setting
     album_list = this.getSharedPreferences(getPackageName(),
@@ -457,7 +478,6 @@ public class CallActivity extends Activity
    });
  }
 
-
   public void Save(final String idx){
     AlertDialog.Builder aDialog = new AlertDialog.Builder(CallActivity.this);
     aDialog.setTitle("종료하시겠습니까");
@@ -471,6 +491,9 @@ public class CallActivity extends Activity
         String album_key = Integer.toString(album_list.getInt("album_length", 0));
         if (bookid != null && idx != null) {
           album_list_editor.putString(album_key, bookid);
+          album_list_editor.putString(album_key+"timestamp", time_stamp);
+          Log.e("stampA", album_key+"timestamp");
+          Log.e("stampB", time_stamp);
           album_list_editor.putString(bookid, idx);
           album_list_editor.commit();
         }

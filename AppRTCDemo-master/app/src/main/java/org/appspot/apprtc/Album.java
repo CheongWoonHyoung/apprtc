@@ -187,10 +187,9 @@ public class Album extends Activity {
             for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
                 try{
                     HashMap<String, String> album_map = new HashMap<>();
-                    Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop), ""),"")) - 1;
-                    String cover_id = story_list.get(idx_).get("cover");
-                    album_map.put("bookid", story_list.get(idx_).get("bookid"));
-                    album_map.put("cover", cover_id);
+                    Integer album_key = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop), ""),"")) - 1;
+                    album_map.put("bookid", story_list.get(album_key).get("bookid"));
+                    album_map.put("time_stamp", album_list.getString(adapter_loop+"timestamp",""));
                     album_arraylist.add(album_map);
                 }catch(Exception e){
                     e.printStackTrace();
@@ -204,8 +203,8 @@ public class Album extends Activity {
                     Integer album_length = album_list.getInt("album_length", -1);
                     for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
                         try{
-                            Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop), ""),"")) - 1;
-                            String cover_id = story_list.get(idx_).get("cover");
+                            Integer album_key = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop), ""),"")) - 1;
+                            String cover_id = story_list.get(album_key).get("cover");
                             int cover= getResources().getIdentifier(cover_id, "drawable", getPackageName());
                             ImageView iv_cover = (ImageView)findViewById(R.id.iv_album_cover);
                             iv_cover.setImageDrawable(getResources().getDrawable(cover));
@@ -235,17 +234,18 @@ public class Album extends Activity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if(load_chk == true) {
                         Intent intent = new Intent(Album.this, Album_Play.class);
-                        Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(position), ""), "")) - 1;
+                        Integer album_key = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(position), ""), "")) - 1;
 
-                        intent.putExtra("title", story_list.get(idx_).get("title"));
-                        intent.putExtra("description", story_list.get(idx_).get("description"));
-                        intent.putExtra("bookid", story_list.get(idx_).get("bookid"));
-                        intent.putExtra("MaxPlayer", story_list.get(idx_).get("MaxPlayer"));
-                        intent.putExtra("download", story_list.get(idx_).get("download"));
+                        intent.putExtra("title", story_list.get(album_key).get("title"));
+                        intent.putExtra("description", story_list.get(album_key).get("description"));
+                        intent.putExtra("bookid", story_list.get(album_key).get("bookid"));
+                        intent.putExtra("MaxPlayer", story_list.get(album_key).get("MaxPlayer"));
+                        intent.putExtra("download", story_list.get(album_key).get("download"));
                         intent.putExtra("character", character_list);
                         intent.putExtra("story", story_list);
                         intent.putExtra("scene_list", scene_list);
                         intent.putExtra("script_list", script_list);
+                        intent.putExtra("record_path", album_arraylist.get(position).get("time_stamp"));
                         startActivity(intent);
                     }
                 }
