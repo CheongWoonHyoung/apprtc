@@ -185,6 +185,7 @@ public class CallActivity extends Activity
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    //Getting Intent Parameters
     script_list = (ArrayList<HashMap<Integer, HashMap>>) getIntent().getSerializableExtra("script");
     story_list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("story");
     scene_list = (ArrayList<HashMap<String,String>>) getIntent().getSerializableExtra("scene_list");
@@ -192,8 +193,6 @@ public class CallActivity extends Activity
     User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
     idx= String.valueOf(getIntent().getExtras().getString("idx"));
     bookid = String.valueOf(getIntent().getExtras().getString("bookid"));
-    Log.d("ghost", "initial" + String.valueOf(scene_loop));
-    Log.d("ghost", "initial" + String.valueOf(scid_loop));
     active = false;
 
     Thread.setDefaultUncaughtExceptionHandler(
@@ -203,19 +202,18 @@ public class CallActivity extends Activity
     btnRecord = (ImageView) findViewById(R.id.btnRecord);
     btnStop = (ImageView) findViewById(R.id.btnStop);
 
-    //////////initial setting//////////////////////////////////////////////
+    //Record Initial Setting
     btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
     btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
     btnStop.setEnabled(true);
     btnRecord.setEnabled(false);
-    ///////////////////////////////////////////////////////////////////////
+    sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+    mFilePath = sdRootPath + "/.mp3";
 
+    //Album Save Initial Setting
     album_list = this.getSharedPreferences(getPackageName(),
             Activity.MODE_PRIVATE);
     album_list_editor = album_list.edit();
-
-    sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-    mFilePath = sdRootPath + "/.mp3";
 
     iceConnected = false;
     signalingParameters = null;
@@ -323,7 +321,7 @@ public class CallActivity extends Activity
             Activity.MODE_PRIVATE);
     album_list_editor = album_list.edit();
 
-
+    //동화 재생 시작
     if (!script_list.isEmpty()){
       try {
         HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
@@ -335,42 +333,31 @@ public class CallActivity extends Activity
         TextView tv_script = (TextView) findViewById(R.id.tv_script);
         tv_script.setText(script_map.get("script"));
         Play(script_map);
-
-      }catch(Exception ex){
-        Log.e("NONO", "NONO", ex);
-
+      }catch(Exception e){
+        e.printStackTrace();
       }
     }
 
-
+    //녹음 시작
     btnRecord.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-
-        Log.d("ghost", "btnRecord" + String.valueOf(scene_loop));
-        Log.d("ghost", "btnRecord" + String.valueOf(scid_loop));
-
         try {
           HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
 
           String scene_loop_string = String.valueOf(scene_loop);
           String scid_loop_string = String.valueOf(scid_loop);
-
-          Log.e("scene_loop", scene_loop_string);
-          Log.e("scid_loop", scid_loop_string);
           String mp3_filename = "/" + scene_loop_string + scid_loop_string + ".mp3";
-          Log.d("flow", "section click");
 
           //내차례
           if (Objects.equals(script_map.get("cid"), User_character_Id)) {
             Log.d("flow", "section C");
             if (active == false) {
-              Log.d("flow", "section D");
+              //녹음 시작
               active = true;
               onBtnRecord(mp3_filename);
               btnRecord.setBackgroundResource(R.drawable.btn_voice_push3x);
-
             } else if (active == true) {
-              Log.d("flow", "section E");
+              //녹음 끝
               active = false;
               onBtnStop();
               btnRecord.setBackgroundResource(R.drawable.btn_voice_inactive3x);
@@ -378,13 +365,10 @@ public class CallActivity extends Activity
               btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
               btnStop.setEnabled(true);
               if (scene_loop == script_list.size()) {
-                Log.e("loop_end", "here_ended");
                 Save(idx);
               }
             }
-            Log.d("flow", "section F");
           }
-          Log.d("flow", "section G");
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -401,12 +385,12 @@ public class CallActivity extends Activity
           btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
           try {
             if (scene_loop == script_list.size()) {
-              Log.e("loop_end", "here_ended");
               Save(idx);
             }
 
             HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
-            ///////////씬 갱신//////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //씬 갱신
             if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
               scid_loop++;
               scene_chk = false;
@@ -414,12 +398,11 @@ public class CallActivity extends Activity
               scene_chk = true;
               scene_loop++;
             }
-            Log.d("ghost", "btnStop" + String.valueOf(scene_loop));
-            Log.d("ghost", "btnStop" + String.valueOf(scid_loop));
             if (scene_chk == true) {
               scid_loop = 0;
             }
 
+            //스크립트&배경 갱신
             HashMap<String, String> script_map_bef = script_list.get(scene_loop).get(scid_loop);
             FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
             int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
@@ -428,12 +411,9 @@ public class CallActivity extends Activity
             TextView tv_script = (TextView) findViewById(R.id.tv_script);
             tv_script.setText(script_map_bef.get("script"));
 
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //다음 씬 체크
             HashMap<String, String> script_map_aft = script_list.get(scene_loop).get(scid_loop);
-            Log.d("flow", "section A");
             if (!script_list.isEmpty() && Objects.equals(script_map_aft.get("cid"), User_character_Id)) {
-              Log.d("flow", "section B");
-              Log.e("cid_play_loop", script_map_aft.get("cid"));
               btnRecord.setBackgroundResource(R.drawable.btn_voice_normal3x);
               btnRecord.setEnabled(true);
               btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
@@ -490,7 +470,6 @@ public class CallActivity extends Activity
         //앨범 인덱스 & Key
         String album_key = Integer.toString(album_list.getInt("album_length", 0));
         if (bookid != null && idx != null) {
-          System.out.println(idx);
           album_list_editor.putString(album_key, bookid);
           album_list_editor.putString(bookid, idx);
           album_list_editor.commit();
