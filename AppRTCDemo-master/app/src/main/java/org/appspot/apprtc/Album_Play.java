@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,9 +86,7 @@ public class Album_Play extends Activity {
                     btnStop.setBackgroundResource(R.drawable.btn_play_push3x);
                 }else if(action == MotionEvent.ACTION_UP){
                     btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
-                    System.out.println("loop");
-                    System.out.println(scene_loop);
-                    System.out.println(scid_loop);
+
                     HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
                     if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
                         scid_loop++;
@@ -103,16 +102,16 @@ public class Album_Play extends Activity {
                     FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play_play);
                     int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
 
-                    //fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+                    fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
                     TextView tv_script = (TextView) findViewById(R.id.tv_script_play);
                     tv_script.setText(script_map_bef.get("script"));
                     HashMap<String, String> script_map_aft = script_list.get(scene_loop).get(scid_loop);
-                    if (!script_list.isEmpty() && Objects.equals(script_map_aft.get("cid"), User_character_Id)) {
-                        String scene_loop_string = String.valueOf(scene_loop);
-                        String scid_loop_string = String.valueOf(scid_loop);
-                        String mp3_filename = "/" + scene_loop_string + scid_loop_string + ".mp3";
-                        mFilePath = sdRootPath + mp3_filename;
-
+                    String scene_loop_string = String.valueOf(scene_loop);
+                    String scid_loop_string = String.valueOf(scid_loop);
+                    String mp3_filename = sdRootPath + "/BookPlay/"+record_path+"/"+ scene_loop_string + scid_loop_string + ".mp3";
+                    File file = new File(mp3_filename);
+                    if (!script_list.isEmpty() && file.exists()) {
+                        mFilePath = mp3_filename;
                         onBtnPlay(mFilePath);
                     } else {
                         Play(script_map_aft);
@@ -126,12 +125,6 @@ public class Album_Play extends Activity {
         if (!script_list.isEmpty()){
             try {
                 HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
-                System.out.println("loop_A");
-                System.out.println(scene_loop);
-                System.out.println(scid_loop);
-                System.out.println(script_map);
-                System.out.println(script_map.get("script"));
-
                 FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play_play);
                 int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
                 fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
@@ -139,10 +132,8 @@ public class Album_Play extends Activity {
                 TextView tv_script = (TextView) findViewById(R.id.tv_script_play);
                 tv_script.setText(script_map.get("script"));
                 Play(script_map);
-
-            }catch(Exception ex){
-                Log.e("NONO", "NONO", ex);
-
+            }catch(Exception e){
+                e.printStackTrace();
             }
         }
     }

@@ -229,7 +229,12 @@ public class CallActivity extends Activity
     btnStop.setEnabled(true);
     btnRecord.setEnabled(false);
     sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-    mFilePath = sdRootPath + "/BookPlay/"+time_stamp+"/.mp3";
+    String save_path = sdRootPath + "/BookPlay/"+time_stamp+"/";
+    File file = new File(save_path);
+    if(!file.exists()){
+      file.mkdirs();
+    }
+    //mFilePath = sdRootPath + "/BookPlay/"+time_stamp+"/.mp3";
 
     //Album Save Initial Setting
     album_list = this.getSharedPreferences(getPackageName(),
@@ -367,7 +372,7 @@ public class CallActivity extends Activity
 
           String scene_loop_string = String.valueOf(scene_loop);
           String scid_loop_string = String.valueOf(scid_loop);
-          String mp3_filename = "/" + scene_loop_string + scid_loop_string + ".mp3";
+          String mp3_filename = "/BookPlay/"+time_stamp+"/"+ scene_loop_string + scid_loop_string + ".mp3";
 
           //내차례
           if (Objects.equals(script_map.get("cid"), User_character_Id)) {
