@@ -64,6 +64,8 @@ public class Album_Play extends Activity {
         story_list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("story");
         scene_list = (ArrayList<HashMap<String, String>>) getIntent().getSerializableExtra("scene_list");
 
+        System.out.println("script_list");
+        System.out.println(script_list);
         User_character_Id = String.valueOf(getIntent().getExtras().getString("User"));
 
         setContentView(R.layout.activity_album);
@@ -83,6 +85,9 @@ public class Album_Play extends Activity {
                     btnStop.setBackgroundResource(R.drawable.btn_play_push3x);
                 }else if(action == MotionEvent.ACTION_UP){
                     btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
+                    System.out.println("loop");
+                    System.out.println(scene_loop);
+                    System.out.println(scid_loop);
                     HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
                     if (scid_loop < Integer.parseInt(script_map.get("script_length")) - 1) {
                         scid_loop++;
@@ -95,11 +100,11 @@ public class Album_Play extends Activity {
                         scid_loop = 0;
                     }
                     HashMap<String, String> script_map_bef = script_list.get(scene_loop).get(scid_loop);
-                    FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
+                    FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play_play);
                     int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
 
-                    fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
-                    TextView tv_script = (TextView) findViewById(R.id.tv_script);
+                    //fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
+                    TextView tv_script = (TextView) findViewById(R.id.tv_script_play);
                     tv_script.setText(script_map_bef.get("script"));
                     HashMap<String, String> script_map_aft = script_list.get(scene_loop).get(scid_loop);
                     if (!script_list.isEmpty() && Objects.equals(script_map_aft.get("cid"), User_character_Id)) {
@@ -121,12 +126,17 @@ public class Album_Play extends Activity {
         if (!script_list.isEmpty()){
             try {
                 HashMap<String, String> script_map = script_list.get(scene_loop).get(scid_loop);
+                System.out.println("loop_A");
+                System.out.println(scene_loop);
+                System.out.println(scid_loop);
+                System.out.println(script_map);
+                System.out.println(script_map.get("script"));
 
-                FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play);
+                FrameLayout fl_play = (FrameLayout) findViewById(R.id.fl_play_play);
                 int play_bg = getResources().getIdentifier(scene_list.get(scene_loop).get("sid"), "drawable", getPackageName());
                 fl_play.setBackgroundDrawable(getResources().getDrawable(play_bg));
 
-                TextView tv_script = (TextView) findViewById(R.id.tv_script);
+                TextView tv_script = (TextView) findViewById(R.id.tv_script_play);
                 tv_script.setText(script_map.get("script"));
                 Play(script_map);
 

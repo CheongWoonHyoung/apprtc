@@ -86,9 +86,7 @@ public class Album extends Activity {
                     String title = Story_single.get("title").toString();
                     String cover = Story_single.get("image").toString();
                     String cover_small = Story_single.get("image_small").toString();
-                    int cover_s = getResources().getIdentifier("org.appspot.apprtc:drawable/main_" + cover_small, null, null);
-                    ImageView iv_cover = (ImageView) findViewById(R.id.iv_cover);
-                    //iv_cover.setImageDrawable(getResources().getDrawable(cover_s));
+
                     String download = Story_single.get("download").toString();
                     String description = Story_single.get("description").toString();
                     String version;
@@ -116,8 +114,6 @@ public class Album extends Activity {
                     //map.put("verson", version);
                     //map.put("displayversion", displayversion);
                     map.put("MaxPlayer", "5");
-                    //map.put("character", character);
-                    //map.put("scene", scene);
 
                     try {
                         JSONObject scene_ = new JSONObject(Scene);
@@ -129,7 +125,6 @@ public class Album extends Activity {
                         for (int k = 0; k < character.length(); k++) {
                             //파싱
                             JSONObject sceneObj = character.getJSONObject(k);
-                            System.out.println(sceneObj);
                             String cid = sceneObj.getString("cid");
                             String name = sceneObj.getString("name");
                             String image = sceneObj.getJSONObject("image").getString("main");
@@ -167,7 +162,6 @@ public class Album extends Activity {
                                 String script = scriptObj.getString("script");
                                 String script_length = Integer.toString(scripts.length());
 
-                                Log.e("스크립트", script);
                                 HashMap<String, String> script_map = new HashMap<>();
                                 script_map.put("scid", scid);
                                 script_map.put("cid", cid);
@@ -193,7 +187,7 @@ public class Album extends Activity {
             for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
                 try{
                     HashMap<String, String> album_map = new HashMap<>();
-                    Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop + 1), ""),""));
+                    Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop), ""),"")) - 1;
                     String cover_id = story_list.get(idx_).get("cover");
                     album_map.put("bookid", story_list.get(idx_).get("bookid"));
                     album_map.put("cover", cover_id);
@@ -210,11 +204,10 @@ public class Album extends Activity {
                     Integer album_length = album_list.getInt("album_length", -1);
                     for(int adapter_loop = 0; adapter_loop<album_length; adapter_loop++){
                         try{
-                            Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop + 1), ""),""));
+                            Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(adapter_loop), ""),"")) - 1;
                             String cover_id = story_list.get(idx_).get("cover");
-                            System.out.println(cover_id);
                             int cover= getResources().getIdentifier(cover_id, "drawable", getPackageName());
-                            ImageView iv_cover = (ImageView)findViewById(R.id.iv_cover_play);
+                            ImageView iv_cover = (ImageView)findViewById(R.id.iv_album_cover);
                             iv_cover.setImageDrawable(getResources().getDrawable(cover));
                         }catch(Exception e){
                             e.printStackTrace();
@@ -242,7 +235,7 @@ public class Album extends Activity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if(load_chk == true) {
                         Intent intent = new Intent(Album.this, Album_Play.class);
-                        Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(position + 1), ""), ""));
+                        Integer idx_ = Integer.parseInt(album_list.getString(album_list.getString(Integer.toString(position), ""), "")) - 1;
 
                         intent.putExtra("title", story_list.get(idx_).get("title"));
                         intent.putExtra("description", story_list.get(idx_).get("description"));

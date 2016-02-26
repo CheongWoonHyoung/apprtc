@@ -428,7 +428,6 @@ public class CallActivity extends Activity
             TextView tv_script = (TextView) findViewById(R.id.tv_script);
             tv_script.setText(script_map_bef.get("script"));
 
-
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             HashMap<String, String> script_map_aft = script_list.get(scene_loop).get(scid_loop);
             Log.d("flow", "section A");
@@ -439,16 +438,13 @@ public class CallActivity extends Activity
               btnRecord.setEnabled(true);
               btnStop.setBackgroundResource(R.drawable.btn_play_inactive3x);
               btnStop.setEnabled(false);
-
             } else {
               Play(script_map_aft);
             }
-
           } catch (Exception e) {
             e.printStackTrace();
           }
         }
-
         return true;
       }
     });
@@ -494,6 +490,7 @@ public class CallActivity extends Activity
         //앨범 인덱스 & Key
         String album_key = Integer.toString(album_list.getInt("album_length", 0));
         if (bookid != null && idx != null) {
+          System.out.println(idx);
           album_list_editor.putString(album_key, bookid);
           album_list_editor.putString(bookid, idx);
           album_list_editor.commit();
@@ -522,7 +519,7 @@ public class CallActivity extends Activity
     try {
       mPlayer.setDataSource(mFilePath);
       mPlayer.prepare();
-    } catch(IOException e) {
+    }catch(IOException e){
       Log.d("tag", "Audio Play error");
       return;
     }
@@ -530,7 +527,6 @@ public class CallActivity extends Activity
   }
 
   public void onBtnRecord(String num) {
-
     Log.d("Record", "Record Started");
     if( mRecorder != null ) {
       mRecorder.release();
@@ -548,7 +544,7 @@ public class CallActivity extends Activity
 
     try {
       mRecorder.prepare();
-    } catch(IOException e) {
+    }catch(IOException e){
       Log.d("tag", "Record Prepare error");
     }
     mRecorder.start();
