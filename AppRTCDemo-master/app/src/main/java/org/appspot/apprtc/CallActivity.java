@@ -228,13 +228,14 @@ public class CallActivity extends Activity
     btnStop.setBackgroundResource(R.drawable.btn_play_normal3x);
     btnStop.setEnabled(true);
     btnRecord.setEnabled(false);
+
+    //path
     sdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
     String save_path = sdRootPath + "/BookPlay/"+time_stamp+"/";
     File file = new File(save_path);
     if(!file.exists()){
       file.mkdirs();
     }
-    //mFilePath = sdRootPath + "/BookPlay/"+time_stamp+"/.mp3";
 
     //Album Save Initial Setting
     album_list = this.getSharedPreferences(getPackageName(),
@@ -376,7 +377,6 @@ public class CallActivity extends Activity
 
           //내차례
           if (Objects.equals(script_map.get("cid"), User_character_Id)) {
-            Log.d("flow", "section C");
             if (active == false) {
               //녹음 시작
               active = true;
@@ -497,8 +497,6 @@ public class CallActivity extends Activity
         if (bookid != null && idx != null) {
           album_list_editor.putString(album_key, bookid);
           album_list_editor.putString(album_key+"timestamp", time_stamp);
-          Log.e("stampA", album_key+"timestamp");
-          Log.e("stampB", time_stamp);
           album_list_editor.putString(bookid, idx);
           album_list_editor.commit();
         }
@@ -534,7 +532,6 @@ public class CallActivity extends Activity
   }
 
   public void onBtnRecord(String num) {
-    Log.d("Record", "Record Started");
     if( mRecorder != null ) {
       mRecorder.release();
       mRecorder = null;
@@ -576,7 +573,6 @@ public class CallActivity extends Activity
     mRecorder.stop();
     mRecorder.reset();
     mRecorder.release();
-    Log.d("Record","Record Stopped");
     // 버튼 활성/비활성 설정
     //btnRecord.setEnabled(true);
     //btnStop.setEnabled(false);
